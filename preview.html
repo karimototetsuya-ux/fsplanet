@@ -1,0 +1,3356 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>F'sPlanet — 家族の時間をもっと豊かに。</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* =============================================
+   DESIGN TOKENS
+============================================= */
+:root {
+  --c-main:    #62ADED;
+  --c-sub:     #3E7CB1;
+  --c-bg:      #FCFCFD;
+  --c-accent:  #CFAE6B;
+  --c-btn:     #4A90E2;
+  --c-buy:     #F2994A;
+  --c-text:    #222222;
+  --c-text2:   #555555;
+  --c-text3:   #888888;
+  --c-border:  #E8E8EA;
+  --c-surface: #F7F7F8;
+  --c-warm:    #FBF8F4;
+  --c-warm2:   #F3EDE3;
+  --c-white:   #FFFFFF;
+
+  --f-en:      'Cormorant Garamond', Georgia, serif;
+  --f-ja:      'Noto Sans JP', 'Hiragino Sans', sans-serif;
+  --ls:         0.08em;
+  --ls-wide:    0.14em;
+  --ls-tight:   0.04em;
+
+  --hdr-h:     68px;
+  --max-w:     1280px;
+  --max-w-sm:  960px;
+  --radius-s:  6px;
+  --radius-m:  12px;
+  --radius-l:  20px;
+  --radius-xl: 32px;
+
+  --shadow-s:  0 1px 4px rgba(0,0,0,.06);
+  --shadow-m:  0 4px 20px rgba(0,0,0,.08);
+  --shadow-l:  0 12px 48px rgba(0,0,0,.10);
+
+  --ease:       cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-out:   cubic-bezier(0.16, 1, 0.3, 1);
+  --dur:        .65s;
+  --dur-fast:   .3s;
+}
+
+/* =============================================
+   RESET & BASE
+============================================= */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: var(--f-ja);
+  background: var(--c-bg);
+  color: var(--c-text);
+  line-height: 1.7;
+  letter-spacing: var(--ls);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+img { display: block; width: 100%; height: 100%; object-fit: cover; }
+a { text-decoration: none; color: inherit; }
+button { border: none; background: none; cursor: pointer; font-family: inherit; }
+ul, ol { list-style: none; }
+input, textarea { font-family: inherit; outline: none; }
+
+/* =============================================
+   TYPOGRAPHY
+============================================= */
+.en { font-family: var(--f-en); font-weight: 300; letter-spacing: var(--ls-wide); }
+.section-label {
+  font-family: var(--f-en);
+  font-size: clamp(10px, 1.1vw, 11px);
+  font-weight: 300;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--c-accent);
+  display: block;
+  margin-bottom: 10px;
+}
+.section-title {
+  font-family: var(--f-en);
+  font-size: clamp(28px, 3.6vw, 46px);
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  line-height: 1.15;
+  color: var(--c-text);
+}
+.section-title-ja {
+  font-size: clamp(20px, 2.4vw, 30px);
+  font-weight: 300;
+  letter-spacing: var(--ls);
+  line-height: 1.4;
+  color: var(--c-text);
+}
+.section-desc {
+  font-size: clamp(13px, 1.1vw, 15px);
+  font-weight: 300;
+  color: var(--c-text2);
+  line-height: 1.9;
+  letter-spacing: var(--ls);
+}
+
+/* =============================================
+   SCROLL REVEAL
+============================================= */
+.sr { opacity: 0; transform: translateY(28px); transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease); }
+.sr.visible { opacity: 1; transform: none; }
+.sr-l { opacity: 0; transform: translateX(-36px); transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease); }
+.sr-l.visible { opacity: 1; transform: none; }
+.sr-r { opacity: 0; transform: translateX(36px); transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease); }
+.sr-r.visible { opacity: 1; transform: none; }
+.sr-scale { opacity: 0; transform: scale(0.94); transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease); }
+.sr-scale.visible { opacity: 1; transform: none; }
+.sr-delay-1 { transition-delay: .1s; }
+.sr-delay-2 { transition-delay: .2s; }
+.sr-delay-3 { transition-delay: .3s; }
+.sr-delay-4 { transition-delay: .4s; }
+.sr-delay-5 { transition-delay: .5s; }
+
+/* =============================================
+   LAYOUT UTILITIES
+============================================= */
+.container {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 clamp(20px, 4vw, 60px);
+}
+.container-sm {
+  max-width: var(--max-w-sm);
+  margin: 0 auto;
+  padding: 0 clamp(20px, 4vw, 60px);
+}
+.section-pad { padding: clamp(60px, 8vw, 120px) 0; }
+.section-pad-sm { padding: clamp(40px, 5vw, 72px) 0; }
+.section-head { text-align: center; margin-bottom: clamp(36px, 5vw, 64px); }
+.flex-between { display: flex; align-items: center; justify-content: space-between; }
+
+/* =============================================
+   BUTTONS
+============================================= */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 32px;
+  border-radius: 2px;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transition: all var(--dur-fast) var(--ease);
+  position: relative;
+  overflow: hidden;
+}
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,.12);
+  opacity: 0;
+  transition: opacity var(--dur-fast);
+}
+.btn:hover::after { opacity: 1; }
+.btn-primary {
+  background: var(--c-btn);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(74,144,226,.28);
+}
+.btn-primary:hover { background: var(--c-sub); transform: translateY(-1px); box-shadow: 0 6px 24px rgba(74,144,226,.36); }
+.btn-buy {
+  background: var(--c-buy);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(242,153,74,.28);
+}
+.btn-buy:hover { background: #e08c3a; transform: translateY(-1px); }
+.btn-outline {
+  background: transparent;
+  color: var(--c-text);
+  border: 1px solid var(--c-text);
+}
+.btn-outline:hover { background: var(--c-text); color: #fff; }
+.btn-ghost {
+  background: transparent;
+  color: var(--c-text2);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  padding: 10px 0;
+  gap: 12px;
+}
+.btn-ghost svg { transition: transform var(--dur-fast); }
+.btn-ghost:hover svg { transform: translateX(4px); }
+.btn-ghost:hover { color: var(--c-text); }
+.btn-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-text2);
+  border-bottom: 1px solid var(--c-border);
+  padding-bottom: 2px;
+  transition: all var(--dur-fast);
+}
+.btn-link:hover { color: var(--c-main); border-color: var(--c-main); }
+.btn-full { width: 100%; justify-content: center; }
+
+/* =============================================
+   PAGE SWITCHER
+============================================= */
+.page-switcher {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: rgba(255,255,255,.95);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-m);
+  padding: 8px;
+  box-shadow: var(--shadow-l);
+}
+.pg-btn {
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: var(--c-text3);
+  transition: all .2s;
+  white-space: nowrap;
+}
+.pg-btn:hover { background: var(--c-surface); color: var(--c-text); }
+.pg-btn.active { background: var(--c-main); color: #fff; }
+
+.page-section { display: none; }
+.page-section.active { display: block; }
+
+/* =============================================
+   ANNOUNCEMENT BAR
+============================================= */
+.announce-bar {
+  background: var(--c-text);
+  color: #fff;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 300;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  gap: 32px;
+  overflow: hidden;
+  position: relative;
+}
+.announce-bar span { color: var(--c-accent); }
+.announce-track {
+  display: flex;
+  gap: 80px;
+  animation: marquee 28s linear infinite;
+  white-space: nowrap;
+  position: absolute;
+}
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* =============================================
+   HEADER
+============================================= */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  background: rgba(252,252,253,.97);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--c-border);
+  height: var(--hdr-h);
+  display: flex;
+  align-items: center;
+  transition: box-shadow .3s;
+}
+.header.scrolled { box-shadow: var(--shadow-m); }
+.hdr-inner {
+  width: 100%;
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 clamp(20px, 4vw, 60px);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 20px;
+}
+/* Logo */
+.hdr-logo {
+  font-family: var(--f-en);
+  font-size: 22px;
+  font-weight: 300;
+  letter-spacing: 0.18em;
+  color: var(--c-text);
+  white-space: nowrap;
+}
+.hdr-logo span { color: var(--c-main); }
+
+/* Nav */
+.hdr-nav {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.hdr-nav-item {
+  position: relative;
+  padding: 24px 18px;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  color: var(--c-text);
+  cursor: pointer;
+  transition: color .2s;
+  white-space: nowrap;
+}
+.hdr-nav-item::after {
+  content: '';
+  position: absolute;
+  bottom: 16px;
+  left: 18px; right: 18px;
+  height: 1px;
+  background: var(--c-main);
+  transform: scaleX(0);
+  transition: transform .3s var(--ease);
+  transform-origin: left;
+}
+.hdr-nav-item:hover { color: var(--c-main); }
+.hdr-nav-item:hover::after { transform: scaleX(1); }
+
+/* Icons */
+.hdr-icons {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: flex-end;
+}
+.hdr-icon-btn {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: var(--c-text);
+  transition: all .2s;
+}
+.hdr-icon-btn:hover { background: var(--c-surface); color: var(--c-main); }
+.hdr-icon-btn svg { width: 20px; height: 20px; stroke-width: 1.5; }
+.hdr-badge {
+  position: absolute;
+  top: 4px; right: 4px;
+  width: 16px; height: 16px;
+  background: var(--c-buy);
+  color: #fff;
+  border-radius: 50%;
+  font-size: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+}
+
+/* Search Bar */
+.hdr-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 100px;
+  padding: 8px 16px;
+  transition: all .2s;
+  max-width: 200px;
+}
+.hdr-search:focus-within { border-color: var(--c-main); background: #fff; box-shadow: 0 0 0 3px rgba(98,173,237,.12); }
+.hdr-search svg { width: 15px; height: 15px; color: var(--c-text3); flex-shrink: 0; stroke-width: 1.8; }
+.hdr-search input {
+  border: none;
+  background: none;
+  font-size: 12px;
+  width: 100%;
+  color: var(--c-text);
+  letter-spacing: var(--ls);
+}
+.hdr-search input::placeholder { color: var(--c-text3); }
+
+/* Mega Menu */
+.mega-menu {
+  position: absolute;
+  top: var(--hdr-h);
+  left: 0; right: 0;
+  background: #fff;
+  border-bottom: 1px solid var(--c-border);
+  box-shadow: var(--shadow-l);
+  padding: 40px 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-8px);
+  transition: opacity .25s var(--ease), transform .25s var(--ease);
+  z-index: 800;
+}
+.mega-menu.open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+}
+.mega-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 clamp(20px, 4vw, 60px);
+  display: grid;
+  grid-template-columns: 200px 1fr 260px;
+  gap: 60px;
+}
+.mega-section-title {
+  font-family: var(--f-en);
+  font-size: 11px;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--c-text3);
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--c-border);
+}
+.mega-links { display: flex; flex-direction: column; gap: 10px; }
+.mega-link {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--c-text2);
+  letter-spacing: var(--ls);
+  transition: color .2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.mega-link::before {
+  content: '';
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--c-border);
+  flex-shrink: 0;
+  transition: background .2s;
+}
+.mega-link:hover { color: var(--c-main); }
+.mega-link:hover::before { background: var(--c-main); }
+.mega-cats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.mega-cat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 10px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-s);
+  text-align: center;
+  cursor: pointer;
+  transition: all .2s;
+}
+.mega-cat-item:hover { border-color: var(--c-main); background: rgba(98,173,237,.04); }
+.mega-cat-img {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--c-surface);
+}
+.mega-cat-label { font-size: 11px; font-weight: 400; color: var(--c-text2); letter-spacing: var(--ls); }
+.mega-feature {
+  background: var(--c-warm);
+  border-radius: var(--radius-m);
+  padding: 24px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+}
+.mega-feature-tag {
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--c-accent);
+  font-family: var(--f-en);
+  margin-bottom: 8px;
+}
+.mega-feature-title {
+  font-family: var(--f-en);
+  font-size: 20px;
+  font-weight: 300;
+  line-height: 1.25;
+  color: var(--c-text);
+  margin-bottom: 10px;
+}
+.mega-feature-img {
+  width: 100%; height: 140px;
+  border-radius: var(--radius-s);
+  overflow: hidden;
+  margin-top: 16px;
+}
+
+/* =============================================
+   HERO SLIDESHOW
+============================================= */
+.hero {
+  position: relative;
+  height: clamp(480px, 85vh, 860px);
+  overflow: hidden;
+  background: #1a1a1a;
+}
+.hero-track {
+  display: flex;
+  height: 100%;
+  transition: transform .8s var(--ease-out);
+}
+.hero-slide {
+  flex: 0 0 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.05);
+  transition: transform 8s var(--ease);
+}
+.hero-slide.active .hero-bg { transform: scale(1); }
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    rgba(20,20,20,.62) 0%,
+    rgba(20,20,20,.22) 55%,
+    transparent 100%
+  );
+}
+.hero-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(40px, 8vw, 120px);
+  max-width: 640px;
+}
+.hero-eyebrow {
+  font-family: var(--f-en);
+  font-size: clamp(9px, 1vw, 11px);
+  font-weight: 300;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.7);
+  margin-bottom: 16px;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity .6s .3s var(--ease), transform .6s .3s var(--ease);
+}
+.hero-slide.active .hero-eyebrow { opacity: 1; transform: none; }
+.hero-title {
+  font-family: var(--f-en);
+  font-size: clamp(36px, 5.5vw, 80px);
+  font-weight: 300;
+  line-height: 1.08;
+  letter-spacing: 0.02em;
+  color: #fff;
+  margin-bottom: 8px;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity .7s .45s var(--ease), transform .7s .45s var(--ease);
+}
+.hero-slide.active .hero-title { opacity: 1; transform: none; }
+.hero-subtitle {
+  font-size: clamp(13px, 1.3vw, 16px);
+  font-weight: 300;
+  color: rgba(255,255,255,.82);
+  letter-spacing: var(--ls);
+  line-height: 1.8;
+  margin-bottom: 36px;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity .7s .6s var(--ease), transform .7s .6s var(--ease);
+}
+.hero-slide.active .hero-subtitle { opacity: 1; transform: none; }
+.hero-cta {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity .7s .75s var(--ease), transform .7s .75s var(--ease);
+}
+.hero-slide.active .hero-cta { opacity: 1; transform: none; }
+.hero-btn-main {
+  background: #fff;
+  color: var(--c-text);
+  padding: 14px 34px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  border-radius: 2px;
+  transition: all .25s;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.hero-btn-main:hover { background: var(--c-main); color: #fff; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(98,173,237,.3); }
+.hero-btn-sub {
+  background: transparent;
+  color: #fff;
+  padding: 14px 28px;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  border: 1px solid rgba(255,255,255,.5);
+  border-radius: 2px;
+  transition: all .25s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.hero-btn-sub:hover { background: rgba(255,255,255,.12); border-color: #fff; }
+
+/* Hero Controls */
+.hero-controls {
+  position: absolute;
+  bottom: 36px;
+  left: clamp(40px, 8vw, 120px);
+  right: clamp(40px, 8vw, 120px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.hero-dots { display: flex; gap: 8px; }
+.hero-dot {
+  width: 28px; height: 2px;
+  background: rgba(255,255,255,.35);
+  border-radius: 1px;
+  cursor: pointer;
+  transition: all .35s var(--ease);
+  position: relative;
+  overflow: hidden;
+}
+.hero-dot::after {
+  content: '';
+  position: absolute;
+  left: 0; top: 0;
+  height: 100%;
+  width: 0;
+  background: #fff;
+  border-radius: 1px;
+}
+.hero-dot.active { width: 52px; }
+.hero-dot.active::after {
+  width: 100%;
+  transition: width 5.8s linear;
+}
+.hero-arrows { display: flex; gap: 8px; }
+.hero-arrow {
+  width: 44px; height: 44px;
+  border: 1px solid rgba(255,255,255,.4);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  cursor: pointer;
+  transition: all .25s;
+}
+.hero-arrow:hover { background: rgba(255,255,255,.15); border-color: #fff; }
+.hero-arrow svg { width: 18px; height: 18px; stroke-width: 1.5; }
+.hero-scroll-hint {
+  position: absolute;
+  bottom: 36px;
+  right: clamp(40px, 8vw, 120px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255,255,255,.5);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-family: var(--f-en);
+}
+.hero-scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, rgba(255,255,255,.5), transparent);
+  animation: scroll-line 2s ease-in-out infinite;
+}
+@keyframes scroll-line {
+  0%,100% { transform: scaleY(0); transform-origin: top; }
+  50% { transform: scaleY(1); transform-origin: top; }
+}
+
+/* =============================================
+   CATEGORY SECTION
+============================================= */
+.cat-section { background: var(--c-bg); }
+.cat-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 20px;
+}
+.cat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  padding: 24px 12px 20px;
+  border-radius: var(--radius-m);
+  border: 1px solid transparent;
+  transition: all .28s var(--ease);
+  text-decoration: none;
+}
+.cat-item:hover {
+  border-color: var(--c-border);
+  background: #fff;
+  box-shadow: var(--shadow-m);
+  transform: translateY(-4px);
+}
+.cat-icon-wrap {
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .28s var(--ease);
+  position: relative;
+}
+.cat-icon-wrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity .28s;
+}
+.cat-item:hover .cat-icon-wrap::before { opacity: 1; }
+.ci-gift { background: rgba(207,174,107,.12); }
+.ci-gift::before { background: rgba(207,174,107,.2); }
+.ci-kids { background: rgba(98,173,237,.1); }
+.ci-kids::before { background: rgba(98,173,237,.18); }
+.ci-women { background: rgba(220,157,180,.12); }
+.ci-women::before { background: rgba(220,157,180,.2); }
+.ci-men { background: rgba(90,120,160,.1); }
+.ci-men::before { background: rgba(90,120,160,.18); }
+.ci-home { background: rgba(152,195,130,.1); }
+.ci-home::before { background: rgba(152,195,130,.18); }
+.ci-food { background: rgba(230,160,95,.1); }
+.ci-food::before { background: rgba(230,160,95,.18); }
+.cat-icon-wrap svg { width: 30px; height: 30px; position: relative; z-index: 1; }
+.cat-name {
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: var(--ls);
+  color: var(--c-text2);
+  text-align: center;
+  line-height: 1.5;
+  transition: color .2s;
+}
+.cat-name-en {
+  font-family: var(--f-en);
+  font-size: 14px;
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  color: var(--c-text);
+  display: block;
+  margin-bottom: 2px;
+}
+.cat-item:hover .cat-name { color: var(--c-main); }
+
+/* =============================================
+   TOPICS SECTION
+============================================= */
+.topics-section { background: var(--c-warm); }
+.topics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+.topic-card {
+  background: #fff;
+  border-radius: var(--radius-m);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all .3s var(--ease);
+  box-shadow: var(--shadow-s);
+}
+.topic-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-l); }
+.topic-img {
+  height: 220px;
+  overflow: hidden;
+  position: relative;
+}
+.topic-img img {
+  transition: transform .6s var(--ease);
+}
+.topic-card:hover .topic-img img { transform: scale(1.06); }
+.topic-tag {
+  position: absolute;
+  top: 14px; left: 14px;
+  background: var(--c-main);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 100px;
+}
+.topic-body { padding: 22px 24px 26px; }
+.topic-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.topic-date { font-size: 11px; color: var(--c-text3); font-family: var(--f-en); font-weight: 300; letter-spacing: 0.12em; }
+.topic-cat { font-size: 10px; color: var(--c-accent); letter-spacing: 0.1em; font-weight: 500; }
+.topic-title {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.6;
+  letter-spacing: var(--ls);
+  color: var(--c-text);
+  margin-bottom: 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.topic-desc {
+  font-size: 12px;
+  color: var(--c-text3);
+  line-height: 1.7;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* =============================================
+   PRODUCT CARDS & GRID
+============================================= */
+.product-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+.product-grid-4-sm {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.prod-card {
+  cursor: pointer;
+  position: relative;
+}
+.prod-img-wrap {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-s);
+  aspect-ratio: 3/4;
+  background: var(--c-surface);
+}
+.prod-img-wrap img {
+  transition: transform .7s var(--ease);
+}
+.prod-card:hover .prod-img-wrap img { transform: scale(1.07); }
+.prod-badges {
+  position: absolute;
+  top: 12px; left: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 2;
+}
+.prod-badge {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  padding: 3px 8px;
+  border-radius: 2px;
+}
+.pb-new { background: var(--c-main); color: #fff; }
+.pb-sale { background: var(--c-buy); color: #fff; }
+.pb-best { background: var(--c-accent); color: #fff; }
+.pb-limited { background: var(--c-text); color: #fff; }
+.prod-wish {
+  position: absolute;
+  top: 10px; right: 10px;
+  width: 34px; height: 34px;
+  background: rgba(255,255,255,.92);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: all .25s;
+  box-shadow: var(--shadow-s);
+}
+.prod-card:hover .prod-wish { opacity: 1; transform: none; }
+.prod-wish svg { width: 16px; height: 16px; stroke-width: 1.5; color: var(--c-text2); }
+.prod-wish.active svg { fill: #e05c6a; stroke: #e05c6a; }
+.prod-quick {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: rgba(34,34,34,.88);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-align: center;
+  padding: 12px;
+  opacity: 0;
+  transform: translateY(100%);
+  transition: all .3s var(--ease);
+}
+.prod-card:hover .prod-quick { opacity: 1; transform: none; }
+.prod-info { padding: 14px 4px 0; }
+.prod-brand {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-text3);
+  margin-bottom: 4px;
+  font-family: var(--f-en);
+  font-weight: 300;
+}
+.prod-name {
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: var(--ls);
+  line-height: 1.55;
+  color: var(--c-text);
+  margin-bottom: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.prod-price-row { display: flex; align-items: center; gap: 8px; }
+.prod-price {
+  font-family: var(--f-en);
+  font-size: 16px;
+  font-weight: 300;
+  letter-spacing: 0.06em;
+  color: var(--c-text);
+}
+.prod-price-old {
+  font-size: 12px;
+  color: var(--c-text3);
+  text-decoration: line-through;
+  font-family: var(--f-en);
+  font-weight: 300;
+}
+.prod-stars { display: flex; gap: 2px; margin-top: 6px; }
+.prod-star { color: var(--c-accent); font-size: 12px; }
+.prod-rev-count { font-size: 11px; color: var(--c-text3); margin-left: 4px; }
+
+/* =============================================
+   NEW ARRIVALS SECTION
+============================================= */
+.new-section { background: var(--c-bg); }
+
+/* =============================================
+   BEST SELLERS
+============================================= */
+.best-section { background: var(--c-warm); }
+.best-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: clamp(32px, 4vw, 52px);
+}
+.ranking-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+.rank-num {
+  font-family: var(--f-en);
+  font-size: 48px;
+  font-weight: 300;
+  color: var(--c-border);
+  line-height: 1;
+  margin-bottom: -6px;
+  position: relative;
+  z-index: 0;
+}
+.rank-num.rank-1 { color: rgba(207,174,107,.35); }
+.rank-num.rank-2 { color: rgba(180,180,180,.3); }
+.rank-num.rank-3 { color: rgba(185,135,95,.25); }
+
+/* =============================================
+   BRAND SECTION
+============================================= */
+.brand-section { background: var(--c-bg); overflow: hidden; }
+.brand-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 560px;
+}
+.brand-visual {
+  position: relative;
+  overflow: hidden;
+}
+.brand-visual img { height: 100%; }
+.brand-visual-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, transparent 60%, rgba(252,252,253,.6) 100%);
+}
+.brand-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(40px, 6vw, 80px) clamp(40px, 5vw, 70px);
+}
+.brand-stats {
+  display: flex;
+  gap: 36px;
+  margin-top: 36px;
+  padding-top: 36px;
+  border-top: 1px solid var(--c-border);
+}
+.brand-stat-num {
+  font-family: var(--f-en);
+  font-size: clamp(28px, 3.5vw, 44px);
+  font-weight: 300;
+  color: var(--c-main);
+  letter-spacing: 0.04em;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.brand-stat-label { font-size: 11px; color: var(--c-text3); letter-spacing: var(--ls); }
+
+/* =============================================
+   GIFT GUIDE
+============================================= */
+.gift-section {
+  background: var(--c-warm);
+  position: relative;
+}
+.gift-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.gift-card {
+  border-radius: var(--radius-m);
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  aspect-ratio: 3/4;
+}
+.gift-card img { height: 100%; transition: transform .7s var(--ease); }
+.gift-card:hover img { transform: scale(1.06); }
+.gift-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(20,20,20,.72) 0%, transparent 55%);
+}
+.gift-card-content {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 28px;
+}
+.gift-price-range {
+  font-family: var(--f-en);
+  font-size: 10px;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--c-accent);
+  margin-bottom: 8px;
+  display: block;
+}
+.gift-title {
+  font-family: var(--f-en);
+  font-size: clamp(18px, 2vw, 26px);
+  font-weight: 300;
+  color: #fff;
+  letter-spacing: 0.04em;
+  line-height: 1.25;
+  margin-bottom: 14px;
+}
+.gift-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,.18);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,.35);
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 2px;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition: all .25s;
+}
+.gift-btn:hover { background: rgba(255,255,255,.28); }
+
+/* =============================================
+   INSTAGRAM SECTION
+============================================= */
+.insta-section { background: var(--c-bg); }
+.insta-header { text-align: center; margin-bottom: 36px; }
+.insta-handle {
+  font-family: var(--f-en);
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--c-main);
+  letter-spacing: 0.1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+.insta-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+}
+.insta-item {
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: var(--radius-s);
+  position: relative;
+  cursor: pointer;
+}
+.insta-item img { transition: transform .5s var(--ease); }
+.insta-item:hover img { transform: scale(1.1); }
+.insta-hover {
+  position: absolute;
+  inset: 0;
+  background: rgba(98,173,237,.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity .3s;
+}
+.insta-item:hover .insta-hover { opacity: 1; }
+.insta-hover svg { width: 28px; height: 28px; color: #fff; }
+
+/* =============================================
+   NEWSLETTER
+============================================= */
+.nl-section { background: var(--c-text); }
+.nl-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(40px, 6vw, 100px);
+  align-items: center;
+  padding: clamp(60px, 8vw, 100px) 0;
+}
+.nl-label {
+  font-family: var(--f-en);
+  font-size: 10px;
+  font-weight: 300;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--c-accent);
+  display: block;
+  margin-bottom: 12px;
+}
+.nl-title {
+  font-family: var(--f-en);
+  font-size: clamp(26px, 3.2vw, 44px);
+  font-weight: 300;
+  color: #fff;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+.nl-desc { font-size: 13px; font-weight: 300; color: rgba(255,255,255,.6); line-height: 1.9; margin-bottom: 28px; }
+.nl-benefits { display: flex; flex-direction: column; gap: 10px; }
+.nl-benefit {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: rgba(255,255,255,.7);
+  font-weight: 300;
+}
+.nl-benefit svg { width: 14px; height: 14px; color: var(--c-accent); flex-shrink: 0; }
+.nl-form-wrap { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-radius: var(--radius-m); padding: 36px; }
+.nl-form-title { font-size: 15px; font-weight: 400; color: #fff; letter-spacing: var(--ls); margin-bottom: 20px; }
+.nl-input-group { display: flex; flex-direction: column; gap: 12px; }
+.nl-input {
+  width: 100%;
+  padding: 14px 18px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: var(--radius-s);
+  font-size: 13px;
+  color: #fff;
+  letter-spacing: var(--ls);
+  transition: border-color .2s;
+}
+.nl-input::placeholder { color: rgba(255,255,255,.35); }
+.nl-input:focus { border-color: var(--c-main); }
+.nl-note { font-size: 11px; color: rgba(255,255,255,.35); margin-top: 12px; line-height: 1.6; }
+
+/* =============================================
+   FOOTER
+============================================= */
+.footer { background: #111111; color: rgba(255,255,255,.65); }
+.footer-main {
+  padding: clamp(60px, 8vw, 100px) 0 clamp(40px, 5vw, 60px);
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr;
+  gap: 48px;
+}
+.footer-brand {}
+.footer-logo {
+  font-family: var(--f-en);
+  font-size: 20px;
+  font-weight: 300;
+  letter-spacing: 0.18em;
+  color: #fff;
+  margin-bottom: 14px;
+}
+.footer-logo span { color: var(--c-main); }
+.footer-tagline {
+  font-size: 13px;
+  font-weight: 300;
+  color: rgba(255,255,255,.5);
+  line-height: 1.9;
+  letter-spacing: var(--ls);
+  margin-bottom: 24px;
+}
+.footer-sns { display: flex; gap: 10px; }
+.sns-btn {
+  width: 36px; height: 36px;
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,.5);
+  transition: all .2s;
+}
+.sns-btn:hover { border-color: var(--c-main); color: var(--c-main); background: rgba(98,173,237,.08); }
+.sns-btn svg { width: 16px; height: 16px; stroke-width: 1.5; }
+.footer-col-title {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #fff;
+  margin-bottom: 18px;
+}
+.footer-links { display: flex; flex-direction: column; gap: 10px; }
+.footer-link {
+  font-size: 13px;
+  font-weight: 300;
+  color: rgba(255,255,255,.5);
+  letter-spacing: var(--ls);
+  transition: color .2s;
+  display: inline-block;
+}
+.footer-link:hover { color: rgba(255,255,255,.9); }
+.footer-app-title { font-size: 12px; color: rgba(255,255,255,.5); margin-bottom: 12px; }
+.app-badges { display: flex; flex-direction: column; gap: 8px; }
+.app-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: var(--radius-s);
+  color: #fff;
+  cursor: pointer;
+  transition: all .2s;
+}
+.app-badge:hover { border-color: rgba(255,255,255,.35); background: rgba(255,255,255,.04); }
+.app-badge-text { display: flex; flex-direction: column; }
+.app-badge-sub { font-size: 9px; color: rgba(255,255,255,.45); letter-spacing: 0.08em; }
+.app-badge-name { font-size: 13px; font-weight: 400; color: #fff; }
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,.08);
+  padding: 24px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.footer-copy { font-size: 11px; color: rgba(255,255,255,.3); letter-spacing: var(--ls); }
+.footer-bottom-links { display: flex; gap: 20px; }
+.footer-bottom-link { font-size: 11px; color: rgba(255,255,255,.3); transition: color .2s; }
+.footer-bottom-link:hover { color: rgba(255,255,255,.6); }
+.payment-icons { display: flex; gap: 8px; align-items: center; }
+.payment-icon {
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 10px;
+  color: rgba(255,255,255,.5);
+  font-family: var(--f-en);
+  letter-spacing: 0.06em;
+}
+
+/* =============================================
+   PRODUCT PAGE
+============================================= */
+.pp-wrap {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 clamp(20px, 4vw, 60px);
+}
+.pp-breadcrumb {
+  padding: 20px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--c-text3);
+  letter-spacing: var(--ls);
+}
+.pp-breadcrumb a { transition: color .2s; }
+.pp-breadcrumb a:hover { color: var(--c-text); }
+.pp-breadcrumb span { color: var(--c-border); }
+.pp-main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(32px, 5vw, 80px);
+  align-items: start;
+  padding: 20px 0 60px;
+}
+
+/* Gallery */
+.pp-gallery { position: sticky; top: calc(var(--hdr-h) + 24px); }
+.pp-main-img {
+  aspect-ratio: 1;
+  border-radius: var(--radius-m);
+  overflow: hidden;
+  background: var(--c-surface);
+  margin-bottom: 12px;
+  cursor: zoom-in;
+  position: relative;
+}
+.pp-main-img img { transition: transform .5s var(--ease); }
+.pp-main-img:hover img { transform: scale(1.04); }
+.pp-img-zoom {
+  position: absolute;
+  bottom: 12px; right: 12px;
+  background: rgba(255,255,255,.9);
+  border-radius: 50%;
+  width: 36px; height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity .2s;
+}
+.pp-main-img:hover .pp-img-zoom { opacity: 1; }
+.pp-img-zoom svg { width: 16px; height: 16px; color: var(--c-text2); }
+.pp-thumbs { display: flex; gap: 8px; }
+.pp-thumb {
+  width: 72px; height: 72px;
+  border-radius: var(--radius-s);
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color .2s;
+  flex-shrink: 0;
+  background: var(--c-surface);
+}
+.pp-thumb.active { border-color: var(--c-main); }
+.pp-thumb:hover { border-color: var(--c-border); }
+
+/* Product Info */
+.pp-info {}
+.pp-brand-link {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--c-main);
+  font-family: var(--f-en);
+  font-weight: 300;
+  display: inline-block;
+  margin-bottom: 10px;
+  border-bottom: 1px solid transparent;
+  transition: border-color .2s;
+}
+.pp-brand-link:hover { border-color: var(--c-main); }
+.pp-product-name {
+  font-size: clamp(20px, 2.5vw, 30px);
+  font-weight: 300;
+  line-height: 1.35;
+  letter-spacing: var(--ls);
+  color: var(--c-text);
+  margin-bottom: 14px;
+}
+.pp-rating-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.pp-stars { display: flex; gap: 2px; }
+.pp-star { font-size: 14px; color: var(--c-accent); }
+.pp-rating-score { font-family: var(--f-en); font-size: 13px; font-weight: 300; color: var(--c-text2); }
+.pp-rating-count { font-size: 12px; color: var(--c-text3); }
+.pp-write-review {
+  font-size: 12px;
+  color: var(--c-main);
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+  transition: border-color .2s;
+}
+.pp-write-review:hover { border-color: var(--c-main); }
+.pp-divider { height: 1px; background: var(--c-border); margin: 18px 0; }
+.pp-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.pp-price {
+  font-family: var(--f-en);
+  font-size: clamp(24px, 2.8vw, 34px);
+  font-weight: 300;
+  color: var(--c-text);
+  letter-spacing: 0.04em;
+}
+.pp-price-old {
+  font-size: 17px;
+  color: var(--c-text3);
+  text-decoration: line-through;
+  font-family: var(--f-en);
+  font-weight: 300;
+}
+.pp-discount {
+  background: var(--c-buy);
+  color: #fff;
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 2px;
+  font-weight: 500;
+}
+.pp-tax { font-size: 11px; color: var(--c-text3); letter-spacing: var(--ls); margin-bottom: 20px; }
+.pp-option-label {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: var(--c-text);
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.pp-option-hint { font-size: 11px; font-weight: 300; color: var(--c-main); cursor: pointer; }
+.pp-sizes { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+.pp-size-btn {
+  min-width: 48px;
+  padding: 10px 14px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-s);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--c-text2);
+  transition: all .2s;
+  text-align: center;
+}
+.pp-size-btn:hover { border-color: var(--c-text); color: var(--c-text); }
+.pp-size-btn.active { border-color: var(--c-text); background: var(--c-text); color: #fff; }
+.pp-size-btn.sold-out { opacity: .35; text-decoration: line-through; cursor: not-allowed; }
+.pp-colors { display: flex; gap: 8px; margin-bottom: 20px; }
+.pp-color-btn {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  outline: 2px solid transparent;
+  cursor: pointer;
+  transition: outline .2s;
+}
+.pp-color-btn.active { outline: 2px solid var(--c-text); outline-offset: 2px; }
+.pp-qty-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.pp-qty-label { font-size: 12px; font-weight: 500; color: var(--c-text); }
+.pp-qty {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-s);
+  overflow: hidden;
+}
+.pp-qty-btn {
+  width: 40px; height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: var(--c-text2);
+  cursor: pointer;
+  transition: background .2s;
+}
+.pp-qty-btn:hover { background: var(--c-surface); }
+.pp-qty-num {
+  width: 48px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--c-text);
+  border-left: 1px solid var(--c-border);
+  border-right: 1px solid var(--c-border);
+}
+.pp-stock { font-size: 12px; color: var(--c-text3); display: flex; align-items: center; gap: 5px; }
+.pp-stock-dot { width: 6px; height: 6px; border-radius: 50%; background: #5cb85c; }
+.pp-btns { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.pp-cart-btn {
+  width: 100%;
+  padding: 16px;
+  background: var(--c-btn);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  border-radius: var(--radius-s);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all .25s;
+  box-shadow: 0 4px 16px rgba(74,144,226,.25);
+}
+.pp-cart-btn:hover { background: var(--c-sub); transform: translateY(-1px); box-shadow: 0 6px 24px rgba(74,144,226,.35); }
+.pp-buy-btn {
+  width: 100%;
+  padding: 16px;
+  background: var(--c-buy);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  border-radius: var(--radius-s);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all .25s;
+  box-shadow: 0 4px 16px rgba(242,153,74,.25);
+}
+.pp-buy-btn:hover { background: #e08c3a; transform: translateY(-1px); }
+.pp-wish-btn {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid var(--c-border);
+  color: var(--c-text2);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  border-radius: var(--radius-s);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all .25s;
+}
+.pp-wish-btn:hover { border-color: #e05c6a; color: #e05c6a; }
+.pp-info-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.pp-info-tag {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 12px;
+  background: var(--c-surface);
+  border-radius: 100px;
+  font-size: 11px;
+  color: var(--c-text2);
+  letter-spacing: 0.05em;
+}
+.pp-info-tag svg { width: 13px; height: 13px; stroke-width: 1.8; color: var(--c-main); }
+
+/* Accordion */
+.pp-accordion { border-top: 1px solid var(--c-border); }
+.pp-accordion-item { border-bottom: 1px solid var(--c-border); }
+.pp-accordion-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--c-text);
+  transition: color .2s;
+}
+.pp-accordion-hdr:hover { color: var(--c-main); }
+.pp-accordion-icon { width: 20px; height: 20px; transition: transform .3s; }
+.pp-accordion-item.open .pp-accordion-icon { transform: rotate(45deg); }
+.pp-accordion-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .35s var(--ease);
+}
+.pp-accordion-item.open .pp-accordion-body { max-height: 400px; }
+.pp-accordion-content { padding: 0 0 20px; font-size: 13px; color: var(--c-text2); line-height: 1.9; letter-spacing: var(--ls); }
+
+/* Related */
+.pp-related { background: var(--c-warm); padding: clamp(48px, 6vw, 80px) 0; }
+.pp-related-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 clamp(20px, 4vw, 60px);
+}
+
+/* =============================================
+   CATEGORY PAGE
+============================================= */
+.cp-hero {
+  background: var(--c-warm);
+  padding: clamp(40px, 5vw, 64px) 0 clamp(24px, 3vw, 36px);
+}
+.cp-hero-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 clamp(20px, 4vw, 60px);
+}
+.cp-hero-label { margin-bottom: 6px; }
+.cp-hero-title {
+  font-family: var(--f-en);
+  font-size: clamp(26px, 3.5vw, 46px);
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+}
+.cp-hero-count { font-size: 12px; color: var(--c-text3); letter-spacing: var(--ls); }
+.cp-filter-bar {
+  background: #fff;
+  border-bottom: 1px solid var(--c-border);
+  position: sticky;
+  top: var(--hdr-h);
+  z-index: 50;
+}
+.cp-filter-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 clamp(20px, 4vw, 60px);
+  display: flex;
+  align-items: center;
+  gap: 0;
+  height: 52px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.cp-filter-inner::-webkit-scrollbar { display: none; }
+.cp-filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--c-text2);
+  border: 1px solid var(--c-border);
+  border-radius: 100px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all .2s;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+.cp-filter-btn:hover { border-color: var(--c-text); color: var(--c-text); }
+.cp-filter-btn.active { background: var(--c-text); color: #fff; border-color: var(--c-text); }
+.cp-filter-btn svg { width: 12px; height: 12px; }
+.cp-divider { width: 1px; height: 20px; background: var(--c-border); margin: 0 8px; flex-shrink: 0; }
+.cp-sort-select {
+  border: none;
+  font-size: 12px;
+  color: var(--c-text2);
+  letter-spacing: var(--ls);
+  cursor: pointer;
+  background: none;
+  margin-left: auto;
+  flex-shrink: 0;
+  padding: 0 4px;
+}
+.cp-active-filters {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 12px clamp(20px, 4vw, 60px);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.cp-active-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  background: rgba(98,173,237,.1);
+  border-radius: 100px;
+  font-size: 11px;
+  color: var(--c-main);
+  font-weight: 500;
+}
+.cp-active-tag button { color: var(--c-main); font-size: 14px; line-height: 1; }
+.cp-clear-all { font-size: 11px; color: var(--c-text3); cursor: pointer; margin-left: 4px; transition: color .2s; }
+.cp-clear-all:hover { color: var(--c-text); }
+.cp-main {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 32px clamp(20px, 4vw, 60px) 80px;
+}
+.cp-product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+.cp-load-more {
+  text-align: center;
+  margin-top: 48px;
+}
+
+/* =============================================
+   FLOATING ELEMENTS
+============================================= */
+.fab-cart {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  width: 52px; height: 52px;
+  background: var(--c-buy);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 24px rgba(242,153,74,.4);
+  cursor: pointer;
+  z-index: 500;
+  transition: all .25s;
+}
+.fab-cart:hover { transform: translateY(-2px) scale(1.06); box-shadow: 0 10px 32px rgba(242,153,74,.5); }
+.fab-cart svg { width: 22px; height: 22px; color: #fff; }
+.fab-badge {
+  position: absolute;
+  top: -4px; right: -4px;
+  width: 20px; height: 20px;
+  background: var(--c-text);
+  color: #fff;
+  border-radius: 50%;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+.back-top {
+  position: fixed;
+  bottom: 90px;
+  right: 28px;
+  width: 40px; height: 40px;
+  background: rgba(34,34,34,.75);
+  backdrop-filter: blur(8px);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 500;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all .3s;
+}
+.back-top.visible { opacity: 1; transform: none; }
+.back-top:hover { background: var(--c-text); }
+.back-top svg { width: 18px; height: 18px; color: #fff; }
+
+/* =============================================
+   RESPONSIVE
+============================================= */
+@media (max-width: 1100px) {
+  .cat-grid { grid-template-columns: repeat(3, 1fr); }
+  .insta-grid { grid-template-columns: repeat(3, 1fr); }
+  .footer-grid { grid-template-columns: 1.5fr 1fr 1fr; }
+  .mega-cats { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 900px) {
+  .product-grid-4, .ranking-list { grid-template-columns: repeat(2, 1fr); }
+  .topics-grid { grid-template-columns: 1fr 1fr; }
+  .brand-split { grid-template-columns: 1fr; }
+  .gift-grid { grid-template-columns: 1fr 1fr; }
+  .nl-inner { grid-template-columns: 1fr; }
+  .pp-main { grid-template-columns: 1fr; }
+  .pp-gallery { position: static; }
+  .cp-product-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px) {
+  .hdr-nav { display: none; }
+  .hdr-search { display: none; }
+  .cat-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .cat-icon-wrap { width: 54px; height: 54px; }
+  .topics-grid { grid-template-columns: 1fr; }
+  .gift-grid { grid-template-columns: 1fr; }
+  .insta-grid { grid-template-columns: repeat(3, 1fr); }
+  .footer-grid { grid-template-columns: 1fr; }
+  .page-switcher { top: auto; bottom: 80px; right: 12px; }
+}
+
+/* =============================================
+   HERO PLACEHOLDER IMAGES (gradient backgrounds)
+============================================= */
+.hero-bg-1 {
+  background: linear-gradient(135deg, #2C3E50 0%, #3E7CB1 40%, #62ADED 100%);
+}
+.hero-bg-2 {
+  background: linear-gradient(135deg, #1a1a2e 0%, #2d4a6e 40%, #4a7fb5 100%);
+}
+.hero-bg-3 {
+  background: linear-gradient(135deg, #2d2d2d 0%, #4a3728 40%, #7d5a3c 100%);
+}
+/* Topic/Product placeholder images */
+.ph-topic-1 { background: linear-gradient(135deg, #e8f4f8 0%, #b8dded 100%); }
+.ph-topic-2 { background: linear-gradient(135deg, #fef9f0 0%, #f3e4c8 100%); }
+.ph-topic-3 { background: linear-gradient(135deg, #f0f5f0 0%, #c8ddc8 100%); }
+.ph-prod-1 { background: linear-gradient(160deg, #f7f7f8 0%, #ebebec 100%); }
+.ph-prod-2 { background: linear-gradient(160deg, #fef9f4 0%, #f3e8d8 100%); }
+.ph-prod-3 { background: linear-gradient(160deg, #f4f8fc 0%, #dceef8 100%); }
+.ph-prod-4 { background: linear-gradient(160deg, #f8f4fc 0%, #e8d8f0 100%); }
+.ph-brand { background: linear-gradient(135deg, #f0f4f8 0%, #d0e4f0 100%); }
+.ph-gift-1 { background: linear-gradient(160deg, #2c4a6e 0%, #4a7fb5 100%); }
+.ph-gift-2 { background: linear-gradient(160deg, #3d2c1e 0%, #7d5a3c 100%); }
+.ph-gift-3 { background: linear-gradient(160deg, #1e3d1e 0%, #3c7c3c 100%); }
+.ph-insta-1 { background: linear-gradient(135deg, #e8eef8 0%, #c8d8f0 100%); }
+.ph-insta-2 { background: linear-gradient(135deg, #f8f0e8 0%, #f0d8c0 100%); }
+.ph-insta-3 { background: linear-gradient(135deg, #e8f8e8 0%, #c0e0c0 100%); }
+.ph-insta-4 { background: linear-gradient(135deg, #f8e8f8 0%, #e0c0e0 100%); }
+.ph-insta-5 { background: linear-gradient(135deg, #f8f8e8 0%, #e8e8c0 100%); }
+.ph-insta-6 { background: linear-gradient(135deg, #e8f8f8 0%, #c0e8e8 100%); }
+
+/* Product placeholder SVG illustrations */
+.prod-placeholder {
+  width: 100%; height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+}
+</style>
+</head>
+<body>
+
+<!-- Page Switcher -->
+<div class="page-switcher" role="tablist">
+  <button class="pg-btn active" role="tab" aria-selected="true" onclick="switchPage('top',this)">TOP</button>
+  <button class="pg-btn" role="tab" aria-selected="false" onclick="switchPage('product',this)">商品</button>
+  <button class="pg-btn" role="tab" aria-selected="false" onclick="switchPage('category',this)">一覧</button>
+</div>
+
+<!-- FAB Cart -->
+<div class="fab-cart" aria-label="カートを見る">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.932-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"/></svg>
+  <span class="fab-badge">2</span>
+</div>
+
+<!-- Back to Top -->
+<button class="back-top" id="backTop" aria-label="ページトップへ" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.5 15.75l7.5-7.5 7.5 7.5"/></svg>
+</button>
+
+<!-- ===========================
+     ANNOUNCEMENT BAR
+=========================== -->
+<div class="announce-bar" role="marquee" aria-label="お知らせ">
+  <div class="announce-track" id="announceTrack">
+    <span>🚚 税込5,000円以上で<span>送料無料</span></span>
+    <span>✨ 新規会員登録で<span>10%OFF</span>クーポンプレゼント</span>
+    <span>🎁 ギフトラッピング<span>無料対応中</span></span>
+    <span>📦 最短翌日お届け対応商品あり</span>
+    <span>🚚 税込5,000円以上で<span>送料無料</span></span>
+    <span>✨ 新規会員登録で<span>10%OFF</span>クーポンプレゼント</span>
+    <span>🎁 ギフトラッピング<span>無料対応中</span></span>
+    <span>📦 最短翌日お届け対応商品あり</span>
+  </div>
+</div>
+
+<!-- ===========================
+     HEADER
+=========================== -->
+<header class="header" id="mainHeader" role="banner">
+  <div class="hdr-inner">
+
+    <!-- Logo -->
+    <a href="#" class="hdr-logo en" aria-label="F'sPlanet ホームへ">F'<span>s</span>Planet</a>
+
+    <!-- Nav -->
+    <nav class="hdr-nav" role="navigation" aria-label="メインナビゲーション">
+      <div class="hdr-nav-item" data-mega="true">Kids &amp; Baby</div>
+      <div class="hdr-nav-item" data-mega="true">Women</div>
+      <div class="hdr-nav-item" data-mega="true">Men</div>
+      <div class="hdr-nav-item" data-mega="true">Home</div>
+      <div class="hdr-nav-item" data-mega="true">Food &amp; Drink</div>
+      <div class="hdr-nav-item" data-mega="true">Gift</div>
+    </nav>
+
+    <!-- Icons -->
+    <div class="hdr-icons">
+      <div class="hdr-search" role="search">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 15.803 7.5 7.5 0 0015.803 15.803z"/></svg>
+        <input type="text" placeholder="キーワードで検索" aria-label="サイト内検索">
+      </div>
+      <button class="hdr-icon-btn" aria-label="お気に入り">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
+        <span class="hdr-badge">3</span>
+      </button>
+      <button class="hdr-icon-btn" aria-label="マイページ">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+      </button>
+      <button class="hdr-icon-btn" aria-label="カート（2点）">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.932-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"/></svg>
+        <span class="hdr-badge">2</span>
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Mega Menu -->
+  <div class="mega-menu" id="megaMenu" role="dialog" aria-label="カテゴリメニュー">
+    <div class="mega-inner">
+      <div>
+        <div class="mega-section-title">カテゴリ</div>
+        <div class="mega-links">
+          <a class="mega-link" href="#">新着アイテム</a>
+          <a class="mega-link" href="#">人気ランキング</a>
+          <a class="mega-link" href="#">セール品</a>
+          <a class="mega-link" href="#">ブランド一覧</a>
+          <a class="mega-link" href="#">ギフト特集</a>
+          <a class="mega-link" href="#">定期購入</a>
+        </div>
+      </div>
+      <div>
+        <div class="mega-section-title">人気カテゴリ</div>
+        <div class="mega-cats">
+          <div class="mega-cat-item">
+            <div class="mega-cat-img ph-prod-2"></div>
+            <span class="mega-cat-label">ベビー服</span>
+          </div>
+          <div class="mega-cat-item">
+            <div class="mega-cat-img ph-prod-3"></div>
+            <span class="mega-cat-label">おもちゃ</span>
+          </div>
+          <div class="mega-cat-item">
+            <div class="mega-cat-img ph-prod-1"></div>
+            <span class="mega-cat-label">絵本</span>
+          </div>
+          <div class="mega-cat-item">
+            <div class="mega-cat-img ph-prod-4"></div>
+            <span class="mega-cat-label">ベビー用品</span>
+          </div>
+          <div class="mega-cat-item">
+            <div class="mega-cat-img ph-prod-2"></div>
+            <span class="mega-cat-label">マタニティ</span>
+          </div>
+          <div class="mega-cat-item">
+            <div class="mega-cat-img ph-prod-3"></div>
+            <span class="mega-cat-label">ギフトセット</span>
+          </div>
+          <div class="mega-cat-item">
+            <div class="mega-cat-img ph-prod-1"></div>
+            <span class="mega-cat-label">キッズ服</span>
+          </div>
+          <div class="mega-cat-item">
+            <div class="mega-cat-img ph-prod-4"></div>
+            <span class="mega-cat-label">外遊びグッズ</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="mega-section-title">特集</div>
+        <div class="mega-feature">
+          <div class="mega-feature-tag">Summer Special</div>
+          <div class="mega-feature-title">夏のギフト<br>特集 2025</div>
+          <div class="mega-feature-img ph-topic-1"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ========================================
+     TOP PAGE
+======================================== -->
+<main id="page-top" class="page-section active">
+
+  <!-- ① HERO SLIDESHOW -->
+  <section class="hero" aria-label="メインビジュアル">
+    <div class="hero-track" id="heroTrack">
+
+      <!-- Slide 1 -->
+      <div class="hero-slide active" id="slide-0">
+        <div class="hero-bg hero-bg-1"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <span class="hero-eyebrow en">New Summer Collection 2025</span>
+          <h1 class="hero-title en">家族の時間を<br>もっと豊かに。</h1>
+          <p class="hero-subtitle">上質なアイテムで、毎日の暮らしに<br>小さな幸せを届けます。</p>
+          <div class="hero-cta">
+            <a class="hero-btn-main en" href="#">
+              Shop Now
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>
+            </a>
+            <a class="hero-btn-sub en" href="#">New Arrivals</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 2 -->
+      <div class="hero-slide" id="slide-1">
+        <div class="hero-bg hero-bg-2"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <span class="hero-eyebrow en">Gift Season Special</span>
+          <h1 class="hero-title en">大切な人への<br>贈りもの。</h1>
+          <p class="hero-subtitle">心を込めたギフトで、<br>特別な瞬間を彩る。</p>
+          <div class="hero-cta">
+            <a class="hero-btn-main en" href="#">Gift Guide</a>
+            <a class="hero-btn-sub en" href="#">View All</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 3 -->
+      <div class="hero-slide" id="slide-2">
+        <div class="hero-bg hero-bg-3"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <span class="hero-eyebrow en">Home & Lifestyle</span>
+          <h1 class="hero-title en">暮らしを整える、<br>上質な日用品。</h1>
+          <p class="hero-subtitle">こだわりのインテリアと雑貨で、<br>お家の時間を豊かに。</p>
+          <div class="hero-cta">
+            <a class="hero-btn-main en" href="#">Explore Home</a>
+            <a class="hero-btn-sub en" href="#">Sale Items</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Controls -->
+    <div class="hero-controls">
+      <div class="hero-dots" role="tablist" aria-label="スライド選択">
+        <button class="hero-dot active" role="tab" aria-selected="true" aria-label="スライド1" onclick="goToSlide(0)"></button>
+        <button class="hero-dot" role="tab" aria-selected="false" aria-label="スライド2" onclick="goToSlide(1)"></button>
+        <button class="hero-dot" role="tab" aria-selected="false" aria-label="スライド3" onclick="goToSlide(2)"></button>
+      </div>
+      <div class="hero-arrows">
+        <button class="hero-arrow" aria-label="前のスライド" onclick="heroMove(-1)">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/></svg>
+        </button>
+        <button class="hero-arrow" aria-label="次のスライド" onclick="heroMove(1)">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
+        </button>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ② CATEGORY -->
+  <section class="cat-section section-pad-sm" aria-labelledby="cat-heading">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-label en">Category</span>
+        <h2 class="section-title-ja sr" id="cat-heading">カテゴリから探す</h2>
+      </div>
+      <div class="cat-grid">
+
+        <a class="cat-item sr sr-delay-1" href="#" aria-label="Giftカテゴリ">
+          <div class="cat-icon-wrap ci-gift">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#CFAE6B" stroke-width="1.4"><path stroke-linecap="round" stroke-linejoin="round" d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1014.625 7.5H12V4.875zM12 4.875A2.625 2.625 0 109.375 7.5H12V4.875zM12 7.5V21m4.5-13.5H18a2.25 2.25 0 010 4.5h-6V7.5h1.5zm-6 0H6a2.25 2.25 0 000 4.5h6V7.5H7.5z"/></svg>
+          </div>
+          <div class="cat-name">
+            <span class="cat-name-en">Gift</span>
+            ギフト
+          </div>
+        </a>
+
+        <a class="cat-item sr sr-delay-2" href="#" aria-label="Kids &amp; Babyカテゴリ">
+          <div class="cat-icon-wrap ci-kids">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#62ADED" stroke-width="1.4"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8.25v-1.5m0 1.5c-1.355 0-2.697.056-4.024.166C6.845 8.51 6 9.473 6 10.608v2.513m6-4.87c1.355 0 2.697.055 4.024.165C17.155 8.51 18 9.473 18 10.608v2.513m-3-4.87v-1.5m-6 4.5v3.75m6-3.75v3.75m-9 3.375h12m0 0c.621 0 1.125-.504 1.125-1.125V17.25c0-.621-.504-1.125-1.125-1.125H4.875c-.621 0-1.125.504-1.125 1.125v1.125c0 .621.504 1.125 1.125 1.125z"/></svg>
+          </div>
+          <div class="cat-name">
+            <span class="cat-name-en">Kids &amp; Baby</span>
+            キッズ・ベビー
+          </div>
+        </a>
+
+        <a class="cat-item sr sr-delay-3" href="#" aria-label="Womenカテゴリ">
+          <div class="cat-icon-wrap ci-women">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#DC9DB4" stroke-width="1.4"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+          </div>
+          <div class="cat-name">
+            <span class="cat-name-en">Women</span>
+            ウィメンズ
+          </div>
+        </a>
+
+        <a class="cat-item sr sr-delay-4" href="#" aria-label="Menカテゴリ">
+          <div class="cat-icon-wrap ci-men">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#5A78A0" stroke-width="1.4"><path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          </div>
+          <div class="cat-name">
+            <span class="cat-name-en">Men</span>
+            メンズ
+          </div>
+        </a>
+
+        <a class="cat-item sr sr-delay-5" href="#" aria-label="Homeカテゴリ">
+          <div class="cat-icon-wrap ci-home">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#98C382" stroke-width="1.4"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/></svg>
+          </div>
+          <div class="cat-name">
+            <span class="cat-name-en">Home</span>
+            インテリア・雑貨
+          </div>
+        </a>
+
+        <a class="cat-item sr sr-delay-5" href="#" aria-label="Food &amp; Drinkカテゴリ">
+          <div class="cat-icon-wrap ci-food">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#E6A05F" stroke-width="1.4"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <div class="cat-name">
+            <span class="cat-name-en">Food &amp; Drink</span>
+            フード・ドリンク
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ③ TOPICS -->
+  <section class="topics-section section-pad" aria-labelledby="topics-heading">
+    <div class="container">
+      <div class="section-head flex-between" style="text-align:left;margin-bottom:clamp(28px,4vw,48px);">
+        <div>
+          <span class="section-label en">Topics</span>
+          <h2 class="section-title-ja" id="topics-heading">特集・読みもの</h2>
+        </div>
+        <a class="btn-link en" href="#">All Articles <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></a>
+      </div>
+      <div class="topics-grid">
+
+        <article class="topic-card sr">
+          <div class="topic-img ph-topic-1">
+            <span class="topic-tag">特集</span>
+          </div>
+          <div class="topic-body">
+            <div class="topic-meta">
+              <span class="topic-date en">2025.07.01</span>
+              <span class="topic-cat">Kids &amp; Baby</span>
+            </div>
+            <h3 class="topic-title">【夏ギフト特集】赤ちゃんへの贈りもの。はじめてのお誕生日におすすめのギフトセット10選</h3>
+            <p class="topic-desc">大切な家族の記念日に、心を込めた贈りものを。人気ブランドのギフトセットを厳選してご紹介します。</p>
+          </div>
+        </article>
+
+        <article class="topic-card sr sr-delay-2">
+          <div class="topic-img ph-topic-2">
+            <span class="topic-tag">コラム</span>
+          </div>
+          <div class="topic-body">
+            <div class="topic-meta">
+              <span class="topic-date en">2025.06.28</span>
+              <span class="topic-cat">Home</span>
+            </div>
+            <h3 class="topic-title">インテリアの教科書。暮らしをシンプルに整えるための、上質なアイテムの選び方</h3>
+            <p class="topic-desc">ミニマルで洗練された空間づくりのヒントと、長く使えるお気に入りのアイテムをご提案します。</p>
+          </div>
+        </article>
+
+        <article class="topic-card sr sr-delay-4">
+          <div class="topic-img ph-topic-3">
+            <span class="topic-tag">レシピ</span>
+          </div>
+          <div class="topic-body">
+            <div class="topic-meta">
+              <span class="topic-date en">2025.06.22</span>
+              <span class="topic-cat">Food &amp; Drink</span>
+            </div>
+            <h3 class="topic-title">週末の家族時間を豊かにする、こだわりのオーガニック食材とテーブルウェアの提案</h3>
+            <p class="topic-desc">食卓から始まる、豊かな家族の時間。選りすぐりの食材とお気に入りの器で、日常を特別な時間に。</p>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ④ NEW ARRIVALS -->
+  <section class="new-section section-pad" aria-labelledby="new-heading">
+    <div class="container">
+      <div class="section-head flex-between" style="text-align:left;margin-bottom:clamp(28px,4vw,48px);">
+        <div>
+          <span class="section-label en">New Arrival</span>
+          <h2 class="section-title" id="new-heading" style="font-size:clamp(22px,2.8vw,36px);">新着アイテム</h2>
+        </div>
+        <a class="btn-link en" href="#">View All <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></a>
+      </div>
+      <div class="product-grid-4">
+
+        <div class="prod-card sr">
+          <div class="prod-img-wrap ph-prod-2">
+            <div class="prod-placeholder">🍼</div>
+            <div class="prod-badges"><span class="prod-badge pb-new">New</span></div>
+            <button class="prod-wish" aria-label="お気に入りに追加">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
+            </button>
+            <div class="prod-quick">+ カートに追加</div>
+          </div>
+          <div class="prod-info">
+            <div class="prod-brand en">Organic Cotton Co.</div>
+            <div class="prod-name">オーガニックコットン ベビーロンパース / ナチュラルホワイト</div>
+            <div class="prod-price-row">
+              <span class="prod-price en">¥4,800</span>
+            </div>
+            <div class="prod-stars">
+              <span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span>
+              <span class="prod-rev-count">(24)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="prod-card sr sr-delay-2">
+          <div class="prod-img-wrap ph-prod-3">
+            <div class="prod-placeholder">🧸</div>
+            <div class="prod-badges"><span class="prod-badge pb-new">New</span></div>
+            <button class="prod-wish" aria-label="お気に入りに追加">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
+            </button>
+            <div class="prod-quick">+ カートに追加</div>
+          </div>
+          <div class="prod-info">
+            <div class="prod-brand en">Jellycat</div>
+            <div class="prod-name">バシュフル バニー ぬいぐるみ Mサイズ / ベージュ</div>
+            <div class="prod-price-row">
+              <span class="prod-price en">¥3,520</span>
+            </div>
+            <div class="prod-stars">
+              <span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span>
+              <span class="prod-rev-count">(89)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="prod-card sr sr-delay-3">
+          <div class="prod-img-wrap ph-prod-1">
+            <div class="prod-placeholder">🏺</div>
+            <div class="prod-badges"><span class="prod-badge pb-limited">Limited</span></div>
+            <button class="prod-wish" aria-label="お気に入りに追加">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
+            </button>
+            <div class="prod-quick">+ カートに追加</div>
+          </div>
+          <div class="prod-info">
+            <div class="prod-brand en">Hasami Porcelain</div>
+            <div class="prod-name">波佐見焼 マグカップ セット / ナチュラルグレー</div>
+            <div class="prod-price-row">
+              <span class="prod-price en">¥9,240</span>
+            </div>
+            <div class="prod-stars">
+              <span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star" style="color:var(--c-border)">★</span>
+              <span class="prod-rev-count">(12)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="prod-card sr sr-delay-4">
+          <div class="prod-img-wrap ph-prod-4">
+            <div class="prod-placeholder">🌿</div>
+            <div class="prod-badges"><span class="prod-badge pb-new">New</span></div>
+            <button class="prod-wish" aria-label="お気に入りに追加">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
+            </button>
+            <div class="prod-quick">+ カートに追加</div>
+          </div>
+          <div class="prod-info">
+            <div class="prod-brand en">Aesop</div>
+            <div class="prod-name">ボディクリーム & ハンドソープ ギフトセット / ラベンダー</div>
+            <div class="prod-price-row">
+              <span class="prod-price en">¥11,800</span>
+            </div>
+            <div class="prod-stars">
+              <span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span>
+              <span class="prod-rev-count">(34)</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑤ BEST SELLERS -->
+  <section class="best-section section-pad" aria-labelledby="best-heading">
+    <div class="container">
+      <div class="best-header">
+        <div>
+          <span class="section-label en">Best Sellers</span>
+          <h2 class="section-title" id="best-heading" style="font-size:clamp(22px,2.8vw,36px);">人気ランキング</h2>
+        </div>
+        <a class="btn-link en" href="#">All Rankings <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></a>
+      </div>
+      <div class="ranking-list">
+
+        <div class="prod-card sr">
+          <div class="rank-num rank-1 en">01</div>
+          <div class="prod-img-wrap ph-prod-3">
+            <div class="prod-placeholder">🎀</div>
+            <div class="prod-badges"><span class="prod-badge pb-best">人気No.1</span></div>
+            <button class="prod-wish" aria-label="お気に入りに追加">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
+            </button>
+            <div class="prod-quick">+ カートに追加</div>
+          </div>
+          <div class="prod-info">
+            <div class="prod-brand en">Le Creuset</div>
+            <div class="prod-name">ピーコック ブルー ミニ ラムカン 3点セット</div>
+            <div class="prod-price-row">
+              <span class="prod-price en">¥8,400</span>
+            </div>
+            <div class="prod-stars">
+              <span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span>
+              <span class="prod-rev-count">(147)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="prod-card sr sr-delay-2">
+          <div class="rank-num rank-2 en">02</div>
+          <div class="prod-img-wrap ph-prod-1">
+            <div class="prod-placeholder">📚</div>
+            <div class="prod-badges"><span class="prod-badge pb-best">人気No.2</span></div>
+            <button class="prod-wish" aria-label="お気に入りに追加">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
+            </button>
+            <div class="prod-quick">+ カートに追加</div>
+          </div>
+          <div class="prod-info">
+            <div class="prod-brand en">Tsundoku Books</div>
+            <div class="prod-name">子どもと読む絵本 厳選10冊セット / 年齢別</div>
+            <div class="prod-price-row">
+              <span class="prod-price en">¥14,300</span>
+              <span class="prod-price-old en">¥15,800</span>
+            </div>
+            <div class="prod-stars">
+              <span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span>
+              <span class="prod-rev-count">(98)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="prod-card sr sr-delay-3">
+          <div class="rank-num rank-3 en">03</div>
+          <div class="prod-img-wrap ph-prod-2">
+            <div class="prod-placeholder">🌸</div>
+            <div class="prod-badges"><span class="prod-badge pb-sale">SALE</span></div>
+            <button class="prod-wish" aria-label="お気に入りに追加">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
+            </button>
+            <div class="prod-quick">+ カートに追加</div>
+          </div>
+          <div class="prod-info">
+            <div class="prod-brand en">Herbivore</div>
+            <div class="prod-name">ナチュラル スキンケア セット / ローズウォーター</div>
+            <div class="prod-price-row">
+              <span class="prod-price en">¥7,200</span>
+              <span class="prod-price-old en">¥9,600</span>
+            </div>
+            <div class="prod-stars">
+              <span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star" style="color:var(--c-border)">★</span>
+              <span class="prod-rev-count">(63)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="prod-card sr sr-delay-4">
+          <div class="rank-num en" style="color:rgba(0,0,0,.1);">04</div>
+          <div class="prod-img-wrap ph-prod-4">
+            <div class="prod-placeholder">🪴</div>
+            <button class="prod-wish" aria-label="お気に入りに追加">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
+            </button>
+            <div class="prod-quick">+ カートに追加</div>
+          </div>
+          <div class="prod-info">
+            <div class="prod-brand en">Bloomscape</div>
+            <div class="prod-name">インドアプランツ & テラコッタポット セット / Mサイズ</div>
+            <div class="prod-price-row">
+              <span class="prod-price en">¥5,500</span>
+            </div>
+            <div class="prod-stars">
+              <span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span>
+              <span class="prod-rev-count">(41)</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑥ BRAND -->
+  <section class="brand-section" aria-labelledby="brand-heading">
+    <div class="brand-split">
+
+      <div class="brand-visual">
+        <div class="ph-brand" style="height:100%;min-height:500px;display:flex;align-items:center;justify-content:center;font-size:80px;">🏡</div>
+        <div class="brand-visual-overlay"></div>
+      </div>
+
+      <div class="brand-content sr-r">
+        <span class="section-label en">Our Story</span>
+        <h2 class="section-title" id="brand-heading">家族の笑顔のために。<br><span style="font-style:italic;">Every Day.</span></h2>
+        <div style="height:20px;"></div>
+        <p class="section-desc">F'sPlanetは「家族の時間をもっと豊かに」というビジョンのもと、世界中の上質なブランドとこだわりのプロダクトをセレクトしてお届けするライフスタイルショップです。</p>
+        <p class="section-desc" style="margin-top:12px;">ベビー・キッズから大人のファッション、インテリア、食品まで。暮らしのすべてを、ひとつの場所で。</p>
+        <div class="brand-stats">
+          <div>
+            <div class="brand-stat-num en">5,000<span style="font-size:.6em;">+</span></div>
+            <div class="brand-stat-label">取扱商品数</div>
+          </div>
+          <div>
+            <div class="brand-stat-num en">200<span style="font-size:.6em;">+</span></div>
+            <div class="brand-stat-label">セレクトブランド</div>
+          </div>
+          <div>
+            <div class="brand-stat-num en">98<span style="font-size:.5em;">%</span></div>
+            <div class="brand-stat-label">顧客満足度</div>
+          </div>
+        </div>
+        <div style="margin-top:32px;">
+          <a class="btn btn-primary en" href="#">About F'sPlanet</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ⑦ GIFT GUIDE -->
+  <section class="gift-section section-pad" aria-labelledby="gift-heading">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-label en">Gift Guide</span>
+        <h2 class="section-title sr" id="gift-heading">贈りものガイド</h2>
+        <p class="section-desc sr sr-delay-2" style="margin-top:14px;max-width:520px;margin-left:auto;margin-right:auto;">シーンや予算に合わせた、とっておきのギフトをご提案します。</p>
+      </div>
+      <div class="gift-grid">
+
+        <div class="gift-card sr">
+          <div class="ph-gift-1" style="height:100%;"></div>
+          <div class="gift-overlay"></div>
+          <div class="gift-card-content">
+            <span class="gift-price-range en">¥3,000 – ¥5,000</span>
+            <div class="gift-title en">Birthday<br>Gift</div>
+            <button class="gift-btn en">Shop Now <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="12" height="12"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></button>
+          </div>
+        </div>
+
+        <div class="gift-card sr sr-delay-2">
+          <div class="ph-gift-2" style="height:100%;"></div>
+          <div class="gift-overlay"></div>
+          <div class="gift-card-content">
+            <span class="gift-price-range en">¥5,000 – ¥10,000</span>
+            <div class="gift-title en">Wedding<br>Gift</div>
+            <button class="gift-btn en">Shop Now <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="12" height="12"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></button>
+          </div>
+        </div>
+
+        <div class="gift-card sr sr-delay-4">
+          <div class="ph-gift-3" style="height:100%;"></div>
+          <div class="gift-overlay"></div>
+          <div class="gift-card-content">
+            <span class="gift-price-range en">¥10,000+</span>
+            <div class="gift-title en">Luxury<br>Gift</div>
+            <button class="gift-btn en">Shop Now <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="12" height="12"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑧ INSTAGRAM -->
+  <section class="insta-section section-pad-sm" aria-labelledby="insta-heading">
+    <div class="container">
+      <div class="insta-header">
+        <span class="section-label en">Instagram</span>
+        <h2 class="section-title" id="insta-heading" style="font-size:clamp(20px,2.4vw,30px);font-weight:300;">暮らしのスナップ</h2>
+        <div class="insta-handle">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          @fsplanet_official
+        </div>
+      </div>
+      <div class="insta-grid">
+        <div class="insta-item sr ph-insta-1">
+          <div style="height:100%;display:flex;align-items:center;justify-content:center;font-size:36px;">🌿</div>
+          <div class="insta-hover"><svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24"><path d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg></div>
+        </div>
+        <div class="insta-item sr sr-delay-1 ph-insta-2">
+          <div style="height:100%;display:flex;align-items:center;justify-content:center;font-size:36px;">🧸</div>
+          <div class="insta-hover"><svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24"><path d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg></div>
+        </div>
+        <div class="insta-item sr sr-delay-2 ph-insta-3">
+          <div style="height:100%;display:flex;align-items:center;justify-content:center;font-size:36px;">☕</div>
+          <div class="insta-hover"><svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24"><path d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg></div>
+        </div>
+        <div class="insta-item sr sr-delay-3 ph-insta-4">
+          <div style="height:100%;display:flex;align-items:center;justify-content:center;font-size:36px;">🌸</div>
+          <div class="insta-hover"><svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24"><path d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg></div>
+        </div>
+        <div class="insta-item sr sr-delay-4 ph-insta-5">
+          <div style="height:100%;display:flex;align-items:center;justify-content:center;font-size:36px;">🏠</div>
+          <div class="insta-hover"><svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24"><path d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg></div>
+        </div>
+        <div class="insta-item sr sr-delay-5 ph-insta-6">
+          <div style="height:100%;display:flex;align-items:center;justify-content:center;font-size:36px;">🍽️</div>
+          <div class="insta-hover"><svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24"><path d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑨ NEWSLETTER -->
+  <section class="nl-section" aria-labelledby="nl-heading">
+    <div class="container">
+      <div class="nl-inner">
+        <div class="sr-l">
+          <span class="nl-label en">Newsletter</span>
+          <h2 class="nl-title" id="nl-heading">最新情報を<br>お届けします。</h2>
+          <p class="nl-desc">新着商品・セール情報・ライフスタイルコラムなど、F'sPlanetのニュースをいち早くお届けします。</p>
+          <ul class="nl-benefits">
+            <li class="nl-benefit">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              新規登録で10%OFFクーポンをプレゼント
+            </li>
+            <li class="nl-benefit">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              セール情報をいち早くお知らせ
+            </li>
+            <li class="nl-benefit">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              限定アイテムへの優先アクセス
+            </li>
+          </ul>
+        </div>
+        <div class="nl-form-wrap sr-r">
+          <p class="nl-form-title">メールマガジン登録</p>
+          <div class="nl-input-group">
+            <input class="nl-input" type="text" placeholder="お名前">
+            <input class="nl-input" type="email" placeholder="メールアドレス">
+            <button class="btn btn-buy btn-full en" type="button">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
+              無料で登録する
+            </button>
+          </div>
+          <p class="nl-note">※登録情報は個人情報保護方針に基づき適切に管理されます。いつでも配信停止できます。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER (inside TOP page) -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer-main">
+      <div class="container">
+        <div class="footer-grid">
+
+          <div class="footer-brand">
+            <div class="footer-logo en">F'<span>s</span>Planet</div>
+            <p class="footer-tagline">家族の時間をもっと豊かに。<br>上質なライフスタイルアイテムを<br>セレクトしてお届けします。</p>
+            <div class="footer-sns">
+              <a class="sns-btn" href="#" aria-label="Instagram">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              </a>
+              <a class="sns-btn" href="#" aria-label="Twitter / X">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4l16 16M4 20L20 4"/></svg>
+              </a>
+              <a class="sns-btn" href="#" aria-label="Facebook">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+              </a>
+              <a class="sns-btn" href="#" aria-label="YouTube">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.4a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <div>
+            <div class="footer-col-title">Shop</div>
+            <div class="footer-links">
+              <a class="footer-link" href="#">新着アイテム</a>
+              <a class="footer-link" href="#">人気ランキング</a>
+              <a class="footer-link" href="#">セール品</a>
+              <a class="footer-link" href="#">ブランド一覧</a>
+              <a class="footer-link" href="#">ギフト特集</a>
+            </div>
+          </div>
+
+          <div>
+            <div class="footer-col-title">利用ガイド</div>
+            <div class="footer-links">
+              <a class="footer-link" href="#">ご注文方法</a>
+              <a class="footer-link" href="#">お支払い方法</a>
+              <a class="footer-link" href="#">配送について</a>
+              <a class="footer-link" href="#">返品・交換</a>
+              <a class="footer-link" href="#">ギフトラッピング</a>
+            </div>
+          </div>
+
+          <div>
+            <div class="footer-col-title">サポート</div>
+            <div class="footer-links">
+              <a class="footer-link" href="#">よくある質問</a>
+              <a class="footer-link" href="#">お問い合わせ</a>
+              <a class="footer-link" href="#">店舗情報</a>
+              <a class="footer-link" href="#">採用情報</a>
+              <a class="footer-link" href="#">ブランド紹介</a>
+            </div>
+          </div>
+
+          <div>
+            <div class="footer-col-title">アプリでもっと便利に</div>
+            <p class="footer-app-title">公式アプリをダウンロード</p>
+            <div class="app-badges">
+              <div class="app-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                <div class="app-badge-text">
+                  <span class="app-badge-sub">Download on the</span>
+                  <span class="app-badge-name">App Store</span>
+                </div>
+              </div>
+              <div class="app-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="white" viewBox="0 0 24 24"><path d="M3.18 23.76a2 2 0 001.07-.3l12.44-7.02-2.79-2.79-10.72 10.11zM.64 1.34A2 2 0 000 2.83v18.34a2 2 0 00.64 1.49l.08.08L11.08 12v-.25L.72 1.26l-.08.08zM21.38 10.57l-3.2-1.8-3.14 3.14 3.14 3.14 3.23-1.82a2 2 0 000-2.66zM4.25.54l12.44 7.02-2.79 2.79L3.18.24A2 2 0 004.25.54z"/></svg>
+                <div class="app-badge-text">
+                  <span class="app-badge-sub">Get it on</span>
+                  <span class="app-badge-name">Google Play</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="footer-bottom">
+        <span class="footer-copy en">© 2025 F'sPlanet. All rights reserved.</span>
+        <div class="payment-icons">
+          <span class="payment-icon">VISA</span>
+          <span class="payment-icon">MC</span>
+          <span class="payment-icon">AMEX</span>
+          <span class="payment-icon">JCB</span>
+          <span class="payment-icon">PayPay</span>
+          <span class="payment-icon">Apple Pay</span>
+        </div>
+        <div class="footer-bottom-links">
+          <a class="footer-bottom-link" href="#">プライバシーポリシー</a>
+          <a class="footer-bottom-link" href="#">利用規約</a>
+          <a class="footer-bottom-link" href="#">特定商取引法</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</main>
+
+<!-- ========================================
+     PRODUCT PAGE
+======================================== -->
+<div id="page-product" class="page-section">
+  <div class="pp-wrap">
+    <nav class="pp-breadcrumb" aria-label="パンくずリスト">
+      <a href="#">ホーム</a>
+      <span aria-hidden="true">›</span>
+      <a href="#">Kids &amp; Baby</a>
+      <span aria-hidden="true">›</span>
+      <a href="#">ベビー服</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">オーガニックロンパース</span>
+    </nav>
+
+    <div class="pp-main">
+
+      <!-- Gallery -->
+      <div class="pp-gallery">
+        <div class="pp-main-img" id="ppMainImg">
+          <div class="ph-prod-2" style="height:100%;display:flex;align-items:center;justify-content:center;font-size:100px;">🍼</div>
+          <div class="pp-img-zoom">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 15.803 7.5 7.5 0 0015.803 15.803zm-2.303-4.697v-3m-3 0h3m0 3h3"/></svg>
+          </div>
+        </div>
+        <div class="pp-thumbs">
+          <div class="pp-thumb active ph-prod-2" style="display:flex;align-items:center;justify-content:center;font-size:28px;" onclick="selectThumb(this)">🍼</div>
+          <div class="pp-thumb ph-prod-1" style="display:flex;align-items:center;justify-content:center;font-size:28px;" onclick="selectThumb(this)">👕</div>
+          <div class="pp-thumb ph-prod-3" style="display:flex;align-items:center;justify-content:center;font-size:28px;" onclick="selectThumb(this)">🌿</div>
+          <div class="pp-thumb ph-prod-4" style="display:flex;align-items:center;justify-content:center;font-size:28px;" onclick="selectThumb(this)">🏷️</div>
+        </div>
+      </div>
+
+      <!-- Product Info -->
+      <div class="pp-info">
+        <a class="pp-brand-link en" href="#">Organic Cotton Co.</a>
+        <h1 class="pp-product-name">オーガニックコットン ベビーロンパース<br>ナチュラルホワイト 長袖</h1>
+
+        <div class="pp-rating-row">
+          <div class="pp-stars" aria-label="評価: 5点中4.8点">
+            <span class="pp-star">★</span><span class="pp-star">★</span><span class="pp-star">★</span><span class="pp-star">★</span><span class="pp-star">★</span>
+          </div>
+          <span class="pp-rating-score en">4.8</span>
+          <span class="pp-rating-count">（24件のレビュー）</span>
+          <span class="pp-write-review" role="button" tabindex="0">レビューを書く</span>
+        </div>
+
+        <div class="pp-divider"></div>
+
+        <div class="pp-price-row">
+          <span class="pp-price en">¥4,800</span>
+          <span class="pp-discount">送料無料</span>
+        </div>
+        <p class="pp-tax">税込価格 ¥5,280（消費税10%込）</p>
+
+        <!-- Size -->
+        <div>
+          <div class="pp-option-label">
+            サイズ
+            <span class="pp-option-hint" role="button" tabindex="0">サイズガイドを見る →</span>
+          </div>
+          <div class="pp-sizes" role="group" aria-label="サイズ選択">
+            <button class="pp-size-btn" onclick="selectSize(this)">50cm</button>
+            <button class="pp-size-btn active" onclick="selectSize(this)">60cm</button>
+            <button class="pp-size-btn" onclick="selectSize(this)">70cm</button>
+            <button class="pp-size-btn" onclick="selectSize(this)">80cm</button>
+            <button class="pp-size-btn sold-out" disabled>90cm</button>
+          </div>
+        </div>
+
+        <!-- Color -->
+        <div>
+          <div class="pp-option-label">カラー：<span style="font-weight:300;color:var(--c-text2);">ナチュラルホワイト</span></div>
+          <div class="pp-colors" role="group" aria-label="カラー選択">
+            <button class="pp-color-btn active" style="background:#f5f5f0;" aria-label="ナチュラルホワイト" onclick="selectColor(this,'ナチュラルホワイト')"></button>
+            <button class="pp-color-btn" style="background:#c8d8e8;" aria-label="ベビーブルー" onclick="selectColor(this,'ベビーブルー')"></button>
+            <button class="pp-color-btn" style="background:#e8c8d0;" aria-label="さくらピンク" onclick="selectColor(this,'さくらピンク')"></button>
+            <button class="pp-color-btn" style="background:#d4c8a8;" aria-label="ハニーベージュ" onclick="selectColor(this,'ハニーベージュ')"></button>
+          </div>
+        </div>
+
+        <!-- Qty -->
+        <div class="pp-qty-row">
+          <span class="pp-qty-label">数量</span>
+          <div class="pp-qty">
+            <button class="pp-qty-btn" aria-label="数量を減らす" onclick="changeQty(-1)">−</button>
+            <div class="pp-qty-num" id="qtyNum" aria-live="polite">1</div>
+            <button class="pp-qty-btn" aria-label="数量を増やす" onclick="changeQty(1)">+</button>
+          </div>
+          <span class="pp-stock"><span class="pp-stock-dot"></span>在庫あり（残り12点）</span>
+        </div>
+
+        <!-- Buttons -->
+        <div class="pp-btns">
+          <button class="pp-cart-btn" aria-label="カートに追加">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.932-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"/></svg>
+            カートに追加
+          </button>
+          <button class="pp-buy-btn" aria-label="今すぐ購入">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/></svg>
+            今すぐ購入
+          </button>
+          <button class="pp-wish-btn" aria-label="お気に入りに追加">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
+            お気に入りに追加
+          </button>
+        </div>
+
+        <!-- Info Tags -->
+        <div class="pp-info-row">
+          <span class="pp-info-tag">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"/></svg>
+            最短翌日お届け
+          </span>
+          <span class="pp-info-tag">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1014.625 7.5H12V4.875z"/></svg>
+            ギフトラッピング無料
+          </span>
+          <span class="pp-info-tag">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"/></svg>
+            30日間返品OK
+          </span>
+        </div>
+
+        <!-- Accordion -->
+        <div class="pp-accordion">
+
+          <div class="pp-accordion-item open">
+            <div class="pp-accordion-hdr" onclick="toggleAccordion(this)" role="button" aria-expanded="true" tabindex="0">
+              商品詳細
+              <svg class="pp-accordion-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+            </div>
+            <div class="pp-accordion-body">
+              <div class="pp-accordion-content">
+                <p>肌に優しいGOTS認定オーガニックコットン100%を使用した、赤ちゃんのためのロンパースです。柔らかな素材で、繊細な赤ちゃんの肌をやさしく包みます。</p>
+                <br>
+                <p>・素材：オーガニックコットン100%（GOTS認定）<br>・カラー：ナチュラルホワイト<br>・サイズ：50〜80cm<br>・スナップボタン付き（着替えしやすい設計）<br>・洗濯機洗い可（ネット使用推奨）</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="pp-accordion-item">
+            <div class="pp-accordion-hdr" onclick="toggleAccordion(this)" role="button" aria-expanded="false" tabindex="0">
+              配送情報
+              <svg class="pp-accordion-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+            </div>
+            <div class="pp-accordion-body">
+              <div class="pp-accordion-content">
+                <p>・送料：税込5,000円以上で送料無料<br>・標準配送：ご注文から2〜4営業日<br>・最短翌日お届け：在庫確認後にご案内<br>・配送業者：ヤマト運輸 / 佐川急便<br>・ギフトラッピング：無料対応中</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="pp-accordion-item">
+            <div class="pp-accordion-hdr" onclick="toggleAccordion(this)" role="button" aria-expanded="false" tabindex="0">
+              返品・交換
+              <svg class="pp-accordion-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+            </div>
+            <div class="pp-accordion-body">
+              <div class="pp-accordion-content">
+                <p>・返品期限：到着後30日以内<br>・未使用・未開封・タグ付きに限り返品可能<br>・返品送料：お客様負担（初期不良の場合は当店負担）<br>・返金方法：ご注文時のお支払い方法に準じる<br>・交換対応：サイズ・カラーの交換はお問い合わせください</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="pp-accordion-item">
+            <div class="pp-accordion-hdr" onclick="toggleAccordion(this)" role="button" aria-expanded="false" tabindex="0">
+              AIレコメンド — このアイテムに合うもの
+              <svg class="pp-accordion-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+            </div>
+            <div class="pp-accordion-body">
+              <div class="pp-accordion-content">
+                <p>AIが購入履歴・閲覧履歴・季節・年齢に基づいてレコメンドします：</p>
+                <br>
+                <p>🌿 <strong>オーガニックコットン おくるみ</strong> — ¥3,200<br>
+                🧸 <strong>ガラガラ おもちゃセット</strong> — ¥2,800<br>
+                🎁 <strong>出産祝いギフトボックス</strong> — ¥8,500<br>
+                👶 <strong>ベビーミトン & ソックスセット</strong> — ¥1,600</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Related Products -->
+  <div class="pp-related">
+    <div class="pp-related-inner">
+      <div style="margin-bottom:36px;">
+        <span class="section-label en">You May Also Like</span>
+        <h2 class="section-title-ja">おすすめ商品</h2>
+      </div>
+      <div class="product-grid-4-sm">
+
+        <div class="prod-card sr">
+          <div class="prod-img-wrap ph-prod-3">
+            <div class="prod-placeholder">🧸</div>
+            <button class="prod-wish" aria-label="お気に入りに追加"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg></button>
+          </div>
+          <div class="prod-info">
+            <div class="prod-brand en">Jellycat</div>
+            <div class="prod-name">ぬいぐるみ Sサイズ</div>
+            <div class="prod-price-row"><span class="prod-price en">¥2,860</span></div>
+          </div>
+        </div>
+
+        <div class="prod-card sr sr-delay-2">
+          <div class="prod-img-wrap ph-prod-1">
+            <div class="prod-placeholder">👶</div>
+            <button class="prod-wish" aria-label="お気に入りに追加"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg></button>
+          </div>
+          <div class="prod-info">
+            <div class="prod-brand en">Organic Cotton Co.</div>
+            <div class="prod-name">おくるみ ブランケット</div>
+            <div class="prod-price-row"><span class="prod-price en">¥3,200</span></div>
+          </div>
+        </div>
+
+        <div class="prod-card sr sr-delay-3">
+          <div class="prod-img-wrap ph-prod-4">
+            <div class="prod-placeholder">🎁</div>
+            <div class="prod-badges"><span class="prod-badge pb-best">人気</span></div>
+            <button class="prod-wish" aria-label="お気に入りに追加"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg></button>
+          </div>
+          <div class="prod-info">
+            <div class="prod-brand en">F'sPlanet</div>
+            <div class="prod-name">出産祝いギフトセット</div>
+            <div class="prod-price-row"><span class="prod-price en">¥8,500</span></div>
+          </div>
+        </div>
+
+        <div class="prod-card sr sr-delay-4">
+          <div class="prod-img-wrap ph-prod-2">
+            <div class="prod-placeholder">🛁</div>
+            <button class="prod-wish" aria-label="お気に入りに追加"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg></button>
+          </div>
+          <div class="prod-info">
+            <div class="prod-brand en">Mustela</div>
+            <div class="prod-name">ベビーバスセット</div>
+            <div class="prod-price-row"><span class="prod-price en">¥4,400</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================
+     CATEGORY PAGE
+======================================== -->
+<div id="page-category" class="page-section">
+
+  <!-- Category Hero -->
+  <div class="cp-hero">
+    <div class="cp-hero-inner">
+      <nav aria-label="パンくずリスト" style="font-size:11px;color:var(--c-text3);margin-bottom:16px;display:flex;gap:8px;">
+        <a href="#" style="transition:color .2s;">ホーム</a>
+        <span>›</span>
+        <span style="color:var(--c-text);">Kids &amp; Baby</span>
+      </nav>
+      <span class="section-label cp-hero-label en">Kids & Baby</span>
+      <h1 class="cp-hero-title">キッズ・ベビー</h1>
+      <p class="cp-hero-count">全 128 件</p>
+    </div>
+  </div>
+
+  <!-- Filter Bar -->
+  <div class="cp-filter-bar" role="search" aria-label="フィルター">
+    <div class="cp-filter-inner">
+      <button class="cp-filter-btn" onclick="toggleFilter(this)" aria-pressed="false">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="12" height="12"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z"/></svg>
+        フィルター
+      </button>
+      <div class="cp-divider"></div>
+      <button class="cp-filter-btn active" onclick="toggleFilter(this)" aria-pressed="true">
+        ブランド
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="10" height="10"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>
+      </button>
+      <button class="cp-filter-btn" onclick="toggleFilter(this)" aria-pressed="false">
+        価格
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="10" height="10"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>
+      </button>
+      <button class="cp-filter-btn" onclick="toggleFilter(this)" aria-pressed="false">
+        カテゴリー
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="10" height="10"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>
+      </button>
+      <button class="cp-filter-btn" onclick="toggleFilter(this)" aria-pressed="false">
+        素材
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="10" height="10"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>
+      </button>
+      <button class="cp-filter-btn" onclick="toggleFilter(this)" aria-pressed="false">
+        サイズ
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="10" height="10"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>
+      </button>
+      <select class="cp-sort-select" aria-label="並び替え">
+        <option>おすすめ順</option>
+        <option>新着順</option>
+        <option>価格が低い順</option>
+        <option>価格が高い順</option>
+        <option>評価が高い順</option>
+        <option>人気順</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Active Filters -->
+  <div class="cp-active-filters" role="region" aria-label="適用中のフィルター">
+    <span class="cp-active-tag">
+      Jellycat
+      <button onclick="this.parentElement.remove()" aria-label="Jellycatフィルターを削除">×</button>
+    </span>
+    <span class="cp-active-tag">
+      ¥0〜¥5,000
+      <button onclick="this.parentElement.remove()" aria-label="価格フィルターを削除">×</button>
+    </span>
+    <button class="cp-clear-all" onclick="clearAllFilters()" aria-label="すべてのフィルターをクリア">すべてクリア</button>
+  </div>
+
+  <!-- Product Grid -->
+  <div class="cp-main">
+    <div class="cp-product-grid">
+
+      <div class="prod-card sr">
+        <div class="prod-img-wrap ph-prod-2">
+          <div class="prod-placeholder">🍼</div>
+          <div class="prod-badges"><span class="prod-badge pb-new">New</span></div>
+          <button class="prod-wish" aria-label="お気に入りに追加"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg></button>
+          <div class="prod-quick">+ カートに追加</div>
+        </div>
+        <div class="prod-info">
+          <div class="prod-brand en">Organic Cotton Co.</div>
+          <div class="prod-name">ベビーロンパース ナチュラル</div>
+          <div class="prod-price-row"><span class="prod-price en">¥4,800</span></div>
+          <div class="prod-stars"><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-rev-count">(24)</span></div>
+        </div>
+      </div>
+
+      <div class="prod-card sr sr-delay-1">
+        <div class="prod-img-wrap ph-prod-3">
+          <div class="prod-placeholder">🧸</div>
+          <button class="prod-wish" aria-label="お気に入りに追加"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg></button>
+          <div class="prod-quick">+ カートに追加</div>
+        </div>
+        <div class="prod-info">
+          <div class="prod-brand en">Jellycat</div>
+          <div class="prod-name">バシュフルバニー Mサイズ</div>
+          <div class="prod-price-row"><span class="prod-price en">¥3,520</span></div>
+          <div class="prod-stars"><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-rev-count">(89)</span></div>
+        </div>
+      </div>
+
+      <div class="prod-card sr sr-delay-2">
+        <div class="prod-img-wrap ph-prod-1">
+          <div class="prod-placeholder">🎀</div>
+          <div class="prod-badges"><span class="prod-badge pb-best">人気</span></div>
+          <button class="prod-wish" aria-label="お気に入りに追加"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg></button>
+          <div class="prod-quick">+ カートに追加</div>
+        </div>
+        <div class="prod-info">
+          <div class="prod-brand en">BabyBjörn</div>
+          <div class="prod-name">バウンサー バランスソフト</div>
+          <div class="prod-price-row"><span class="prod-price en">¥28,600</span></div>
+          <div class="prod-stars"><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-rev-count">(62)</span></div>
+        </div>
+      </div>
+
+      <div class="prod-card sr sr-delay-3">
+        <div class="prod-img-wrap ph-prod-4">
+          <div class="prod-placeholder">📚</div>
+          <button class="prod-wish" aria-label="お気に入りに追加"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg></button>
+          <div class="prod-quick">+ カートに追加</div>
+        </div>
+        <div class="prod-info">
+          <div class="prod-brand en">Tsundoku</div>
+          <div class="prod-name">絵本ギフトセット 0〜2歳</div>
+          <div class="prod-price-row">
+            <span class="prod-price en">¥6,800</span>
+            <span class="prod-price-old en">¥8,000</span>
+          </div>
+          <div class="prod-stars"><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star" style="color:var(--c-border)">★</span><span class="prod-rev-count">(15)</span></div>
+        </div>
+      </div>
+
+      <div class="prod-card sr">
+        <div class="prod-img-wrap ph-prod-2">
+          <div class="prod-placeholder">🛁</div>
+          <div class="prod-badges"><span class="prod-badge pb-sale">SALE</span></div>
+          <button class="prod-wish" aria-label="お気に入りに追加"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg></button>
+          <div class="prod-quick">+ カートに追加</div>
+        </div>
+        <div class="prod-info">
+          <div class="prod-brand en">Mustela</div>
+          <div class="prod-name">ベビーバスケアセット</div>
+          <div class="prod-price-row">
+            <span class="prod-price en">¥4,400</span>
+            <span class="prod-price-old en">¥5,500</span>
+          </div>
+          <div class="prod-stars"><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-rev-count">(41)</span></div>
+        </div>
+      </div>
+
+      <div class="prod-card sr sr-delay-1">
+        <div class="prod-img-wrap ph-prod-3">
+          <div class="prod-placeholder">🌿</div>
+          <button class="prod-wish" aria-label="お気に入りに追加"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg></button>
+          <div class="prod-quick">+ カートに追加</div>
+        </div>
+        <div class="prod-info">
+          <div class="prod-brand en">PURITO</div>
+          <div class="prod-name">ベビー日焼け止め SPF50+</div>
+          <div class="prod-price-row"><span class="prod-price en">¥2,200</span></div>
+          <div class="prod-stars"><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-rev-count">(78)</span></div>
+        </div>
+      </div>
+
+      <div class="prod-card sr sr-delay-2">
+        <div class="prod-img-wrap ph-prod-1">
+          <div class="prod-placeholder">🍵</div>
+          <button class="prod-wish" aria-label="お気に入りに追加"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg></button>
+          <div class="prod-quick">+ カートに追加</div>
+        </div>
+        <div class="prod-info">
+          <div class="prod-brand en">Suavinex</div>
+          <div class="prod-name">哺乳瓶 ガラス製 240ml</div>
+          <div class="prod-price-row"><span class="prod-price en">¥3,630</span></div>
+          <div class="prod-stars"><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star" style="color:var(--c-border)">★</span><span class="prod-rev-count">(33)</span></div>
+        </div>
+      </div>
+
+      <div class="prod-card sr sr-delay-3">
+        <div class="prod-img-wrap ph-prod-4">
+          <div class="prod-placeholder">🎵</div>
+          <div class="prod-badges"><span class="prod-badge pb-new">New</span></div>
+          <button class="prod-wish" aria-label="お気に入りに追加"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg></button>
+          <div class="prod-quick">+ カートに追加</div>
+        </div>
+        <div class="prod-info">
+          <div class="prod-brand en">Plan Toys</div>
+          <div class="prod-name">木のおもちゃ 音楽セット</div>
+          <div class="prod-price-row"><span class="prod-price en">¥6,600</span></div>
+          <div class="prod-stars"><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-star">★</span><span class="prod-rev-count">(19)</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Load More -->
+    <div class="cp-load-more">
+      <button class="btn btn-outline en" onclick="loadMore(this)">
+        もっと見る（120件以上）
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===========================
+     JAVASCRIPT
+=========================== -->
+<script>
+/* =============================================
+   PAGE SWITCHER
+============================================= */
+function switchPage(name, btn) {
+  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.pg-btn').forEach(b => {
+    b.classList.remove('active');
+    b.setAttribute('aria-selected', 'false');
+  });
+  const target = document.getElementById('page-' + name);
+  if (target) target.classList.add('active');
+  btn.classList.add('active');
+  btn.setAttribute('aria-selected', 'true');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Re-trigger scroll reveals after page switch
+  setTimeout(() => {
+    document.querySelectorAll('#page-' + name + ' .sr, #page-' + name + ' .sr-l, #page-' + name + ' .sr-r, #page-' + name + ' .sr-scale')
+      .forEach(el => srObserver.observe(el));
+  }, 100);
+}
+
+/* =============================================
+   HERO SLIDESHOW
+============================================= */
+let currentSlide = 0;
+const totalSlides = 3;
+let autoTimer;
+
+function goToSlide(n) {
+  const slides = document.querySelectorAll('.hero-slide');
+  const dots = document.querySelectorAll('.hero-dot');
+  slides[currentSlide].classList.remove('active');
+  dots[currentSlide].classList.remove('active');
+  dots[currentSlide].setAttribute('aria-selected', 'false');
+  currentSlide = (n + totalSlides) % totalSlides;
+  const track = document.getElementById('heroTrack');
+  if (track) track.style.transform = `translateX(-${currentSlide * 100}%)`;
+  slides[currentSlide].classList.add('active');
+  dots[currentSlide].classList.add('active');
+  dots[currentSlide].setAttribute('aria-selected', 'true');
+  resetAutoTimer();
+}
+
+function heroMove(dir) {
+  goToSlide(currentSlide + dir);
+}
+
+function resetAutoTimer() {
+  clearInterval(autoTimer);
+  autoTimer = setInterval(() => heroMove(1), 6000);
+}
+resetAutoTimer();
+
+/* =============================================
+   MEGA MENU
+============================================= */
+const megaMenu = document.getElementById('megaMenu');
+let megaTimer;
+
+document.querySelectorAll('.hdr-nav-item').forEach(item => {
+  item.addEventListener('mouseenter', () => {
+    clearTimeout(megaTimer);
+    if (megaMenu) megaMenu.classList.add('open');
+  });
+  item.addEventListener('mouseleave', () => {
+    megaTimer = setTimeout(() => {
+      if (megaMenu) megaMenu.classList.remove('open');
+    }, 180);
+  });
+});
+if (megaMenu) {
+  megaMenu.addEventListener('mouseenter', () => clearTimeout(megaTimer));
+  megaMenu.addEventListener('mouseleave', () => {
+    megaTimer = setTimeout(() => megaMenu.classList.remove('open'), 180);
+  });
+}
+
+/* =============================================
+   SCROLL REVEAL
+============================================= */
+const srObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      srObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.06, rootMargin: '0px 0px -32px 0px' });
+
+document.querySelectorAll('.sr, .sr-l, .sr-r, .sr-scale').forEach(el => srObserver.observe(el));
+
+/* =============================================
+   HEADER SCROLL
+============================================= */
+const hdr = document.getElementById('mainHeader');
+const backTop = document.getElementById('backTop');
+window.addEventListener('scroll', () => {
+  if (hdr) hdr.classList.toggle('scrolled', window.scrollY > 20);
+  if (backTop) backTop.classList.toggle('visible', window.scrollY > 300);
+}, { passive: true });
+
+/* =============================================
+   PRODUCT PAGE INTERACTIONS
+============================================= */
+function selectThumb(el) {
+  document.querySelectorAll('.pp-thumb').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+function selectSize(el) {
+  document.querySelectorAll('.pp-size-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+function selectColor(el, name) {
+  document.querySelectorAll('.pp-color-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  const label = document.querySelector('.pp-option-label span');
+  if (label) label.textContent = name;
+}
+
+let qty = 1;
+function changeQty(delta) {
+  qty = Math.max(1, Math.min(99, qty + delta));
+  const el = document.getElementById('qtyNum');
+  if (el) el.textContent = qty;
+}
+
+function toggleAccordion(hdr) {
+  const item = hdr.closest('.pp-accordion-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.pp-accordion-item').forEach(i => {
+    i.classList.remove('open');
+    const h = i.querySelector('.pp-accordion-hdr');
+    if (h) h.setAttribute('aria-expanded', 'false');
+  });
+  if (!isOpen) {
+    item.classList.add('open');
+    hdr.setAttribute('aria-expanded', 'true');
+  }
+}
+
+/* =============================================
+   CATEGORY PAGE INTERACTIONS
+============================================= */
+function toggleFilter(btn) {
+  const isActive = btn.classList.contains('active');
+  btn.classList.toggle('active', !isActive);
+  btn.setAttribute('aria-pressed', String(!isActive));
+}
+
+function clearAllFilters() {
+  document.querySelectorAll('.cp-active-tag').forEach(t => t.remove());
+  document.querySelectorAll('.cp-filter-btn.active').forEach(b => {
+    b.classList.remove('active');
+    b.setAttribute('aria-pressed', 'false');
+  });
+}
+
+function loadMore(btn) {
+  btn.textContent = '読み込み中...';
+  btn.disabled = true;
+  setTimeout(() => {
+    btn.textContent = 'すべて表示しました';
+    btn.style.opacity = '.5';
+    btn.style.cursor = 'default';
+  }, 1200);
+}
+
+/* =============================================
+   WISHLIST TOGGLE
+============================================= */
+document.querySelectorAll('.prod-wish').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    btn.classList.toggle('active');
+    const isActive = btn.classList.contains('active');
+    btn.setAttribute('aria-label', isActive ? 'お気に入りから削除' : 'お気に入りに追加');
+  });
+});
+</script>
+
+</body>
+</html>
