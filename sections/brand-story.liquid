@@ -1,0 +1,144 @@
+<section class="brand-section" aria-labelledby="brand-heading-{{ section.id }}">
+  <div class="brand-split">
+
+    <div class="brand-visual">
+      {%- if section.settings.image != blank -%}
+        <img src="{{ section.settings.image | image_url: width: 900 }}"
+             srcset="{{ section.settings.image | image_url: width: 600 }} 600w, {{ section.settings.image | image_url: width: 900 }} 900w"
+             alt="{{ section.settings.image_alt | default: 'Brand story' }}"
+             loading="lazy" style="width:100%;height:100%;object-fit:cover;">
+      {%- else -%}
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+      {%- endif -%}
+      <div class="brand-visual-overlay"></div>
+    </div>
+
+    <div class="brand-content sr-r">
+      <span class="section-label en">{{ section.settings.label }}</span>
+      <h2 class="section-title" id="brand-heading-{{ section.id }}">{{ section.settings.heading }}</h2>
+      <div style="height:20px;"></div>
+      {%- if section.settings.text != blank -%}
+        <div class="section-desc">{{ section.settings.text }}</div>
+      {%- endif -%}
+      {%- if section.settings.text2 != blank -%}
+        <div class="section-desc" style="margin-top:12px;">{{ section.settings.text2 }}</div>
+      {%- endif -%}
+
+      {%- assign stat_blocks = section.blocks | where: 'type', 'stat' -%}
+      {%- if stat_blocks.size > 0 -%}
+        <div class="brand-stats">
+          {%- for block in stat_blocks -%}
+            <div {{ block.shopify_attributes }}>
+              <div class="brand-stat-num en">{{ block.settings.number }}</div>
+              <div class="brand-stat-label">{{ block.settings.label }}</div>
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.btn_label != blank -%}
+        <div style="margin-top:32px;">
+          <a class="btn btn-primary en" href="{{ section.settings.btn_url | default: '/pages/about' }}">
+            {{ section.settings.btn_label }}
+          </a>
+        </div>
+      {%- endif -%}
+    </div>
+
+  </div>
+</section>
+
+<style>
+.brand-section { background:var(--c-bg); overflow:hidden; }
+.brand-split { display:grid; grid-template-columns:1fr 1fr; min-height:560px; }
+.brand-visual { position:relative; overflow:hidden; background:var(--c-surface); }
+.brand-visual-overlay { position:absolute; inset:0; background:linear-gradient(to right,transparent 60%,rgba(252,252,253,.6) 100%); }
+.brand-content { display:flex; flex-direction:column; justify-content:center; padding:clamp(40px,6vw,80px) clamp(40px,5vw,70px); }
+.brand-stats { display:flex; gap:36px; margin-top:36px; padding-top:36px; border-top:1px solid var(--c-border); }
+.brand-stat-num { font-family:var(--f-en); font-size:clamp(28px,3.5vw,44px); font-weight:300; color:var(--c-main); letter-spacing:.04em; line-height:1; margin-bottom:4px; }
+.brand-stat-label { font-size:11px; color:var(--c-text3); letter-spacing:var(--ls); }
+@media (max-width:900px){ .brand-split { grid-template-columns:1fr; } .brand-visual { min-height:360px; } .brand-visual-overlay { display:none; } }
+</style>
+
+{% schema %}
+{
+  "name": "ブランドストーリー",
+  "class": "section-brand-story",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "ブランド画像"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "画像ALTテキスト"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "ラベル（英語）",
+      "default": "Our Story"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "見出し",
+      "default": "家族の笑顔のために。\nEvery Day."
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "本文1",
+      "default": "<p>F'sPlanetは「家族の時間をもっと豊かに」というビジョンのもと、世界中の上質なブランドとこだわりのプロダクトをセレクトしてお届けするライフスタイルショップです。</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "text2",
+      "label": "本文2"
+    },
+    {
+      "type": "text",
+      "id": "btn_label",
+      "label": "ボタンテキスト",
+      "default": "About F'sPlanet"
+    },
+    {
+      "type": "url",
+      "id": "btn_url",
+      "label": "ボタンリンク先"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "統計数字",
+      "settings": [
+        {
+          "type": "text",
+          "id": "number",
+          "label": "数字",
+          "default": "5,000+"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "ラベル",
+          "default": "取扱商品数"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "ブランドストーリー",
+      "blocks": [
+        { "type": "stat", "settings": { "number": "5,000+", "label": "取扱商品数" } },
+        { "type": "stat", "settings": { "number": "200+",   "label": "セレクトブランド" } },
+        { "type": "stat", "settings": { "number": "98%",    "label": "顧客満足度" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

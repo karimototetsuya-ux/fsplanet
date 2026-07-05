@@ -1,0 +1,427 @@
+<header class="header{% if section.settings.sticky %} header--sticky{% endif %}" id="mainHeader" role="banner">
+  <div class="hdr-inner">
+
+    <!-- Logo -->
+    <a href="{{ routes.root_url }}" class="hdr-logo en" aria-label="{{ shop.name }} ホームへ">
+      {%- if section.settings.logo != blank -%}
+        <img src="{{ section.settings.logo | image_url: width: section.settings.logo_width }}"
+             alt="{{ shop.name }}"
+             width="{{ section.settings.logo_width }}"
+             loading="eager">
+      {%- else -%}
+        F'<span>s</span>Planet
+      {%- endif -%}
+    </a>
+
+    <!-- Desktop Nav -->
+    <nav class="hdr-nav" role="navigation" aria-label="メインナビゲーション">
+      {%- for link in section.settings.menu.links -%}
+        {%- if link.links != blank -%}
+          <div class="hdr-nav-item" data-mega="true"
+               role="button" tabindex="0"
+               aria-haspopup="true" aria-expanded="false">
+            {{ link.title }}
+          </div>
+        {%- else -%}
+          <a class="hdr-nav-item" href="{{ link.url }}">{{ link.title }}</a>
+        {%- endif -%}
+      {%- endfor -%}
+    </nav>
+
+    <!-- Icons -->
+    <div class="hdr-icons">
+
+      {%- if section.settings.show_search -%}
+        <div class="hdr-search hdr-search-wrap" role="search">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="15" height="15" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 15.803 7.5 7.5 0 0015.803 15.803z"/></svg>
+          <input type="text" placeholder="キーワードで検索"
+                 aria-label="サイト内検索"
+                 form="search-form-header"
+                 name="q">
+        </div>
+        <form id="search-form-header" action="{{ routes.search_url }}" method="get" hidden>
+          <input type="hidden" name="type" value="product">
+        </form>
+      {%- endif -%}
+
+      {%- if section.settings.show_wishlist -%}
+        <button class="hdr-icon-btn" aria-label="お気に入り">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
+        </button>
+      {%- endif -%}
+
+      <a href="{{ routes.account_url }}" class="hdr-icon-btn" aria-label="マイページ">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+      </a>
+
+      <a href="{{ routes.cart_url }}" class="hdr-icon-btn" aria-label="カート（{{ cart.item_count }}点）">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.932-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"/></svg>
+        {%- if cart.item_count > 0 -%}
+          <span class="hdr-badge" aria-label="{{ cart.item_count }}点">{{ cart.item_count }}</span>
+        {%- endif -%}
+      </a>
+
+      <!-- Mobile Menu Toggle -->
+      <button class="hdr-icon-btn hdr-mobile-toggle" id="mobileMenuToggle"
+              aria-label="メニューを開く" aria-expanded="false" aria-controls="mobileDrawer">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
+      </button>
+
+    </div>
+  </div>
+
+  <!-- Mega Menu -->
+  <div class="mega-menu" id="megaMenu" role="dialog" aria-label="カテゴリメニュー" aria-hidden="true">
+    <div class="mega-inner">
+      <div>
+        <div class="mega-section-title">カテゴリ</div>
+        <div class="mega-links">
+          {%- for link in section.settings.menu.links -%}
+            <a class="mega-link" href="{{ link.url }}">{{ link.title }}</a>
+          {%- endfor -%}
+        </div>
+      </div>
+      <div>
+        <div class="mega-section-title">人気カテゴリ</div>
+        <div class="mega-cats">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'mega_category' -%}
+              <a class="mega-cat-item" href="{{ block.settings.url }}" {{ block.shopify_attributes }}>
+                {%- if block.settings.image != blank -%}
+                  <div class="mega-cat-img">
+                    <img src="{{ block.settings.image | image_url: width: 56 }}" alt="{{ block.settings.label }}" width="56" height="56" loading="lazy">
+                  </div>
+                {%- else -%}
+                  <div class="mega-cat-img" style="background:var(--c-surface);"></div>
+                {%- endif -%}
+                <span class="mega-cat-label">{{ block.settings.label }}</span>
+              </a>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'mega_feature' -%}
+          <div {{ block.shopify_attributes }}>
+            <div class="mega-section-title">特集</div>
+            <a class="mega-feature" href="{{ block.settings.url }}">
+              <div class="mega-feature-tag">{{ block.settings.tag }}</div>
+              <div class="mega-feature-title">{{ block.settings.title }}</div>
+              {%- if block.settings.image != blank -%}
+                <div class="mega-feature-img">
+                  <img src="{{ block.settings.image | image_url: width: 260 }}" alt="{{ block.settings.title }}" loading="lazy">
+                </div>
+              {%- endif -%}
+            </a>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Drawer -->
+<div class="mobile-overlay" id="mobileOverlay" aria-hidden="true"></div>
+<nav class="mobile-drawer" id="mobileDrawer" aria-label="モバイルメニュー" aria-hidden="true">
+  <div class="mobile-drawer-header">
+    <span class="en" style="font-size:18px;font-weight:300;letter-spacing:.18em;">F'<span style="color:var(--c-main);">s</span>Planet</span>
+    <button class="hdr-icon-btn" id="mobileMenuClose" aria-label="メニューを閉じる">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="mobile-drawer-links">
+    {%- for link in section.settings.menu.links -%}
+      <a class="mobile-nav-link" href="{{ link.url }}">{{ link.title }}</a>
+    {%- endfor -%}
+  </div>
+  <div class="mobile-drawer-footer">
+    <a href="{{ routes.account_url }}">マイページ</a>
+    <a href="{{ routes.cart_url }}">カート（{{ cart.item_count }}）</a>
+  </div>
+</nav>
+
+<style>
+/* Header */
+.header {
+  position: relative;
+  z-index: 900;
+  background: rgba(252,252,253,.97);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--c-border);
+  height: var(--hdr-h);
+  display: flex;
+  align-items: center;
+  transition: box-shadow .3s;
+}
+.header--sticky { position: sticky; top: 0; }
+.header.scrolled { box-shadow: var(--shadow-m); }
+.hdr-inner {
+  width: 100%;
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 clamp(20px,4vw,60px);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 20px;
+}
+.hdr-logo {
+  font-family: var(--f-en);
+  font-size: 22px;
+  font-weight: 300;
+  letter-spacing: 0.18em;
+  color: var(--c-text);
+  white-space: nowrap;
+}
+.hdr-logo span { color: var(--c-main); }
+.hdr-logo img { width: auto; height: 36px; object-fit: contain; }
+.hdr-nav { display: flex; align-items: center; }
+.hdr-nav-item {
+  position: relative;
+  padding: 24px 18px;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  color: var(--c-text);
+  cursor: pointer;
+  transition: color .2s;
+  white-space: nowrap;
+}
+.hdr-nav-item::after {
+  content: '';
+  position: absolute;
+  bottom: 16px;
+  left: 18px; right: 18px;
+  height: 1px;
+  background: var(--c-main);
+  transform: scaleX(0);
+  transition: transform .3s var(--ease);
+  transform-origin: left;
+}
+.hdr-nav-item:hover { color: var(--c-main); }
+.hdr-nav-item:hover::after { transform: scaleX(1); }
+.hdr-icons { display: flex; align-items: center; gap: 4px; justify-content: flex-end; }
+.hdr-icon-btn {
+  position: relative;
+  width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  color: var(--c-text);
+  transition: all .2s;
+}
+.hdr-icon-btn:hover { background: var(--c-surface); color: var(--c-main); }
+.hdr-badge {
+  position: absolute;
+  top: 4px; right: 4px;
+  width: 16px; height: 16px;
+  background: var(--c-buy);
+  color: #fff;
+  border-radius: 50%;
+  font-size: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 500;
+}
+.hdr-search {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 100px;
+  padding: 8px 16px;
+  transition: all .2s;
+  max-width: 200px;
+}
+.hdr-search:focus-within { border-color: var(--c-main); background: #fff; box-shadow: 0 0 0 3px rgba(98,173,237,.12); }
+.hdr-search input { border: none; background: none; font-size: 12px; width: 100%; color: var(--c-text); letter-spacing: var(--ls); outline: none; }
+.hdr-search input::placeholder { color: var(--c-text3); }
+/* Mega Menu */
+.mega-menu {
+  position: absolute;
+  top: var(--hdr-h);
+  left: 0; right: 0;
+  background: #fff;
+  border-bottom: 1px solid var(--c-border);
+  box-shadow: var(--shadow-l);
+  padding: 40px 0;
+  opacity: 0; pointer-events: none;
+  transform: translateY(-8px);
+  transition: opacity .25s var(--ease), transform .25s var(--ease);
+}
+.mega-menu.open { opacity: 1; pointer-events: auto; transform: none; }
+.mega-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 clamp(20px,4vw,60px);
+  display: grid;
+  grid-template-columns: 200px 1fr 260px;
+  gap: 60px;
+}
+.mega-section-title { font-family:var(--f-en); font-size:11px; font-weight:300; letter-spacing:.2em; text-transform:uppercase; color:var(--c-text3); margin-bottom:16px; padding-bottom:10px; border-bottom:1px solid var(--c-border); }
+.mega-links { display:flex; flex-direction:column; gap:10px; }
+.mega-link { font-size:13px; font-weight:300; color:var(--c-text2); letter-spacing:var(--ls); transition:color .2s; display:flex; align-items:center; gap:8px; }
+.mega-link::before { content:''; width:4px; height:4px; border-radius:50%; background:var(--c-border); flex-shrink:0; transition:background .2s; }
+.mega-link:hover { color:var(--c-main); }
+.mega-link:hover::before { background:var(--c-main); }
+.mega-cats { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+.mega-cat-item { display:flex; flex-direction:column; align-items:center; gap:10px; padding:14px 8px; border:1px solid var(--c-border); border-radius:var(--radius-s); text-align:center; cursor:pointer; transition:all .2s; }
+.mega-cat-item:hover { border-color:var(--c-main); background:rgba(98,173,237,.04); }
+.mega-cat-img { width:48px; height:48px; border-radius:50%; overflow:hidden; background:var(--c-surface); }
+.mega-cat-img img { width:100%; height:100%; object-fit:cover; }
+.mega-cat-label { font-size:11px; font-weight:400; color:var(--c-text2); }
+.mega-feature { background:var(--c-warm); border-radius:var(--radius-m); padding:24px; display:block; transition:opacity .2s; }
+.mega-feature:hover { opacity:.85; }
+.mega-feature-tag { font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:var(--c-accent); font-family:var(--f-en); margin-bottom:8px; }
+.mega-feature-title { font-family:var(--f-en); font-size:20px; font-weight:300; line-height:1.25; color:var(--c-text); margin-bottom:10px; }
+.mega-feature-img { width:100%; height:130px; border-radius:var(--radius-s); overflow:hidden; margin-top:14px; }
+.mega-feature-img img { width:100%; height:100%; object-fit:cover; }
+/* Mobile */
+.hdr-mobile-toggle { display: none; }
+.mobile-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:850; opacity:0; transition:opacity .3s; }
+.mobile-overlay.open { opacity:1; }
+.mobile-drawer {
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  width: 300px;
+  background: #fff;
+  z-index: 860;
+  transform: translateX(-100%);
+  transition: transform .35s var(--ease);
+  display: flex;
+  flex-direction: column;
+}
+.mobile-drawer.open { transform: none; }
+.mobile-drawer-header { display:flex; align-items:center; justify-content:space-between; padding:20px; border-bottom:1px solid var(--c-border); }
+.mobile-drawer-links { flex:1; overflow-y:auto; padding:16px; }
+.mobile-nav-link { display:block; padding:14px 8px; font-size:14px; font-weight:300; letter-spacing:var(--ls); color:var(--c-text); border-bottom:1px solid var(--c-surface); transition:color .2s; }
+.mobile-nav-link:hover { color:var(--c-main); }
+.mobile-drawer-footer { padding:20px; border-top:1px solid var(--c-border); display:flex; gap:16px; }
+.mobile-drawer-footer a { font-size:13px; color:var(--c-text2); }
+@media (max-width: 900px) {
+  .hdr-nav, .hdr-search-wrap { display: none; }
+  .hdr-mobile-toggle { display: flex; }
+  .mobile-overlay, .mobile-drawer { display: flex; }
+  .mobile-overlay { display: block; }
+}
+</style>
+
+<script>
+(function(){
+  const toggle = document.getElementById('mobileMenuToggle');
+  const close  = document.getElementById('mobileMenuClose');
+  const drawer = document.getElementById('mobileDrawer');
+  const overlay= document.getElementById('mobileOverlay');
+  function openDrawer() {
+    drawer.classList.add('open'); overlay.classList.add('open');
+    drawer.setAttribute('aria-hidden','false'); overlay.setAttribute('aria-hidden','false');
+    toggle.setAttribute('aria-expanded','true');
+    document.body.style.overflow='hidden';
+  }
+  function closeDrawer() {
+    drawer.classList.remove('open'); overlay.classList.remove('open');
+    drawer.setAttribute('aria-hidden','true'); overlay.setAttribute('aria-hidden','true');
+    toggle.setAttribute('aria-expanded','false');
+    document.body.style.overflow='';
+  }
+  if(toggle) toggle.addEventListener('click', openDrawer);
+  if(close)  close.addEventListener('click',  closeDrawer);
+  if(overlay)overlay.addEventListener('click', closeDrawer);
+})();
+</script>
+
+{% schema %}
+{
+  "name": "ヘッダー",
+  "class": "section-header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "ロゴ画像"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "label": "ロゴ幅 (px)",
+      "min": 80,
+      "max": 300,
+      "step": 10,
+      "default": 140
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "ナビゲーションメニュー",
+      "default": "main-menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky",
+      "label": "ヘッダーを固定する",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "label": "検索バーを表示",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_wishlist",
+      "label": "お気に入りアイコンを表示",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "mega_category",
+      "name": "メガメニュー：カテゴリ",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "カテゴリ名"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "リンク先URL"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "サムネイル画像"
+        }
+      ]
+    },
+    {
+      "type": "mega_feature",
+      "name": "メガメニュー：特集バナー",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "tag",
+          "label": "タグテキスト",
+          "default": "Summer Special"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "タイトル",
+          "default": "夏の特集 2025"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "リンク先URL"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "特集画像"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

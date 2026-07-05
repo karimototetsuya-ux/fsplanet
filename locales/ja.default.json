@@ -1,0 +1,353 @@
+{
+  "general": {
+    "breadcrumb": {
+      "home": "ホーム",
+      "collections": "コレクション一覧"
+    },
+    "pagination": {
+      "previous": "前へ",
+      "next": "次へ"
+    },
+    "search": {
+      "placeholder": "商品を検索する...",
+      "submit": "検索",
+      "no_results": "「{{ terms }}」に一致する商品が見つかりませんでした。",
+      "results_with_count_and_term": "「{{ terms }}」の検索結果：{{ count }}件"
+    },
+    "accessibility": {
+      "skip_to_content": "コンテンツへスキップ",
+      "close": "閉じる",
+      "loading": "読み込み中..."
+    },
+    "currency": {
+      "yen": "¥"
+    },
+    "newsletter": {
+      "email_placeholder": "メールアドレスを入力",
+      "submit": "登録する"
+    }
+  },
+
+  "header": {
+    "nav": {
+      "collections": "コレクション",
+      "new_arrivals": "新着",
+      "sale": "セール",
+      "gift": "ギフト",
+      "brand": "ブランド",
+      "topics": "トピックス",
+      "about": "F'sPlanetについて",
+      "contact": "お問い合わせ",
+      "all_categories": "すべてのカテゴリ"
+    },
+    "icons": {
+      "search": "検索",
+      "wishlist": "お気に入り",
+      "account": "マイページ",
+      "cart": "カート"
+    },
+    "cart_count": "{{ count }}点の商品がカートに入っています",
+    "announcement": {
+      "free_shipping": "🚚 税込5,000円以上で送料無料",
+      "coupon": "✨ 新規会員登録で10%OFFクーポンプレゼント",
+      "gift": "🎁 ギフトラッピング無料対応中"
+    }
+  },
+
+  "collections": {
+    "hero": {
+      "eyebrow": "Collection",
+      "products": "件の商品"
+    },
+    "filter": {
+      "title": "フィルター",
+      "label": "絞り込み",
+      "brand": "ブランド",
+      "price": "価格",
+      "price_apply": "価格で絞り込む",
+      "material": "素材",
+      "size": "サイズ",
+      "reset": "リセット",
+      "apply": "適用する"
+    },
+    "sort": {
+      "label": "並び替え",
+      "featured": "おすすめ順",
+      "best_selling": "人気順",
+      "new": "新着順",
+      "price_asc": "価格が安い順",
+      "price_desc": "価格が高い順",
+      "title_asc": "A → Z",
+      "title_desc": "Z → A"
+    },
+    "meta": {
+      "count": "件の商品"
+    },
+    "empty": {
+      "title": "商品が見つかりません",
+      "text": "検索条件を変えてもう一度お試しください。",
+      "cta": "すべてのコレクションを見る"
+    },
+    "view": {
+      "grid_4": "4列グリッド",
+      "grid_2": "2列グリッド",
+      "list": "リスト表示"
+    }
+  },
+
+  "products": {
+    "general": {
+      "add_to_cart": "カートに追加する",
+      "sold_out": "完売",
+      "unavailable": "在庫なし",
+      "buy_now": "今すぐ購入",
+      "wishlist_add": "お気に入りに追加",
+      "wishlist_remove": "お気に入りから削除",
+      "quick_add": "クイック追加",
+      "view_details": "詳細を見る",
+      "new": "NEW",
+      "sale": "SALE",
+      "best": "BEST",
+      "quantity": "数量",
+      "sku": "SKU",
+      "vendor": "ブランド",
+      "type": "カテゴリ"
+    },
+    "price": {
+      "regular_price": "通常価格",
+      "sale_price": "セール価格",
+      "from": "¥{{ price }}〜",
+      "tax_included": "税込",
+      "free_shipping": "送料無料",
+      "shipping_calculated": "配送料は購入手続き時に計算されます。"
+    },
+    "description": {
+      "title": "商品詳細"
+    },
+    "reviews": {
+      "title": "カスタマーレビュー",
+      "rating": "{{ rating }}点（{{ count }}件のレビュー）",
+      "write_review": "レビューを書く",
+      "no_reviews": "まだレビューはありません。最初のレビューを書いてみましょう。"
+    },
+    "accordion": {
+      "description": "商品詳細",
+      "shipping": "配送・返品",
+      "care": "お手入れ方法",
+      "ingredients": "素材・成分"
+    },
+    "shipping": {
+      "title": "配送・返品について",
+      "free_threshold": "税込5,000円以上で送料無料",
+      "delivery_days": "ご注文から2〜5営業日でお届け",
+      "returns": "商品到着後14日以内であれば返品・交換可能",
+      "gift_wrap": "ギフトラッピング対応（無料）"
+    },
+    "recommendations": {
+      "title": "おすすめ商品",
+      "subtitle": "こちらの商品と一緒に購入されています"
+    },
+    "gallery": {
+      "zoom": "クリックで拡大",
+      "thumbnail_alt": "商品画像 {{ number }}"
+    },
+    "options": {
+      "color": "カラー",
+      "size": "サイズ",
+      "material": "素材",
+      "style": "スタイル"
+    }
+  },
+
+  "cart": {
+    "title": "ショッピングカート",
+    "empty": {
+      "title": "カートは空です",
+      "text": "ショッピングを続けて、お気に入りのアイテムを見つけてください。",
+      "cta": "ショッピングを続ける"
+    },
+    "items": {
+      "count_singular": "{{ count }}点",
+      "count_plural": "{{ count }}点",
+      "remove": "削除"
+    },
+    "subtotal": "小計",
+    "taxes_included": "税込",
+    "shipping_note": "配送料とクーポンは次のステップで確認できます。",
+    "checkout": "レジに進む",
+    "continue_shopping": "ショッピングを続ける",
+    "coupon": {
+      "placeholder": "クーポンコードを入力",
+      "apply": "適用"
+    }
+  },
+
+  "customer": {
+    "login": {
+      "title": "ログイン",
+      "email": "メールアドレス",
+      "password": "パスワード",
+      "submit": "ログイン",
+      "forgot_password": "パスワードを忘れた方",
+      "create_account": "アカウントを作成",
+      "guest_checkout": "ゲストとして購入"
+    },
+    "register": {
+      "title": "アカウント作成",
+      "first_name": "名",
+      "last_name": "姓",
+      "email": "メールアドレス",
+      "password": "パスワード",
+      "submit": "アカウントを作成",
+      "already_registered": "すでにアカウントをお持ちの方"
+    },
+    "account": {
+      "title": "マイアカウント",
+      "orders": "注文履歴",
+      "profile": "プロフィール",
+      "addresses": "住所管理",
+      "wishlist": "お気に入り",
+      "logout": "ログアウト"
+    },
+    "newsletter": {
+      "title": "メルマガ登録",
+      "subtitle": "新着情報・お得な情報をいち早くお届けします",
+      "email_placeholder": "メールアドレスを入力してください",
+      "submit": "無料で登録する",
+      "success": "メルマガ登録が完了しました。ありがとうございます！",
+      "error": "登録中にエラーが発生しました。もう一度お試しください。",
+      "privacy_note": "個人情報保護方針に同意の上、登録してください。"
+    },
+    "password_recovery": {
+      "title": "パスワードのリセット",
+      "subtext": "登録済みのメールアドレスを入力してください。パスワードリセットのリンクをお送りします。",
+      "email": "メールアドレス",
+      "submit": "リセットリンクを送信",
+      "cancel": "キャンセル"
+    }
+  },
+
+  "order": {
+    "title": "注文詳細",
+    "date": "注文日",
+    "status": {
+      "confirmed": "注文確認済み",
+      "processing": "処理中",
+      "shipped": "発送済み",
+      "delivered": "配達完了",
+      "cancelled": "キャンセル済み"
+    },
+    "table": {
+      "product": "商品",
+      "sku": "SKU",
+      "price": "価格",
+      "quantity": "数量",
+      "total": "合計"
+    },
+    "subtotal": "小計",
+    "shipping": "配送料",
+    "tax": "消費税",
+    "total": "合計",
+    "payment": "支払い方法",
+    "billing_address": "請求先住所",
+      "shipping_address": "配送先住所"
+  },
+
+  "sections": {
+    "announcement_bar": {
+      "label": "お知らせバー"
+    },
+    "hero_slideshow": {
+      "label": "ヒーロースライドショー",
+      "slide_label": "スライド"
+    },
+    "category_grid": {
+      "label": "カテゴリグリッド"
+    },
+    "topics": {
+      "label": "トピックス",
+      "article_card": "記事カード（ブログ連携）",
+      "manual_card": "手動カード"
+    },
+    "featured_collection": {
+      "label": "コレクション特集",
+      "view_all": "すべて見る"
+    },
+    "brand_story": {
+      "label": "ブランドストーリー"
+    },
+    "gift_guide": {
+      "label": "ギフトガイド"
+    },
+    "instagram_grid": {
+      "label": "Instagramグリッド"
+    },
+    "newsletter": {
+      "label": "メルマガ登録",
+      "benefit": "特典"
+    },
+    "header": {
+      "label": "ヘッダー"
+    },
+    "footer": {
+      "label": "フッター"
+    },
+    "main_product": {
+      "label": "商品詳細"
+    },
+    "main_collection": {
+      "label": "コレクションページ"
+    }
+  },
+
+  "errors": {
+    "general": "エラーが発生しました。もう一度お試しください。",
+    "sold_out": "この商品は現在在庫がありません。",
+    "invalid_email": "有効なメールアドレスを入力してください。",
+    "required_field": "必須項目です。",
+    "cart_error": "カートへの追加中にエラーが発生しました。",
+    "form_error": "入力内容を確認してください。"
+  },
+
+  "footer": {
+    "copyright": "© {{ year }} F'sPlanet. All rights reserved.",
+    "payment_methods": "ご利用可能な支払い方法",
+    "follow_us": "フォローする",
+    "links": {
+      "about": "F'sPlanetについて",
+      "contact": "お問い合わせ",
+      "faq": "よくある質問",
+      "shipping": "配送・返品について",
+      "privacy": "プライバシーポリシー",
+      "terms": "利用規約",
+      "sitemap": "サイトマップ",
+      "careers": "採用情報",
+      "press": "プレス・メディア"
+    },
+    "app": {
+      "title": "アプリでもっと便利に",
+      "subtitle": "App Store & Google Playで無料ダウンロード",
+      "app_store": "App Store",
+      "google_play": "Google Play"
+    }
+  },
+
+  "accessibility": {
+    "open_menu": "メニューを開く",
+    "close_menu": "メニューを閉じる",
+    "slide_previous": "前のスライドへ",
+    "slide_next": "次のスライドへ",
+    "go_to_slide": "スライド {{ number }} へ",
+    "image_zoom": "画像を拡大",
+    "add_to_wishlist": "お気に入りに追加",
+    "remove_from_wishlist": "お気に入りから削除",
+    "increase_quantity": "数量を増やす",
+    "decrease_quantity": "数量を減らす",
+    "filter_drawer_open": "フィルターを開く",
+    "filter_drawer_close": "フィルターを閉じる",
+    "product_image": "{{ product_title }}の画像",
+    "cart_open": "カートを開く",
+    "search_open": "検索を開く",
+    "back_to_top": "ページのトップへ戻る"
+  }
+}

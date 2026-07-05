@@ -1,0 +1,163 @@
+{%- form 'customer', id: 'newsletter-form-{{ section.id }}' -%}
+  <input type="hidden" name="contact[tags]" value="newsletter">
+{%- endform -%}
+
+<section class="nl-section" aria-labelledby="nl-heading-{{ section.id }}">
+  <div class="container">
+    <div class="nl-inner">
+
+      <div class="sr-l">
+        <span class="nl-label en">{{ section.settings.label }}</span>
+        <h2 class="nl-title" id="nl-heading-{{ section.id }}">{{ section.settings.heading }}</h2>
+        {%- if section.settings.subtext != blank -%}
+          <p class="nl-desc">{{ section.settings.subtext }}</p>
+        {%- endif -%}
+        <ul class="nl-benefits">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'benefit' -%}
+              <li class="nl-benefit" {{ block.shopify_attributes }}>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                {{ block.settings.text }}
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      </div>
+
+      <div class="nl-form-wrap sr-r">
+        <p class="nl-form-title">{{ section.settings.form_title }}</p>
+        {%- form 'customer', id: 'newsletter-form-{{ section.id }}-main' -%}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          <div class="nl-input-group">
+            {%- if section.settings.show_name_field -%}
+              <input class="nl-input" type="text" name="contact[first_name]"
+                     placeholder="{{ section.settings.name_placeholder | default: 'お名前' }}"
+                     autocomplete="given-name">
+            {%- endif -%}
+            <input class="nl-input" type="email" name="contact[email]"
+                   placeholder="{{ section.settings.email_placeholder | default: 'メールアドレス' }}"
+                   required autocomplete="email"
+                   aria-required="true">
+            <button class="btn btn-buy btn-full en" type="submit">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
+              {{ section.settings.btn_label | default: '無料で登録する' }}
+            </button>
+          </div>
+          {%- if form.errors -%}
+            <p class="nl-note" style="color:#e05c6a;">{{ form.errors.translated_fields | join: ', ' }} を確認してください。</p>
+          {%- elsif form.posted_successfully? -%}
+            <p class="nl-note" style="color:var(--c-accent);">✨ ご登録ありがとうございます！</p>
+          {%- endif -%}
+        {%- endform -%}
+        <p class="nl-note">{{ section.settings.note }}</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+.nl-section { background:var(--c-text); }
+.nl-inner { display:grid; grid-template-columns:1fr 1fr; gap:clamp(40px,6vw,100px); align-items:center; padding:clamp(60px,8vw,100px) 0; }
+.nl-label { font-family:var(--f-en); font-size:10px; font-weight:300; letter-spacing:.24em; text-transform:uppercase; color:var(--c-accent); display:block; margin-bottom:12px; }
+.nl-title { font-family:var(--f-en); font-size:clamp(26px,3.2vw,44px); font-weight:300; color:#fff; letter-spacing:.04em; line-height:1.2; margin-bottom:16px; }
+.nl-desc { font-size:13px; font-weight:300; color:rgba(255,255,255,.6); line-height:1.9; margin-bottom:28px; }
+.nl-benefits { display:flex; flex-direction:column; gap:10px; }
+.nl-benefit { display:flex; align-items:center; gap:10px; font-size:12px; color:rgba(255,255,255,.7); font-weight:300; }
+.nl-benefit svg { color:var(--c-accent); flex-shrink:0; }
+.nl-form-wrap { background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:var(--radius-m); padding:36px; }
+.nl-form-title { font-size:15px; font-weight:400; color:#fff; letter-spacing:var(--ls); margin-bottom:20px; }
+.nl-input-group { display:flex; flex-direction:column; gap:12px; }
+.nl-input { width:100%; padding:14px 18px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.15); border-radius:var(--radius-s); font-size:13px; color:#fff; letter-spacing:var(--ls); transition:border-color .2s; outline:none; }
+.nl-input::placeholder { color:rgba(255,255,255,.35); }
+.nl-input:focus { border-color:var(--c-main); }
+.nl-note { font-size:11px; color:rgba(255,255,255,.35); margin-top:12px; line-height:1.6; }
+@media (max-width:900px){ .nl-inner { grid-template-columns:1fr; } }
+</style>
+
+{% schema %}
+{
+  "name": "メールマガジン",
+  "class": "section-newsletter",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "ラベル（英語）",
+      "default": "Newsletter"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "見出し",
+      "default": "最新情報を\nお届けします。"
+    },
+    {
+      "type": "text",
+      "id": "subtext",
+      "label": "サブテキスト",
+      "default": "新着商品・セール情報・ライフスタイルコラムなど、F'sPlanetのニュースをいち早くお届けします。"
+    },
+    {
+      "type": "text",
+      "id": "form_title",
+      "label": "フォームタイトル",
+      "default": "メールマガジン登録"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_name_field",
+      "label": "名前フィールドを表示",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "name_placeholder",
+      "label": "名前フィールド プレースホルダー",
+      "default": "お名前"
+    },
+    {
+      "type": "text",
+      "id": "email_placeholder",
+      "label": "メールアドレス プレースホルダー",
+      "default": "メールアドレス"
+    },
+    {
+      "type": "text",
+      "id": "btn_label",
+      "label": "ボタンテキスト",
+      "default": "無料で登録する"
+    },
+    {
+      "type": "text",
+      "id": "note",
+      "label": "注意書き",
+      "default": "※登録情報は個人情報保護方針に基づき適切に管理されます。いつでも配信停止できます。"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "特典テキスト",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "特典内容",
+          "default": "新規登録で10%OFFクーポンをプレゼント"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "メールマガジン",
+      "blocks": [
+        { "type": "benefit", "settings": { "text": "新規登録で10%OFFクーポンをプレゼント" } },
+        { "type": "benefit", "settings": { "text": "セール情報をいち早くお知らせ" } },
+        { "type": "benefit", "settings": { "text": "限定アイテムへの優先アクセス" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,299 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "F'sPlanet",
+    "theme_version": "1.0.0",
+    "theme_author": "F'sPlanet",
+    "theme_documentation_url": "https://fsplanet.jp",
+    "theme_support_url": "https://fsplanet.jp/support"
+  },
+  {
+    "name": "カラー設定",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_main",
+        "label": "メインカラー",
+        "default": "#62ADED"
+      },
+      {
+        "type": "color",
+        "id": "color_sub",
+        "label": "サブカラー",
+        "default": "#3E7CB1"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "label": "アクセントカラー",
+        "default": "#CFAE6B"
+      },
+      {
+        "type": "color",
+        "id": "color_bg",
+        "label": "背景色",
+        "default": "#FCFCFD"
+      },
+      {
+        "type": "color",
+        "id": "color_btn",
+        "label": "通常ボタン色",
+        "default": "#4A90E2"
+      },
+      {
+        "type": "color",
+        "id": "color_buy",
+        "label": "購入ボタン色",
+        "default": "#F2994A"
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "テキストカラー",
+        "default": "#222222"
+      }
+    ]
+  },
+  {
+    "name": "タイポグラフィ",
+    "settings": [
+      {
+        "type": "font_picker",
+        "id": "font_heading",
+        "label": "見出しフォント",
+        "default": "cormorant_garamond_n3"
+      },
+      {
+        "type": "font_picker",
+        "id": "font_body",
+        "label": "本文フォント",
+        "default": "noto_sans_jp_n3"
+      },
+      {
+        "type": "range",
+        "id": "font_body_size",
+        "label": "本文フォントサイズ",
+        "min": 12,
+        "max": 18,
+        "step": 1,
+        "unit": "px",
+        "default": 15
+      }
+    ]
+  },
+  {
+    "name": "ヘッダー設定",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "ロゴ画像"
+      },
+      {
+        "type": "range",
+        "id": "logo_width",
+        "label": "ロゴ幅",
+        "min": 80,
+        "max": 280,
+        "step": 10,
+        "unit": "px",
+        "default": 140
+      },
+      {
+        "type": "checkbox",
+        "id": "header_sticky",
+        "label": "ヘッダーを固定する",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "header_show_search",
+        "label": "検索バーを表示",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "header_show_wishlist",
+        "label": "お気に入りアイコンを表示",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "お知らせバー",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "announce_show",
+        "label": "お知らせバーを表示",
+        "default": true
+      },
+      {
+        "type": "color",
+        "id": "announce_bg",
+        "label": "背景色",
+        "default": "#222222"
+      },
+      {
+        "type": "color",
+        "id": "announce_text",
+        "label": "テキスト色",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "text",
+        "id": "announce_text_1",
+        "label": "お知らせ文1",
+        "default": "🚚 税込5,000円以上で送料無料"
+      },
+      {
+        "type": "text",
+        "id": "announce_text_2",
+        "label": "お知らせ文2",
+        "default": "✨ 新規会員登録で10%OFFクーポンプレゼント"
+      },
+      {
+        "type": "text",
+        "id": "announce_text_3",
+        "label": "お知らせ文3",
+        "default": "🎁 ギフトラッピング無料対応中"
+      }
+    ]
+  },
+  {
+    "name": "SNS・ソーシャル",
+    "settings": [
+      {
+        "type": "text",
+        "id": "social_instagram",
+        "label": "Instagram URL"
+      },
+      {
+        "type": "text",
+        "id": "social_twitter",
+        "label": "X (Twitter) URL"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook",
+        "label": "Facebook URL"
+      },
+      {
+        "type": "text",
+        "id": "social_youtube",
+        "label": "YouTube URL"
+      },
+      {
+        "type": "text",
+        "id": "social_line",
+        "label": "LINE URL"
+      }
+    ]
+  },
+  {
+    "name": "カート設定",
+    "settings": [
+      {
+        "type": "select",
+        "id": "cart_type",
+        "label": "カートタイプ",
+        "options": [
+          { "value": "page", "label": "カートページ" },
+          { "value": "drawer", "label": "サイドドロワー" },
+          { "value": "notification", "label": "通知のみ" }
+        ],
+        "default": "drawer"
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_show_fab",
+        "label": "カートFABボタンを表示",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "商品設定",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "product_show_vendor",
+        "label": "ブランド名を表示",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "product_show_rating",
+        "label": "評価・レビューを表示",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "product_show_wishlist",
+        "label": "お気に入りボタンを表示",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "product_show_quick_add",
+        "label": "クイック追加を表示",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "product_image_ratio",
+        "label": "商品画像アスペクト比",
+        "options": [
+          { "value": "square", "label": "正方形 (1:1)" },
+          { "value": "portrait", "label": "縦長 (3:4)" },
+          { "value": "landscape", "label": "横長 (4:3)" }
+        ],
+        "default": "portrait"
+      }
+    ]
+  },
+  {
+    "name": "フッター設定",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "footer_logo",
+        "label": "フッターロゴ"
+      },
+      {
+        "type": "richtext",
+        "id": "footer_description",
+        "label": "ブランド説明文",
+        "default": "<p>家族の時間をもっと豊かに。上質なライフスタイルアイテムをセレクトしてお届けします。</p>"
+      },
+      {
+        "type": "checkbox",
+        "id": "footer_show_payment",
+        "label": "支払い方法アイコンを表示",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "footer_show_app_badges",
+        "label": "アプリDLバッジを表示",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "SEO設定",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "share_image",
+        "label": "OGP画像（SNSシェア用）"
+      },
+      {
+        "type": "checkbox",
+        "id": "seo_structured_data",
+        "label": "構造化データを有効化",
+        "default": true
+      }
+    ]
+  }
+]

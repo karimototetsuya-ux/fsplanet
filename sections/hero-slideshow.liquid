@@ -1,0 +1,271 @@
+<section class="hero" aria-label="メインビジュアル" id="hero-{{ section.id }}">
+  <div class="hero-track" id="heroTrack-{{ section.id }}">
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'slide' -%}
+        <div class="hero-slide{% if forloop.first %} active{% endif %}" id="slide-{{ section.id }}-{{ forloop.index0 }}" {{ block.shopify_attributes }}>
+
+          {%- if block.settings.image != blank -%}
+            <div class="hero-bg"
+                 style="background-image:url('{{ block.settings.image | image_url: width: 1920 }}');">
+            </div>
+          {%- else -%}
+            <div class="hero-bg" style="background: linear-gradient(135deg,#2C3E50 0%,#3E7CB1 40%,#62ADED 100%);"></div>
+          {%- endif -%}
+
+          <div class="hero-overlay" style="background:linear-gradient(105deg, rgba(20,20,20,{{ block.settings.overlay_opacity | times: 0.01 }}) 0%, rgba(20,20,20,{{ block.settings.overlay_opacity | times: 0.004 }}) 55%, transparent 100%);"></div>
+
+          <div class="hero-content">
+            {%- if block.settings.eyebrow != blank -%}
+              <span class="hero-eyebrow en">{{ block.settings.eyebrow }}</span>
+            {%- endif -%}
+            {%- if block.settings.title != blank -%}
+              <h2 class="hero-title en">{{ block.settings.title }}</h2>
+            {%- endif -%}
+            {%- if block.settings.subtitle != blank -%}
+              <p class="hero-subtitle">{{ block.settings.subtitle }}</p>
+            {%- endif -%}
+            <div class="hero-cta">
+              {%- if block.settings.btn1_label != blank -%}
+                <a class="hero-btn-main en" href="{{ block.settings.btn1_url | default: '#' }}">
+                  {{ block.settings.btn1_label }}
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>
+                </a>
+              {%- endif -%}
+              {%- if block.settings.btn2_label != blank -%}
+                <a class="hero-btn-sub en" href="{{ block.settings.btn2_url | default: '#' }}">{{ block.settings.btn2_label }}</a>
+              {%- endif -%}
+            </div>
+          </div>
+
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+
+  <!-- Controls -->
+  {%- assign slide_count = section.blocks | where: 'type', 'slide' | size -%}
+  {%- if slide_count > 1 -%}
+    <div class="hero-controls">
+      <div class="hero-dots" role="tablist" aria-label="スライド選択">
+        {%- for i in (1..slide_count) -%}
+          <button class="hero-dot{% if forloop.first %} active{% endif %}"
+                  role="tab"
+                  aria-selected="{{ forloop.first }}"
+                  aria-label="スライド{{ forloop.index }}"
+                  data-slide="{{ forloop.index0 }}"
+                  data-target="{{ section.id }}">
+          </button>
+        {%- endfor -%}
+      </div>
+      <div class="hero-arrows">
+        <button class="hero-arrow" aria-label="前のスライド" data-dir="-1" data-target="{{ section.id }}">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="18" height="18" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/></svg>
+        </button>
+        <button class="hero-arrow" aria-label="次のスライド" data-dir="1" data-target="{{ section.id }}">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="18" height="18" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
+        </button>
+      </div>
+    </div>
+  {%- endif -%}
+</section>
+
+<style>
+.hero {
+  position: relative;
+  height: clamp(480px,85vh,860px);
+  overflow: hidden;
+  background: #1a1a1a;
+}
+.hero-track { display:flex; height:100%; transition:transform .8s var(--ease-out); }
+.hero-slide { flex:0 0 100%; height:100%; position:relative; overflow:hidden; }
+.hero-bg { position:absolute; inset:0; background-size:cover; background-position:center; transform:scale(1.05); transition:transform 8s var(--ease); }
+.hero-slide.active .hero-bg { transform:scale(1); }
+.hero-overlay { position:absolute; inset:0; }
+.hero-content { position:absolute; inset:0; display:flex; flex-direction:column; justify-content:center; padding:clamp(40px,8vw,120px); max-width:640px; }
+.hero-eyebrow { font-family:var(--f-en); font-size:clamp(9px,1vw,11px); font-weight:300; letter-spacing:.28em; text-transform:uppercase; color:rgba(255,255,255,.7); margin-bottom:16px; opacity:0; transform:translateY(12px); transition:opacity .6s .3s var(--ease),transform .6s .3s var(--ease); }
+.hero-slide.active .hero-eyebrow { opacity:1; transform:none; }
+.hero-title { font-family:var(--f-en); font-size:clamp(36px,5.5vw,80px); font-weight:300; line-height:1.08; letter-spacing:.02em; color:#fff; margin-bottom:8px; opacity:0; transform:translateY(16px); transition:opacity .7s .45s var(--ease),transform .7s .45s var(--ease); }
+.hero-slide.active .hero-title { opacity:1; transform:none; }
+.hero-subtitle { font-size:clamp(13px,1.3vw,16px); font-weight:300; color:rgba(255,255,255,.82); letter-spacing:var(--ls); line-height:1.8; margin-bottom:36px; opacity:0; transform:translateY(12px); transition:opacity .7s .6s var(--ease),transform .7s .6s var(--ease); }
+.hero-slide.active .hero-subtitle { opacity:1; transform:none; }
+.hero-cta { display:flex; gap:14px; flex-wrap:wrap; opacity:0; transform:translateY(10px); transition:opacity .7s .75s var(--ease),transform .7s .75s var(--ease); }
+.hero-slide.active .hero-cta { opacity:1; transform:none; }
+.hero-btn-main { background:#fff; color:var(--c-text); padding:14px 34px; font-size:12px; font-weight:500; letter-spacing:.16em; text-transform:uppercase; border-radius:2px; transition:all .25s; display:inline-flex; align-items:center; gap:10px; }
+.hero-btn-main:hover { background:var(--c-main); color:#fff; transform:translateY(-1px); }
+.hero-btn-sub { background:transparent; color:#fff; padding:14px 28px; font-size:12px; font-weight:400; letter-spacing:.16em; text-transform:uppercase; border:1px solid rgba(255,255,255,.5); border-radius:2px; transition:all .25s; display:inline-flex; align-items:center; gap:8px; }
+.hero-btn-sub:hover { background:rgba(255,255,255,.12); border-color:#fff; }
+.hero-controls { position:absolute; bottom:36px; left:clamp(40px,8vw,120px); right:clamp(40px,8vw,120px); display:flex; align-items:center; justify-content:space-between; }
+.hero-dots { display:flex; gap:8px; }
+.hero-dot { width:28px; height:2px; background:rgba(255,255,255,.35); border-radius:1px; cursor:pointer; transition:all .35s var(--ease); position:relative; overflow:hidden; border:none; }
+.hero-dot::after { content:''; position:absolute; left:0; top:0; height:100%; width:0; background:#fff; border-radius:1px; }
+.hero-dot.active { width:52px; }
+.hero-dot.active::after { width:100%; transition:width {{ section.settings.autoplay_speed | minus: 200 }}ms linear; }
+.hero-arrows { display:flex; gap:8px; }
+.hero-arrow { width:44px; height:44px; border:1px solid rgba(255,255,255,.4); border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; cursor:pointer; transition:all .25s; }
+.hero-arrow:hover { background:rgba(255,255,255,.15); border-color:#fff; }
+</style>
+
+<script>
+(function(){
+  const sectionId = '{{ section.id }}';
+  const totalSlides = {{ slide_count }};
+  if(totalSlides <= 1) return;
+  let current = 0;
+  let timer;
+  const speed = {{ section.settings.autoplay_speed }};
+
+  function goTo(n) {
+    const slides = document.querySelectorAll('#hero-' + sectionId + ' .hero-slide');
+    const dots   = document.querySelectorAll('[data-target="' + sectionId + '"].hero-dot');
+    const track  = document.getElementById('heroTrack-' + sectionId);
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = ((n % totalSlides) + totalSlides) % totalSlides;
+    if(track) track.style.transform = 'translateX(-' + (current * 100) + '%)';
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+    dots[current].setAttribute('aria-selected','true');
+    resetTimer();
+  }
+
+  function resetTimer() {
+    clearInterval(timer);
+    {%- if section.settings.autoplay -%}
+    timer = setInterval(() => goTo(current + 1), speed);
+    {%- endif -%}
+  }
+
+  document.querySelectorAll('[data-target="' + sectionId + '"].hero-dot').forEach((dot, i) => {
+    dot.addEventListener('click', () => goTo(i));
+  });
+  document.querySelectorAll('[data-target="' + sectionId + '"].hero-arrow').forEach(btn => {
+    btn.addEventListener('click', () => goTo(current + parseInt(btn.dataset.dir)));
+  });
+
+  // Swipe support
+  let touchStartX = 0;
+  const hero = document.getElementById('hero-' + sectionId);
+  if(hero) {
+    hero.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, {passive:true});
+    hero.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].screenX - touchStartX;
+      if(Math.abs(dx) > 40) goTo(current + (dx < 0 ? 1 : -1));
+    });
+  }
+
+  resetTimer();
+})();
+</script>
+
+{% schema %}
+{
+  "name": "ヒーロースライドショー",
+  "class": "section-hero",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "自動再生",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "label": "自動再生間隔 (ms)",
+      "min": 3000,
+      "max": 10000,
+      "step": 500,
+      "default": 6000
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "スライド",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "背景画像"
+        },
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "label": "オーバーレイ不透明度 (%)",
+          "min": 0,
+          "max": 80,
+          "step": 5,
+          "default": 55
+        },
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "小見出し（英語）",
+          "default": "New Summer Collection 2025"
+        },
+        {
+          "type": "textarea",
+          "id": "title",
+          "label": "メインタイトル",
+          "default": "家族の時間を\nもっと豊かに。"
+        },
+        {
+          "type": "textarea",
+          "id": "subtitle",
+          "label": "サブタイトル",
+          "default": "上質なアイテムで、毎日の暮らしに\n小さな幸せを届けます。"
+        },
+        {
+          "type": "text",
+          "id": "btn1_label",
+          "label": "ボタン1 テキスト",
+          "default": "Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "btn1_url",
+          "label": "ボタン1 リンク先"
+        },
+        {
+          "type": "text",
+          "id": "btn2_label",
+          "label": "ボタン2 テキスト",
+          "default": "New Arrivals"
+        },
+        {
+          "type": "url",
+          "id": "btn2_url",
+          "label": "ボタン2 リンク先"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "ヒーロースライドショー",
+      "blocks": [
+        {
+          "type": "slide",
+          "settings": {
+            "eyebrow": "New Summer Collection 2025",
+            "title": "家族の時間を\nもっと豊かに。",
+            "subtitle": "上質なアイテムで、毎日の暮らしに\n小さな幸せを届けます。",
+            "btn1_label": "Shop Now",
+            "btn2_label": "New Arrivals"
+          }
+        },
+        {
+          "type": "slide",
+          "settings": {
+            "eyebrow": "Gift Season Special",
+            "title": "大切な人への\n贈りもの。",
+            "subtitle": "心を込めたギフトで、\n特別な瞬間を彩る。",
+            "btn1_label": "Gift Guide",
+            "btn2_label": "View All"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

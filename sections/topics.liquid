@@ -1,0 +1,792 @@
+{%- liquid
+  assign heading     = section.settings.heading     | default: 'Topics'
+  assign subheading  = section.settings.subheading  | default: 'F\'sPlanetからのお知らせ・読みもの'
+  assign layout      = section.settings.layout      | default: 'grid'
+  assign show_date   = section.settings.show_date
+  assign show_tag    = section.settings.show_tag
+  assign show_author = section.settings.show_author
+  assign cta_text    = section.settings.cta_text    | default: 'すべての記事を見る'
+  assign cta_url     = section.settings.cta_url     | default: '/blogs/news'
+  assign bg_color    = section.settings.bg_color    | default: 'white'
+-%}
+
+{%- style -%}
+/* =========================================================
+   topics — F'sPlanet
+   ========================================================= */
+.topics-section {
+  padding: var(--section-gap, 80px) 0;
+}
+.topics-section--bg-light { background: #F4F8FD; }
+.topics-section--bg-warm  { background: #FAF7F2; }
+.topics-section--bg-white { background: var(--c-bg, #FCFCFD); }
+
+/* ── Section Header ── */
+.topics-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+.topics-header__eyebrow {
+  display: inline-block;
+  font-family: var(--f-en, Georgia, serif);
+  font-size: .7rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--c-main, #62ADED);
+  margin-bottom: 12px;
+}
+.topics-header__title {
+  font-family: var(--f-en, Georgia, serif);
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+  font-weight: 300;
+  letter-spacing: .08em;
+  color: var(--c-text, #222);
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+.topics-header__sub {
+  font-family: var(--f-ja, sans-serif);
+  font-size: .9rem;
+  color: #888;
+  letter-spacing: .04em;
+}
+
+/* ── Grid Layout ── */
+.topics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px 28px;
+  width: 100%;
+  max-width: var(--max-w, 1280px);
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+/* ── Featured Layout (1 large + 2 small) ── */
+.topics-featured {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 28px;
+  width: 100%;
+  max-width: var(--max-w, 1280px);
+  margin: 0 auto;
+  padding: 0 40px;
+}
+.topics-featured .topics-card:first-child {
+  grid-row: 1 / 3;
+}
+.topics-featured .topics-card:first-child .topics-card__img-wrap {
+  aspect-ratio: 4/5;
+}
+.topics-featured .topics-card:first-child .topics-card__title {
+  font-size: 1.2rem;
+}
+
+/* ── Horizontal Layout ── */
+.topics-list {
+  width: 100%;
+  max-width: var(--max-w, 1280px);
+  margin: 0 auto;
+  padding: 0 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.topics-list-item {
+  display: flex;
+  align-items: stretch;
+  gap: 28px;
+  padding: 24px 0;
+  border-bottom: 1px solid #EDF2F8;
+  text-decoration: none;
+  transition: background .2s;
+  border-radius: 0;
+}
+.topics-list-item:hover { background: #F8FBFF; }
+.topics-list-item__img {
+  width: 160px;
+  flex-shrink: 0;
+  aspect-ratio: 16/10;
+  object-fit: cover;
+  border-radius: 10px;
+  background: #EDF2F8;
+}
+.topics-list-item__body { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+.topics-list-item__tag {
+  font-family: var(--f-en, Georgia, serif);
+  font-size: .72rem;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--c-main, #62ADED);
+  margin-bottom: 8px;
+}
+.topics-list-item__title {
+  font-family: var(--f-ja, sans-serif);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--c-text, #222);
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+.topics-list-item__excerpt {
+  font-family: var(--f-ja, sans-serif);
+  font-size: .84rem;
+  color: #888;
+  line-height: 1.65;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.topics-list-item__meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+  font-family: var(--f-ja, sans-serif);
+  font-size: .76rem;
+  color: #aaa;
+}
+
+/* ── Card (Grid / Featured) ── */
+.topics-card {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 16px rgba(0,0,0,.05);
+  text-decoration: none;
+  transition: transform .3s cubic-bezier(.22,.68,0,1.2), box-shadow .3s;
+}
+.topics-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,.1);
+}
+.topics-card__img-wrap {
+  width: 100%;
+  aspect-ratio: 16/10;
+  overflow: hidden;
+  background: #EDF2F8;
+  flex-shrink: 0;
+}
+.topics-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .5s ease;
+}
+.topics-card:hover .topics-card__img { transform: scale(1.04); }
+
+/* Tag ribbon */
+.topics-card__tag-wrap {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.topics-card__img-wrap { position: relative; }
+.topics-tag {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-family: var(--f-en, Georgia, serif);
+  font-size: .68rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.topics-tag--news    { background: rgba(98,173,237,.15); color: #3E7CB1; }
+.topics-tag--recipe  { background: rgba(207,174,107,.15); color: #A07840; }
+.topics-tag--pickup  { background: rgba(242,153,74,.15);  color: #C0672A; }
+.topics-tag--guide   { background: rgba(80,180,120,.15);  color: #2E8050; }
+.topics-tag--special { background: rgba(160,100,220,.15); color: #7040A0; }
+
+.topics-card__body {
+  padding: 20px 22px 22px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.topics-card__tag {
+  font-family: var(--f-en, Georgia, serif);
+  font-size: .7rem;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--c-main, #62ADED);
+  margin-bottom: 8px;
+}
+.topics-card__title {
+  font-family: var(--f-ja, sans-serif);
+  font-size: .97rem;
+  font-weight: 500;
+  color: var(--c-text, #222);
+  line-height: 1.55;
+  margin-bottom: 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.topics-card__excerpt {
+  font-family: var(--f-ja, sans-serif);
+  font-size: .82rem;
+  color: #888;
+  line-height: 1.7;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.topics-card__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid #F0F4F8;
+}
+.topics-card__date {
+  font-family: var(--f-en, Georgia, serif);
+  font-size: .75rem;
+  color: #bbb;
+  letter-spacing: .04em;
+}
+.topics-card__author {
+  font-family: var(--f-ja, sans-serif);
+  font-size: .75rem;
+  color: #bbb;
+}
+.topics-card__read-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--f-en, Georgia, serif);
+  font-size: .78rem;
+  letter-spacing: .08em;
+  color: var(--c-main, #62ADED);
+  text-decoration: none;
+  transition: gap .2s;
+}
+.topics-card__read-more:hover { gap: 9px; }
+
+/* ── Footer CTA ── */
+.topics-footer {
+  text-align: center;
+  margin-top: 44px;
+}
+.topics-footer__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 36px;
+  border: 1.5px solid var(--c-text, #222);
+  border-radius: 30px;
+  font-family: var(--f-en, Georgia, serif);
+  font-size: .88rem;
+  letter-spacing: .1em;
+  color: var(--c-text, #222);
+  text-decoration: none;
+  transition: background .25s, color .25s, border-color .25s;
+}
+.topics-footer__link:hover {
+  background: var(--c-text, #222);
+  color: #fff;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .topics-grid,
+  .topics-featured,
+  .topics-list { padding: 0 24px; }
+  .topics-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .topics-featured { grid-template-columns: 1fr; }
+  .topics-featured .topics-card:first-child { grid-row: auto; }
+  .topics-featured .topics-card:first-child .topics-card__img-wrap { aspect-ratio: 16/10; }
+}
+@media (max-width: 768px) {
+  .topics-section { padding: 60px 0; }
+  .topics-grid { padding: 0 20px; grid-template-columns: 1fr; gap: 20px; }
+  .topics-featured { padding: 0 20px; }
+  .topics-list { padding: 0 20px; }
+  .topics-list-item__img { width: 110px; }
+  .topics-header { margin-bottom: 32px; }
+}
+{%- endstyle -%}
+
+<section
+  class="topics-section topics-section--bg-{{ bg_color }}"
+  id="topics-{{ section.id }}"
+  data-section-type="topics"
+>
+  <div class="topics-header sr">
+    <span class="topics-header__eyebrow">Topics</span>
+    <h2 class="topics-header__title">{{ heading }}</h2>
+    {%- if subheading != blank -%}
+      <p class="topics-header__sub">{{ subheading }}</p>
+    {%- endif -%}
+  </div>
+
+  {%- if section.blocks.size > 0 -%}
+
+    {%- comment -%} ── Grid Layout ── {%- endcomment -%}
+    {%- if layout == 'grid' -%}
+      <div class="topics-grid">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'article_card' -%}
+            {%- liquid
+              assign article_obj = block.settings.article
+              assign card_title   = block.settings.card_title   | default: article_obj.title
+              assign card_excerpt = block.settings.card_excerpt | default: article_obj.excerpt_or_content | strip_html | truncate: 120
+              assign card_date    = article_obj.published_at    | date: '%Y.%m.%d'
+              assign card_url     = article_obj.url             | default: block.settings.card_url | default: '#'
+              assign card_image   = article_obj.image           | default: block.settings.card_image
+              assign card_tag     = block.settings.card_tag
+              assign card_author  = article_obj.author          | default: block.settings.card_author
+            -%}
+            <a
+              class="topics-card sr"
+              href="{{ card_url }}"
+              {{ block.shopify_attributes }}
+              style="animation-delay:{{ forloop.index0 | times: 0.1 }}s"
+            >
+              <div class="topics-card__img-wrap">
+                {%- if card_image -%}
+                  <img
+                    class="topics-card__img"
+                    src="{{ card_image | image_url: width: 640 }}"
+                    srcset="{{ card_image | image_url: width: 400 }} 400w, {{ card_image | image_url: width: 640 }} 640w"
+                    sizes="(max-width:768px) 90vw, 380px"
+                    alt="{{ card_title | escape }}"
+                    loading="lazy"
+                    width="640"
+                    height="400"
+                  >
+                {%- else -%}
+                  <div style="width:100%;height:100%;background:linear-gradient(135deg,#EAF3FB,#F0EBE0);display:flex;align-items:center;justify-content:center">
+                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" opacity=".3"><rect x="6" y="10" width="36" height="28" rx="4" stroke="#62ADED" stroke-width="2"/><circle cx="18" cy="21" r="4" stroke="#62ADED" stroke-width="2"/><path d="M6 34l10-8 8 6 6-5 12 7" stroke="#62ADED" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
+                {%- endif -%}
+                {%- if card_tag != blank -%}
+                  <div class="topics-card__tag-wrap">
+                    <span class="topics-tag topics-tag--{{ card_tag | downcase | replace: ' ', '-' }}">{{ card_tag }}</span>
+                  </div>
+                {%- endif -%}
+              </div>
+              <div class="topics-card__body">
+                {%- if card_tag != blank and show_tag -%}
+                  <span class="topics-card__tag">{{ card_tag }}</span>
+                {%- endif -%}
+                <h3 class="topics-card__title">{{ card_title }}</h3>
+                {%- if card_excerpt != blank -%}
+                  <p class="topics-card__excerpt">{{ card_excerpt }}</p>
+                {%- endif -%}
+                <div class="topics-card__meta">
+                  <div style="display:flex;flex-direction:column;gap:2px">
+                    {%- if show_date and card_date != blank -%}
+                      <span class="topics-card__date">{{ card_date }}</span>
+                    {%- endif -%}
+                    {%- if show_author and card_author != blank -%}
+                      <span class="topics-card__author">by {{ card_author }}</span>
+                    {%- endif -%}
+                  </div>
+                  <span class="topics-card__read-more" aria-hidden="true">
+                    Read more
+                    <svg width="14" height="8" viewBox="0 0 14 8" fill="none"><path d="M1 4h12M9 1l4 3-4 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
+                </div>
+              </div>
+            </a>
+
+          {%- elsif block.type == 'manual_card' -%}
+            <a
+              class="topics-card sr"
+              href="{{ block.settings.card_url | default: '#' }}"
+              {{ block.shopify_attributes }}
+              style="animation-delay:{{ forloop.index0 | times: 0.1 }}s"
+            >
+              <div class="topics-card__img-wrap">
+                {%- if block.settings.card_image -%}
+                  <img
+                    class="topics-card__img"
+                    src="{{ block.settings.card_image | image_url: width: 640 }}"
+                    srcset="{{ block.settings.card_image | image_url: width: 400 }} 400w, {{ block.settings.card_image | image_url: width: 640 }} 640w"
+                    sizes="(max-width:768px) 90vw, 380px"
+                    alt="{{ block.settings.card_title | escape }}"
+                    loading="lazy"
+                    width="640"
+                    height="400"
+                  >
+                {%- else -%}
+                  <div style="width:100%;height:100%;background:linear-gradient(135deg,#EAF3FB,#F0EBE0);display:flex;align-items:center;justify-content:center">
+                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" opacity=".3"><rect x="6" y="10" width="36" height="28" rx="4" stroke="#62ADED" stroke-width="2"/><circle cx="18" cy="21" r="4" stroke="#62ADED" stroke-width="2"/><path d="M6 34l10-8 8 6 6-5 12 7" stroke="#62ADED" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
+                {%- endif -%}
+                {%- if block.settings.card_tag != blank -%}
+                  <div class="topics-card__tag-wrap">
+                    <span class="topics-tag topics-tag--{{ block.settings.card_tag | downcase | replace: ' ', '-' }}">{{ block.settings.card_tag }}</span>
+                  </div>
+                {%- endif -%}
+              </div>
+              <div class="topics-card__body">
+                {%- if block.settings.card_tag != blank and show_tag -%}
+                  <span class="topics-card__tag">{{ block.settings.card_tag }}</span>
+                {%- endif -%}
+                <h3 class="topics-card__title">{{ block.settings.card_title }}</h3>
+                {%- if block.settings.card_excerpt != blank -%}
+                  <p class="topics-card__excerpt">{{ block.settings.card_excerpt }}</p>
+                {%- endif -%}
+                <div class="topics-card__meta">
+                  <div style="display:flex;flex-direction:column;gap:2px">
+                    {%- if show_date and block.settings.card_date != blank -%}
+                      <span class="topics-card__date">{{ block.settings.card_date }}</span>
+                    {%- endif -%}
+                    {%- if show_author and block.settings.card_author != blank -%}
+                      <span class="topics-card__author">by {{ block.settings.card_author }}</span>
+                    {%- endif -%}
+                  </div>
+                  <span class="topics-card__read-more" aria-hidden="true">
+                    Read more
+                    <svg width="14" height="8" viewBox="0 0 14 8" fill="none"><path d="M1 4h12M9 1l4 3-4 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
+                </div>
+              </div>
+            </a>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+
+    {%- comment -%} ── Featured Layout ── {%- endcomment -%}
+    {%- elsif layout == 'featured' -%}
+      <div class="topics-featured">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'article_card' or block.type == 'manual_card' -%}
+            {%- liquid
+              if block.type == 'article_card'
+                assign article_obj  = block.settings.article
+                assign card_title   = block.settings.card_title   | default: article_obj.title
+                assign card_excerpt = block.settings.card_excerpt | default: article_obj.excerpt_or_content | strip_html | truncate: 120
+                assign card_date    = article_obj.published_at    | date: '%Y.%m.%d'
+                assign card_url     = article_obj.url             | default: block.settings.card_url | default: '#'
+                assign card_image   = article_obj.image           | default: block.settings.card_image
+              else
+                assign card_title   = block.settings.card_title
+                assign card_excerpt = block.settings.card_excerpt
+                assign card_date    = block.settings.card_date
+                assign card_url     = block.settings.card_url | default: '#'
+                assign card_image   = block.settings.card_image
+              endif
+              assign card_tag    = block.settings.card_tag
+              assign card_author = block.settings.card_author
+            -%}
+            <a class="topics-card sr" href="{{ card_url }}" {{ block.shopify_attributes }} style="animation-delay:{{ forloop.index0 | times: 0.1 }}s">
+              <div class="topics-card__img-wrap">
+                {%- if card_image -%}
+                  <img class="topics-card__img" src="{{ card_image | image_url: width: 640 }}" alt="{{ card_title | escape }}" loading="lazy" width="640" height="400">
+                {%- else -%}
+                  <div style="width:100%;height:100%;background:linear-gradient(135deg,#EAF3FB,#F0EBE0)"></div>
+                {%- endif -%}
+                {%- if card_tag != blank -%}
+                  <div class="topics-card__tag-wrap"><span class="topics-tag topics-tag--{{ card_tag | downcase }}">{{ card_tag }}</span></div>
+                {%- endif -%}
+              </div>
+              <div class="topics-card__body">
+                {%- if show_tag and card_tag != blank -%}<span class="topics-card__tag">{{ card_tag }}</span>{%- endif -%}
+                <h3 class="topics-card__title">{{ card_title }}</h3>
+                {%- if card_excerpt != blank -%}<p class="topics-card__excerpt">{{ card_excerpt }}</p>{%- endif -%}
+                <div class="topics-card__meta">
+                  <div>
+                    {%- if show_date and card_date != blank -%}<span class="topics-card__date">{{ card_date }}</span>{%- endif -%}
+                    {%- if show_author and card_author != blank -%}<span class="topics-card__author">by {{ card_author }}</span>{%- endif -%}
+                  </div>
+                  <span class="topics-card__read-more" aria-hidden="true">Read more <svg width="14" height="8" viewBox="0 0 14 8" fill="none"><path d="M1 4h12M9 1l4 3-4 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </div>
+              </div>
+            </a>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+
+    {%- comment -%} ── List Layout ── {%- endcomment -%}
+    {%- elsif layout == 'list' -%}
+      <div class="topics-list">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'article_card' or block.type == 'manual_card' -%}
+            {%- liquid
+              if block.type == 'article_card'
+                assign article_obj  = block.settings.article
+                assign card_title   = block.settings.card_title   | default: article_obj.title
+                assign card_excerpt = block.settings.card_excerpt | default: article_obj.excerpt_or_content | strip_html | truncate: 100
+                assign card_date    = article_obj.published_at    | date: '%Y.%m.%d'
+                assign card_url     = article_obj.url             | default: '#'
+                assign card_image   = article_obj.image           | default: block.settings.card_image
+              else
+                assign card_title   = block.settings.card_title
+                assign card_excerpt = block.settings.card_excerpt
+                assign card_date    = block.settings.card_date
+                assign card_url     = block.settings.card_url | default: '#'
+                assign card_image   = block.settings.card_image
+              endif
+              assign card_tag = block.settings.card_tag
+            -%}
+            <a class="topics-list-item sr" href="{{ card_url }}" {{ block.shopify_attributes }}>
+              {%- if card_image -%}
+                <img class="topics-list-item__img" src="{{ card_image | image_url: width: 320 }}" alt="{{ card_title | escape }}" loading="lazy" width="160" height="100">
+              {%- else -%}
+                <div class="topics-list-item__img" style="background:linear-gradient(135deg,#EAF3FB,#F0EBE0)"></div>
+              {%- endif -%}
+              <div class="topics-list-item__body">
+                {%- if show_tag and card_tag != blank -%}<span class="topics-list-item__tag">{{ card_tag }}</span>{%- endif -%}
+                <h3 class="topics-list-item__title">{{ card_title }}</h3>
+                {%- if card_excerpt != blank -%}<p class="topics-list-item__excerpt">{{ card_excerpt }}</p>{%- endif -%}
+                <div class="topics-list-item__meta">
+                  {%- if show_date and card_date != blank -%}<span>{{ card_date }}</span>{%- endif -%}
+                </div>
+              </div>
+            </a>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+  {%- else -%}
+    {%- comment -%} No blocks placeholder {%- endcomment -%}
+    <div style="text-align:center;padding:60px 20px;color:#bbb">
+      <p style="font-family:var(--f-ja,sans-serif);font-size:.9rem">
+        テーマエディターからTopicsカードを追加してください
+      </p>
+    </div>
+  {%- endif -%}
+
+  {%- if cta_text != blank -%}
+    <div class="topics-footer sr">
+      <a href="{{ cta_url }}" class="topics-footer__link">
+        {{ cta_text }}
+        <svg width="16" height="10" viewBox="0 0 16 10" fill="none"><path d="M1 5h14M10 1l5 4-5 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Topics",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "セクション設定"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Topics",
+      "label": "見出し"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "default": "F'sPlanetからのお知らせ・読みもの",
+      "label": "サブテキスト"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "レイアウト",
+      "options": [
+        { "value": "grid",     "label": "グリッド（3列）" },
+        { "value": "featured", "label": "フィーチャー（大1+小2）" },
+        { "value": "list",     "label": "リスト（横並び）" }
+      ],
+      "default": "grid"
+    },
+    {
+      "type": "select",
+      "id": "bg_color",
+      "label": "背景色",
+      "options": [
+        { "value": "white", "label": "ホワイト" },
+        { "value": "light", "label": "ライトブルー" },
+        { "value": "warm",  "label": "ウォームベージュ" }
+      ],
+      "default": "light"
+    },
+    {
+      "type": "header",
+      "content": "表示オプション"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "default": true,
+      "label": "日付を表示"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tag",
+      "default": true,
+      "label": "タグを表示"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_author",
+      "default": false,
+      "label": "著者を表示"
+    },
+    {
+      "type": "header",
+      "content": "フッターCTA"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "default": "すべての記事を見る",
+      "label": "ボタンテキスト"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "ボタンURL"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "article_card",
+      "name": "記事カード（Shopifyブログ）",
+      "settings": [
+        {
+          "type": "article",
+          "id": "article",
+          "label": "記事を選択"
+        },
+        {
+          "type": "text",
+          "id": "card_title",
+          "label": "タイトルを上書き（任意）"
+        },
+        {
+          "type": "textarea",
+          "id": "card_excerpt",
+          "label": "抜粋を上書き（任意）"
+        },
+        {
+          "type": "image_picker",
+          "id": "card_image",
+          "label": "サムネイルを上書き（任意）"
+        },
+        {
+          "type": "select",
+          "id": "card_tag",
+          "label": "タグ",
+          "options": [
+            { "value": "",        "label": "なし" },
+            { "value": "news",    "label": "News" },
+            { "value": "recipe",  "label": "Recipe" },
+            { "value": "pickup",  "label": "Pickup" },
+            { "value": "guide",   "label": "Guide" },
+            { "value": "special", "label": "Special" }
+          ],
+          "default": "news"
+        }
+      ]
+    },
+    {
+      "type": "manual_card",
+      "name": "手動カード",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "card_image",
+          "label": "サムネイル画像"
+        },
+        {
+          "type": "text",
+          "id": "card_title",
+          "default": "F'sPlanetの新しいコレクションが入荷しました",
+          "label": "タイトル"
+        },
+        {
+          "type": "textarea",
+          "id": "card_excerpt",
+          "default": "今シーズンのおすすめアイテムをご紹介します。家族みんなで楽しめるナチュラルなライフスタイルアイテムが揃いました。",
+          "label": "抜粋"
+        },
+        {
+          "type": "text",
+          "id": "card_date",
+          "default": "2025.01.01",
+          "label": "日付（YYYY.MM.DD形式）"
+        },
+        {
+          "type": "text",
+          "id": "card_author",
+          "label": "著者名"
+        },
+        {
+          "type": "url",
+          "id": "card_url",
+          "label": "リンク先URL"
+        },
+        {
+          "type": "select",
+          "id": "card_tag",
+          "label": "タグ",
+          "options": [
+            { "value": "",        "label": "なし" },
+            { "value": "news",    "label": "News" },
+            { "value": "recipe",  "label": "Recipe" },
+            { "value": "pickup",  "label": "Pickup" },
+            { "value": "guide",   "label": "Guide" },
+            { "value": "special", "label": "Special" }
+          ],
+          "default": "news"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Topics（記事グリッド）",
+      "settings": {
+        "heading": "Topics",
+        "layout": "grid",
+        "bg_color": "light"
+      },
+      "blocks": [
+        {
+          "type": "manual_card",
+          "settings": {
+            "card_title": "オーガニックコットンの新作コレクション入荷",
+            "card_excerpt": "肌に優しいオーガニックコットンを使用した新作アイテムが入荷しました。ベビーから大人まで安心してお使いいただけます。",
+            "card_date": "2025.06.20",
+            "card_tag": "news"
+          }
+        },
+        {
+          "type": "manual_card",
+          "settings": {
+            "card_title": "夏の食卓を彩るレシピ特集",
+            "card_excerpt": "旬の野菜を使ったヘルシーレシピを紹介。家族みんなで楽しめる簡単メニューを集めました。",
+            "card_date": "2025.06.15",
+            "card_tag": "recipe"
+          }
+        },
+        {
+          "type": "manual_card",
+          "settings": {
+            "card_title": "エコなライフスタイルを始めるための7つのヒント",
+            "card_excerpt": "毎日の小さな選択が、地球と家族の未来をつくります。今日からできるサステナブルな暮らしのヒントをご紹介。",
+            "card_date": "2025.06.10",
+            "card_tag": "guide"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

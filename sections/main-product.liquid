@@ -1,0 +1,360 @@
+{%- assign product = product -%}
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+
+<div class="pp-wrap" itemscope itemtype="https://schema.org/Product">
+
+  <!-- Breadcrumb -->
+  <nav class="pp-breadcrumb" aria-label="パンくずリスト">
+    <a href="{{ routes.root_url }}">ホーム</a>
+    <span aria-hidden="true">›</span>
+    {%- if product.collections.first -%}
+      <a href="{{ product.collections.first.url }}">{{ product.collections.first.title }}</a>
+      <span aria-hidden="true">›</span>
+    {%- endif -%}
+    <span aria-current="page">{{ product.title }}</span>
+  </nav>
+
+  <div class="pp-main">
+
+    <!-- Gallery -->
+    <div class="pp-gallery">
+      <div class="pp-main-img" id="ppMainImg">
+        {%- if product.featured_image -%}
+          <img src="{{ product.featured_image | image_url: width: 800 }}"
+               srcset="{{ product.featured_image | image_url: width: 400 }} 400w, {{ product.featured_image | image_url: width: 800 }} 800w"
+               alt="{{ product.featured_image.alt | default: product.title | escape }}"
+               id="mainProductImg"
+               width="800" height="800"
+               itemprop="image"
+               loading="eager">
+        {%- else -%}
+          {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+        {%- endif -%}
+        <div class="pp-img-zoom" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 15.803 7.5 7.5 0 0015.803 15.803zm-2.303-4.697v-3m-3 0h3m0 3h3"/></svg>
+        </div>
+      </div>
+
+      {%- if product.images.size > 1 -%}
+        <div class="pp-thumbs" role="list" aria-label="商品画像一覧">
+          {%- for image in product.images limit: 6 -%}
+            <button class="pp-thumb{% if forloop.first %} active{% endif %}"
+                    role="listitem"
+                    aria-label="画像{{ forloop.index }}を表示"
+                    data-src="{{ image | image_url: width: 800 }}"
+                    onclick="switchProductImage(this)"
+                    style="background-image:url('{{ image | image_url: width: 144 }}');background-size:cover;background-position:center;">
+            </button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <!-- Product Info -->
+    <div class="pp-info">
+      <span itemprop="brand" itemscope itemtype="https://schema.org/Brand">
+        {%- if product.vendor != blank -%}
+          <a class="pp-brand-link en" href="/collections/vendors?q={{ product.vendor | url_encode }}" itemprop="name">
+            {{ product.vendor }}
+          </a>
+        {%- endif -%}
+      </span>
+
+      <h1 class="pp-product-name" itemprop="name">{{ product.title }}</h1>
+
+      <!-- Rating -->
+      {%- if product.metafields.reviews.rating.value != blank -%}
+        <div class="pp-rating-row" itemprop="aggregateRating" itemscope itemtype="https://schema.org/AggregateRating">
+          <div class="pp-stars" aria-label="評価: {{ product.metafields.reviews.rating.value }}">
+            {%- assign rating = product.metafields.reviews.rating.value | round -%}
+            {%- for i in (1..5) -%}
+              <span class="pp-star" style="color:{% if i <= rating %}var(--c-accent){% else %}var(--c-border){% endif %}">★</span>
+            {%- endfor -%}
+          </div>
+          <span class="pp-rating-score en" itemprop="ratingValue">{{ product.metafields.reviews.rating.value }}</span>
+          {%- if product.metafields.reviews.rating_count.value -%}
+            <span class="pp-rating-count" itemprop="reviewCount">（{{ product.metafields.reviews.rating_count.value }}件のレビュー）</span>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      <div class="pp-divider"></div>
+
+      <!-- Price -->
+      <div class="pp-price-row" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+        <meta itemprop="priceCurrency" content="{{ cart.currency.iso_code }}">
+        {%- if current_variant.compare_at_price > current_variant.price -%}
+          <span class="pp-price en" itemprop="price" content="{{ current_variant.price | divided_by: 100.0 }}">
+            {{ current_variant.price | money }}
+          </span>
+          <span class="pp-price-old en">{{ current_variant.compare_at_price | money }}</span>
+          {%- assign discount = current_variant.compare_at_price | minus: current_variant.price | times: 100 | divided_by: current_variant.compare_at_price -%}
+          <span class="pp-discount">{{ discount }}% OFF</span>
+        {%- else -%}
+          <span class="pp-price en" itemprop="price" content="{{ current_variant.price | divided_by: 100.0 }}">
+            {{ current_variant.price | money }}
+          </span>
+        {%- endif -%}
+        <link itemprop="availability" href="{% if current_variant.available %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}">
+      </div>
+      <p class="pp-tax">税込価格 {{ current_variant.price | times: 1.1 | money }}（消費税10%込）</p>
+
+      <!-- Options -->
+      {%- unless product.has_only_default_variant -%}
+        {%- for option in product.options_with_values -%}
+          <div style="margin-bottom:18px;">
+            <div class="pp-option-label">{{ option.name }}</div>
+            <div class="pp-sizes" role="group" aria-label="{{ option.name }}選択">
+              {%- for value in option.values -%}
+                {%- assign variant_for_value = product.variants | where: "option{{ forloop.parentloop.index }}", value | first -%}
+                <button class="pp-size-btn{% if option.selected_value == value %} active{% endif %}{% unless variant_for_value.available %} sold-out{% endunless %}"
+                        data-option-index="{{ forloop.parentloop.index0 }}"
+                        data-value="{{ value }}"
+                        onclick="selectOption(this)"
+                        {% unless variant_for_value.available %}disabled aria-label="{{ value }}（売り切れ）"{% endunless %}>
+                  {{ value }}
+                </button>
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- endunless -%}
+
+      <!-- Quantity -->
+      <div class="pp-qty-row">
+        <span class="pp-qty-label">数量</span>
+        <div class="pp-qty">
+          <button class="pp-qty-btn" aria-label="数量を減らす" onclick="changeQty(-1)">−</button>
+          <div class="pp-qty-num" id="qtyNum" aria-live="polite">1</div>
+          <button class="pp-qty-btn" aria-label="数量を増やす" onclick="changeQty(1)">+</button>
+        </div>
+        {%- if current_variant.available -%}
+          <span class="pp-stock">
+            <span class="pp-stock-dot"></span>
+            在庫あり
+          </span>
+        {%- else -%}
+          <span class="pp-stock" style="color:var(--c-buy);">売り切れ</span>
+        {%- endif -%}
+      </div>
+
+      <!-- Buttons -->
+      <div class="pp-btns">
+        {%- form 'product', product, id: 'product-form', novalidate: 'novalidate' -%}
+          <input type="hidden" name="id" value="{{ current_variant.id }}" id="variantId">
+          <input type="hidden" name="quantity" value="1" id="variantQty">
+
+          {%- if current_variant.available -%}
+            <button type="submit" class="pp-cart-btn" aria-label="カートに追加">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="18" height="18" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.932-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"/></svg>
+              カートに追加
+            </button>
+          {%- else -%}
+            <button type="button" class="pp-cart-btn" disabled style="opacity:.5;cursor:not-allowed;">
+              売り切れ
+            </button>
+          {%- endif -%}
+        {%- endform -%}
+
+        {%- if current_variant.available -%}
+          {%- form 'product', product, id: 'buy-form' -%}
+            <input type="hidden" name="id" value="{{ current_variant.id }}">
+            <input type="hidden" name="quantity" value="1">
+            <button type="submit" name="checkout" class="pp-buy-btn" aria-label="今すぐ購入">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="18" height="18" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/></svg>
+              今すぐ購入
+            </button>
+          {%- endform -%}
+        {%- endif -%}
+
+        <button class="pp-wish-btn" aria-label="お気に入りに追加" data-product-id="{{ product.id }}">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="18" height="18" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
+          お気に入りに追加
+        </button>
+      </div>
+
+      <!-- Info Tags -->
+      <div class="pp-info-row">
+        <span class="pp-info-tag">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="13" height="13" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"/></svg>
+          最短翌日お届け
+        </span>
+        <span class="pp-info-tag">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="13" height="13" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1014.625 7.5H12V4.875z"/></svg>
+          ギフトラッピング無料
+        </span>
+        <span class="pp-info-tag">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="13" height="13" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"/></svg>
+          30日間返品OK
+        </span>
+      </div>
+
+      <!-- Description Accordion -->
+      <div class="pp-accordion">
+
+        {%- if product.description != blank -%}
+          <div class="pp-accordion-item open">
+            <div class="pp-accordion-hdr" onclick="toggleAccordion(this)" role="button" aria-expanded="true" tabindex="0">
+              商品詳細
+              <svg class="pp-accordion-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+            </div>
+            <div class="pp-accordion-body">
+              <div class="pp-accordion-content" itemprop="description">
+                {{ product.description }}
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'accordion' -%}
+            <div class="pp-accordion-item" {{ block.shopify_attributes }}>
+              <div class="pp-accordion-hdr" onclick="toggleAccordion(this)" role="button" aria-expanded="false" tabindex="0">
+                {{ block.settings.title }}
+                <svg class="pp-accordion-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+              </div>
+              <div class="pp-accordion-body">
+                <div class="pp-accordion-content">{{ block.settings.content }}</div>
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.pp-wrap { max-width:var(--max-w); margin:0 auto; padding:0 clamp(20px,4vw,60px); }
+.pp-breadcrumb { padding:20px 0; display:flex; align-items:center; gap:8px; font-size:11px; color:var(--c-text3); letter-spacing:var(--ls); flex-wrap:wrap; }
+.pp-breadcrumb a { transition:color .2s; } .pp-breadcrumb a:hover { color:var(--c-text); }
+.pp-main { display:grid; grid-template-columns:1fr 1fr; gap:clamp(32px,5vw,80px); align-items:start; padding:20px 0 60px; }
+.pp-gallery { position:sticky; top:calc(var(--hdr-h) + 24px); }
+.pp-main-img { aspect-ratio:1; border-radius:var(--radius-m); overflow:hidden; background:var(--c-surface); margin-bottom:12px; cursor:zoom-in; position:relative; }
+.pp-main-img img { width:100%; height:100%; object-fit:cover; transition:transform .5s var(--ease); }
+.pp-main-img:hover img { transform:scale(1.04); }
+.pp-img-zoom { position:absolute; bottom:12px; right:12px; background:rgba(255,255,255,.9); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity .2s; }
+.pp-main-img:hover .pp-img-zoom { opacity:1; }
+.pp-thumbs { display:flex; gap:8px; flex-wrap:wrap; }
+.pp-thumb { width:72px; height:72px; border-radius:var(--radius-s); border:2px solid transparent; transition:border-color .2s; flex-shrink:0; background-size:cover; background-position:center; background-color:var(--c-surface); cursor:pointer; }
+.pp-thumb.active { border-color:var(--c-main); }
+.pp-thumb:hover { border-color:var(--c-border); }
+.pp-brand-link { font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--c-main); font-family:var(--f-en); font-weight:300; display:inline-block; margin-bottom:10px; border-bottom:1px solid transparent; transition:border-color .2s; }
+.pp-brand-link:hover { border-color:var(--c-main); }
+.pp-product-name { font-size:clamp(20px,2.5vw,30px); font-weight:300; line-height:1.35; letter-spacing:var(--ls); color:var(--c-text); margin-bottom:14px; }
+.pp-rating-row { display:flex; align-items:center; gap:10px; margin-bottom:18px; flex-wrap:wrap; }
+.pp-stars { display:flex; gap:2px; }
+.pp-star { font-size:14px; }
+.pp-rating-score { font-family:var(--f-en); font-size:13px; font-weight:300; color:var(--c-text2); }
+.pp-rating-count { font-size:12px; color:var(--c-text3); }
+.pp-divider { height:1px; background:var(--c-border); margin:18px 0; }
+.pp-price-row { display:flex; align-items:baseline; gap:12px; margin-bottom:8px; }
+.pp-price { font-family:var(--f-en); font-size:clamp(24px,2.8vw,34px); font-weight:300; color:var(--c-text); letter-spacing:.04em; }
+.pp-price-old { font-size:17px; color:var(--c-text3); text-decoration:line-through; font-family:var(--f-en); font-weight:300; }
+.pp-discount { background:var(--c-buy); color:#fff; font-size:11px; padding:3px 8px; border-radius:2px; font-weight:500; }
+.pp-tax { font-size:11px; color:var(--c-text3); letter-spacing:var(--ls); margin-bottom:20px; }
+.pp-option-label { font-size:12px; font-weight:500; letter-spacing:.1em; color:var(--c-text); margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; }
+.pp-sizes { display:flex; gap:8px; flex-wrap:wrap; }
+.pp-size-btn { min-width:48px; padding:10px 14px; border:1px solid var(--c-border); border-radius:var(--radius-s); font-size:13px; font-weight:400; color:var(--c-text2); transition:all .2s; }
+.pp-size-btn:hover { border-color:var(--c-text); color:var(--c-text); }
+.pp-size-btn.active { border-color:var(--c-text); background:var(--c-text); color:#fff; }
+.pp-size-btn.sold-out { opacity:.35; text-decoration:line-through; cursor:not-allowed; }
+.pp-qty-row { display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+.pp-qty-label { font-size:12px; font-weight:500; color:var(--c-text); }
+.pp-qty { display:flex; align-items:center; border:1px solid var(--c-border); border-radius:var(--radius-s); overflow:hidden; }
+.pp-qty-btn { width:40px; height:40px; display:flex; align-items:center; justify-content:center; font-size:18px; color:var(--c-text2); cursor:pointer; transition:background .2s; }
+.pp-qty-btn:hover { background:var(--c-surface); }
+.pp-qty-num { width:48px; text-align:center; font-size:14px; border-left:1px solid var(--c-border); border-right:1px solid var(--c-border); }
+.pp-stock { font-size:12px; color:var(--c-text3); display:flex; align-items:center; gap:5px; }
+.pp-stock-dot { width:6px; height:6px; border-radius:50%; background:#5cb85c; }
+.pp-btns { display:flex; flex-direction:column; gap:10px; margin-bottom:20px; }
+.pp-cart-btn { width:100%; padding:16px; background:var(--c-btn); color:#fff; font-size:13px; font-weight:500; letter-spacing:.12em; border-radius:var(--radius-s); display:flex; align-items:center; justify-content:center; gap:10px; transition:all .25s; box-shadow:0 4px 16px rgba(74,144,226,.25); border:none; cursor:pointer; font-family:var(--f-ja); }
+.pp-cart-btn:hover { background:var(--c-sub); transform:translateY(-1px); }
+.pp-cart-btn:disabled { opacity:.5; cursor:not-allowed; transform:none; }
+.pp-buy-btn { width:100%; padding:16px; background:var(--c-buy); color:#fff; font-size:13px; font-weight:500; letter-spacing:.12em; border-radius:var(--radius-s); display:flex; align-items:center; justify-content:center; gap:10px; transition:all .25s; box-shadow:0 4px 16px rgba(242,153,74,.25); border:none; cursor:pointer; font-family:var(--f-ja); }
+.pp-buy-btn:hover { background:#e08c3a; transform:translateY(-1px); }
+.pp-wish-btn { width:100%; padding:14px; border:1px solid var(--c-border); color:var(--c-text2); font-size:13px; font-weight:400; letter-spacing:.1em; border-radius:var(--radius-s); display:flex; align-items:center; justify-content:center; gap:8px; transition:all .25s; background:transparent; cursor:pointer; font-family:var(--f-ja); }
+.pp-wish-btn:hover { border-color:#e05c6a; color:#e05c6a; }
+.pp-info-row { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:20px; }
+.pp-info-tag { display:flex; align-items:center; gap:5px; padding:7px 12px; background:var(--c-surface); border-radius:100px; font-size:11px; color:var(--c-text2); }
+.pp-info-tag svg { color:var(--c-main); }
+.pp-accordion { border-top:1px solid var(--c-border); }
+.pp-accordion-item { border-bottom:1px solid var(--c-border); }
+.pp-accordion-hdr { display:flex; align-items:center; justify-content:space-between; padding:16px 0; cursor:pointer; font-size:13px; font-weight:500; letter-spacing:.08em; color:var(--c-text); transition:color .2s; }
+.pp-accordion-hdr:hover { color:var(--c-main); }
+.pp-accordion-icon { transition:transform .3s; }
+.pp-accordion-item.open .pp-accordion-icon { transform:rotate(45deg); }
+.pp-accordion-body { max-height:0; overflow:hidden; transition:max-height .35s var(--ease); }
+.pp-accordion-item.open .pp-accordion-body { max-height:600px; }
+.pp-accordion-content { padding:0 0 20px; font-size:13px; color:var(--c-text2); line-height:1.9; }
+@media (max-width:900px){ .pp-main { grid-template-columns:1fr; } .pp-gallery { position:static; } }
+</style>
+
+<script>
+// Product page interactions
+let qty = 1;
+function changeQty(delta) {
+  qty = Math.max(1, Math.min(99, qty + delta));
+  const el = document.getElementById('qtyNum');
+  const qtyInput = document.getElementById('variantQty');
+  if(el) el.textContent = qty;
+  if(qtyInput) qtyInput.value = qty;
+}
+function selectOption(btn) {
+  const group = btn.closest('.pp-sizes');
+  group.querySelectorAll('.pp-size-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function switchProductImage(thumb) {
+  document.querySelectorAll('.pp-thumb').forEach(t => t.classList.remove('active'));
+  thumb.classList.add('active');
+  const mainImg = document.getElementById('mainProductImg');
+  if(mainImg && thumb.dataset.src) mainImg.src = thumb.dataset.src;
+}
+function toggleAccordion(hdr) {
+  const item = hdr.closest('.pp-accordion-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.pp-accordion-item').forEach(i => {
+    i.classList.remove('open');
+    const h = i.querySelector('.pp-accordion-hdr');
+    if(h) h.setAttribute('aria-expanded','false');
+  });
+  if(!isOpen) { item.classList.add('open'); hdr.setAttribute('aria-expanded','true'); }
+}
+</script>
+
+{% schema %}
+{
+  "name": "商品ページ（メイン）",
+  "class": "section-main-product",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "accordion",
+      "name": "アコーディオン",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "タイトル"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "内容"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "商品ページ（メイン）",
+      "blocks": [
+        { "type": "accordion", "settings": { "title": "配送情報" } },
+        { "type": "accordion", "settings": { "title": "返品・交換" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

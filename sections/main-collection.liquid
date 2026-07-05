@@ -1,0 +1,1282 @@
+{%- liquid
+  assign sort_by = collection.sort_by | default: collection.default_sort_by
+  assign products_per_page = section.settings.products_per_page | default: 24
+  assign columns_desktop  = section.settings.columns_desktop  | default: 4
+  assign columns_mobile   = section.settings.columns_mobile   | default: 2
+-%}
+
+{%- style -%}
+/* =========================================================
+   main-collection — F'sPlanet
+   ========================================================= */
+.mc-page {
+  background: var(--c-bg, #FCFCFD);
+  padding-bottom: 80px;
+}
+
+/* ── Collection Hero ── */
+.mc-hero {
+  position: relative;
+  width: 100%;
+  min-height: 240px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  background: linear-gradient(135deg, #EAF3FB 0%, #F6EFE5 100%);
+}
+.mc-hero__bg {
+  position: absolute;
+  inset: 0;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  opacity: .45;
+}
+.mc-hero__body {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: var(--max-w, 1280px);
+  margin: 0 auto;
+  padding: 48px 40px;
+}
+.mc-hero__eyebrow {
+  font-family: var(--f-en, Georgia, serif);
+  font-size: .72rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--c-main, #62ADED);
+  margin-bottom: 8px;
+}
+.mc-hero__title {
+  font-family: var(--f-en, Georgia, serif);
+  font-size: clamp(1.8rem, 4vw, 3.2rem);
+  font-weight: 300;
+  letter-spacing: .06em;
+  color: var(--c-text, #222);
+  line-height: 1.15;
+  margin-bottom: 12px;
+}
+.mc-hero__desc {
+  font-family: var(--f-ja, sans-serif);
+  font-size: .88rem;
+  color: #666;
+  max-width: 520px;
+  line-height: 1.75;
+}
+.mc-hero__count {
+  font-family: var(--f-en, Georgia, serif);
+  font-size: .8rem;
+  color: #999;
+  margin-top: 12px;
+  letter-spacing: .05em;
+}
+
+/* ── Breadcrumb ── */
+.mc-breadcrumb {
+  width: 100%;
+  max-width: var(--max-w, 1280px);
+  margin: 0 auto;
+  padding: 16px 40px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--f-ja, sans-serif);
+  font-size: .78rem;
+  color: #999;
+}
+.mc-breadcrumb a {
+  color: #999;
+  text-decoration: none;
+  transition: color .2s;
+}
+.mc-breadcrumb a:hover { color: var(--c-main, #62ADED); }
+.mc-breadcrumb__sep { opacity: .5; }
+
+/* ── Layout ── */
+.mc-layout {
+  width: 100%;
+  max-width: var(--max-w, 1280px);
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+/* ── Filter Bar ── */
+.mc-filterbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 0 16px;
+  border-bottom: 1px solid #E8EDF3;
+  flex-wrap: wrap;
+}
+.mc-filterbar__label {
+  font-family: var(--f-ja, sans-serif);
+  font-size: .78rem;
+  color: #888;
+  font-weight: 500;
+  margin-right: 4px;
+  white-space: nowrap;
+}
+.mc-filter-group {
+  position: relative;
+}
+.mc-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: 1px solid #D8E2EE;
+  border-radius: 24px;
+  background: #fff;
+  font-family: var(--f-ja, sans-serif);
+  font-size: .82rem;
+  color: var(--c-text, #222);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color .2s, box-shadow .2s;
+  user-select: none;
+}
+.mc-filter-btn:hover,
+.mc-filter-btn.active {
+  border-color: var(--c-main, #62ADED);
+  box-shadow: 0 0 0 3px rgba(98,173,237,.1);
+}
+.mc-filter-btn svg {
+  width: 12px;
+  height: 12px;
+  transition: transform .25s;
+  flex-shrink: 0;
+}
+.mc-filter-btn.open svg { transform: rotate(180deg); }
+
+/* Dropdown */
+.mc-filter-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 200px;
+  background: #fff;
+  border: 1px solid #E0E8F0;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.1);
+  padding: 8px 0;
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-8px);
+  transition: opacity .2s, transform .2s;
+}
+.mc-filter-dropdown.open {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0);
+}
+.mc-filter-dropdown label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 18px;
+  font-family: var(--f-ja, sans-serif);
+  font-size: .84rem;
+  color: var(--c-text, #222);
+  cursor: pointer;
+  transition: background .15s;
+}
+.mc-filter-dropdown label:hover { background: #F4F8FD; }
+.mc-filter-dropdown input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--c-main, #62ADED);
+  flex-shrink: 0;
+}
+
+/* Price range */
+.mc-price-range {
+  padding: 12px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.mc-price-range__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.mc-price-range input[type="number"] {
+  width: 80px;
+  padding: 6px 10px;
+  border: 1px solid #D8E2EE;
+  border-radius: 8px;
+  font-size: .82rem;
+  text-align: center;
+  outline: none;
+}
+.mc-price-range input[type="number"]:focus {
+  border-color: var(--c-main, #62ADED);
+}
+.mc-price-range__sep { color: #bbb; font-size: .8rem; }
+.mc-price-range__apply {
+  width: 100%;
+  padding: 8px;
+  background: var(--c-main, #62ADED);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: .82rem;
+  cursor: pointer;
+  transition: opacity .2s;
+}
+.mc-price-range__apply:hover { opacity: .85; }
+
+/* Sort */
+.mc-sort {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.mc-sort__label {
+  font-family: var(--f-ja, sans-serif);
+  font-size: .78rem;
+  color: #888;
+  white-space: nowrap;
+}
+.mc-sort__select {
+  padding: 8px 32px 8px 14px;
+  border: 1px solid #D8E2EE;
+  border-radius: 24px;
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 12px center;
+  font-family: var(--f-ja, sans-serif);
+  font-size: .82rem;
+  color: var(--c-text, #222);
+  cursor: pointer;
+  appearance: none;
+  outline: none;
+  transition: border-color .2s;
+}
+.mc-sort__select:focus { border-color: var(--c-main, #62ADED); }
+
+/* ── Active Filters ── */
+.mc-active-filters {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 14px 0 2px;
+  min-height: 0;
+}
+.mc-active-filters:empty { display: none; }
+.mc-active-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px 5px 14px;
+  background: #EAF3FB;
+  border-radius: 20px;
+  font-family: var(--f-ja, sans-serif);
+  font-size: .78rem;
+  color: var(--c-main, #62ADED);
+}
+.mc-active-tag__remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(98,173,237,.2);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: var(--c-main, #62ADED);
+  font-size: .9rem;
+  line-height: 1;
+  transition: background .2s;
+}
+.mc-active-tag__remove:hover { background: rgba(98,173,237,.4); }
+.mc-clear-all {
+  font-family: var(--f-ja, sans-serif);
+  font-size: .78rem;
+  color: #999;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 4px;
+  margin-left: 4px;
+}
+.mc-clear-all:hover { color: #555; }
+
+/* ── Result Meta ── */
+.mc-result-meta {
+  padding: 14px 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.mc-result-meta__count {
+  font-family: var(--f-ja, sans-serif);
+  font-size: .82rem;
+  color: #888;
+}
+.mc-result-meta__count strong {
+  color: var(--c-text, #222);
+  font-weight: 500;
+}
+.mc-view-toggle {
+  display: flex;
+  gap: 4px;
+}
+.mc-view-btn {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #D8E2EE;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color .2s, background .2s;
+  color: #aaa;
+}
+.mc-view-btn.active,
+.mc-view-btn:hover {
+  border-color: var(--c-main, #62ADED);
+  background: #EAF3FB;
+  color: var(--c-main, #62ADED);
+}
+
+/* ── Product Grid ── */
+.mc-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 4), 1fr);
+  gap: 28px 24px;
+}
+.mc-grid[data-cols="3"] { --cols: 3; }
+.mc-grid[data-cols="2"] { --cols: 2; }
+
+/* ── No Results ── */
+.mc-no-results {
+  padding: 80px 0;
+  text-align: center;
+}
+.mc-no-results__icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+  opacity: .35;
+}
+.mc-no-results__title {
+  font-family: var(--f-ja, sans-serif);
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--c-text, #222);
+  margin-bottom: 8px;
+}
+.mc-no-results__text {
+  font-family: var(--f-ja, sans-serif);
+  font-size: .88rem;
+  color: #888;
+  margin-bottom: 24px;
+}
+.mc-no-results__btn {
+  display: inline-block;
+  padding: 12px 32px;
+  background: var(--c-main, #62ADED);
+  color: #fff;
+  border-radius: 30px;
+  text-decoration: none;
+  font-family: var(--f-ja, sans-serif);
+  font-size: .88rem;
+  letter-spacing: .06em;
+  transition: opacity .2s;
+}
+.mc-no-results__btn:hover { opacity: .85; }
+
+/* ── Pagination ── */
+.mc-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 48px 0 24px;
+  flex-wrap: wrap;
+}
+.mc-page-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #D8E2EE;
+  border-radius: 10px;
+  background: #fff;
+  font-family: var(--f-en, Georgia, serif);
+  font-size: .9rem;
+  color: var(--c-text, #222);
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color .2s, background .2s, color .2s;
+}
+.mc-page-btn:hover,
+.mc-page-btn.current {
+  border-color: var(--c-main, #62ADED);
+  background: var(--c-main, #62ADED);
+  color: #fff;
+}
+.mc-page-btn.prev,
+.mc-page-btn.next {
+  width: auto;
+  padding: 0 16px;
+  gap: 6px;
+  font-family: var(--f-ja, sans-serif);
+  font-size: .8rem;
+}
+.mc-page-btn.disabled {
+  opacity: .35;
+  pointer-events: none;
+}
+.mc-page-ellipsis {
+  color: #bbb;
+  font-family: var(--f-en, Georgia, serif);
+  font-size: .9rem;
+  padding: 0 4px;
+}
+
+/* ── Load More Button ── */
+.mc-loadmore {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 48px 0 16px;
+}
+.mc-loadmore__progress {
+  width: 100%;
+  max-width: 320px;
+  height: 3px;
+  background: #E8EDF3;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.mc-loadmore__bar {
+  height: 100%;
+  background: var(--c-main, #62ADED);
+  border-radius: 2px;
+  transition: width .4s;
+}
+.mc-loadmore__text {
+  font-family: var(--f-ja, sans-serif);
+  font-size: .8rem;
+  color: #999;
+}
+.mc-loadmore__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 40px;
+  border: 1.5px solid var(--c-main, #62ADED);
+  border-radius: 30px;
+  background: transparent;
+  color: var(--c-main, #62ADED);
+  font-family: var(--f-ja, sans-serif);
+  font-size: .9rem;
+  letter-spacing: .06em;
+  cursor: pointer;
+  transition: background .25s, color .25s;
+}
+.mc-loadmore__btn:hover {
+  background: var(--c-main, #62ADED);
+  color: #fff;
+}
+.mc-loadmore__btn svg {
+  width: 16px;
+  height: 16px;
+  transition: transform .3s;
+}
+.mc-loadmore__btn:hover svg { transform: rotate(180deg); }
+
+/* ── Skeleton Loader ── */
+.mc-skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 4), 1fr);
+  gap: 28px 24px;
+}
+.mc-skeleton-card {
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+}
+.mc-skeleton-img {
+  width: 100%;
+  aspect-ratio: 3/4;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: mc-shimmer 1.4s infinite;
+}
+.mc-skeleton-info { padding: 14px 4px; }
+.mc-skeleton-line {
+  height: 12px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: mc-shimmer 1.4s infinite;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+.mc-skeleton-line--short { width: 60%; }
+@keyframes mc-shimmer {
+  0%   { background-position:  200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── Mobile Filter Drawer ── */
+.mc-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s;
+}
+.mc-drawer-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+.mc-drawer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-height: 85vh;
+  background: #fff;
+  border-radius: 20px 20px 0 0;
+  z-index: 1000;
+  padding: 0 24px 32px;
+  overflow-y: auto;
+  transform: translateY(100%);
+  transition: transform .35s cubic-bezier(.32,.72,0,1);
+}
+.mc-drawer.open { transform: translateY(0); }
+.mc-drawer__handle {
+  width: 40px;
+  height: 4px;
+  background: #D8E2EE;
+  border-radius: 2px;
+  margin: 16px auto;
+}
+.mc-drawer__title {
+  font-family: var(--f-ja, sans-serif);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--c-text, #222);
+  margin-bottom: 24px;
+  text-align: center;
+}
+.mc-drawer-section {
+  margin-bottom: 24px;
+  border-bottom: 1px solid #F0F4F8;
+  padding-bottom: 24px;
+}
+.mc-drawer-section:last-child { border-bottom: none; }
+.mc-drawer-section__title {
+  font-family: var(--f-ja, sans-serif);
+  font-size: .88rem;
+  font-weight: 600;
+  color: var(--c-text, #222);
+  margin-bottom: 14px;
+}
+.mc-drawer-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.mc-chip {
+  padding: 7px 16px;
+  border: 1px solid #D8E2EE;
+  border-radius: 20px;
+  font-family: var(--f-ja, sans-serif);
+  font-size: .82rem;
+  color: var(--c-text, #222);
+  cursor: pointer;
+  transition: border-color .2s, background .2s, color .2s;
+}
+.mc-chip.selected {
+  border-color: var(--c-main, #62ADED);
+  background: var(--c-main, #62ADED);
+  color: #fff;
+}
+.mc-drawer-footer {
+  display: flex;
+  gap: 12px;
+  padding-top: 8px;
+}
+.mc-drawer-footer button {
+  flex: 1;
+  padding: 14px;
+  border-radius: 30px;
+  font-family: var(--f-ja, sans-serif);
+  font-size: .92rem;
+  cursor: pointer;
+  border: none;
+  transition: opacity .2s;
+}
+.mc-drawer-footer button:hover { opacity: .85; }
+.mc-drawer-reset {
+  background: #F0F4F8;
+  color: #666;
+}
+.mc-drawer-apply {
+  background: var(--c-main, #62ADED);
+  color: #fff;
+}
+
+/* モバイルフィルターボタン */
+.mc-mobile-filter-btn {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: 1.5px solid var(--c-main, #62ADED);
+  border-radius: 24px;
+  background: #fff;
+  color: var(--c-main, #62ADED);
+  font-family: var(--f-ja, sans-serif);
+  font-size: .88rem;
+  cursor: pointer;
+}
+.mc-mobile-filter-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  background: var(--c-main, #62ADED);
+  color: #fff;
+  border-radius: 50%;
+  font-size: .68rem;
+  font-weight: 700;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .mc-hero__body { padding: 40px 24px; }
+  .mc-breadcrumb,
+  .mc-layout { padding-left: 24px; padding-right: 24px; }
+  .mc-grid { --cols: 3; }
+}
+@media (max-width: 768px) {
+  .mc-filterbar { display: none; }
+  .mc-sort { margin-left: 0; }
+  .mc-mobile-filter-btn { display: inline-flex; }
+  .mc-result-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .mc-grid { --cols: 2; gap: 20px 14px; }
+  .mc-hero { min-height: 180px; }
+  .mc-hero__body { padding: 28px 20px; }
+  .mc-breadcrumb { padding: 12px 20px 0; }
+  .mc-layout { padding-left: 20px; padding-right: 20px; }
+}
+@media (max-width: 480px) {
+  .mc-grid { gap: 16px 10px; }
+}
+{%- endstyle -%}
+
+{%- comment -%} Mobile filter drawer overlay {%- endcomment -%}
+<div class="mc-drawer-overlay" id="mc-drawer-overlay" onclick="mcCloseDrawer()"></div>
+
+{%- comment -%} Mobile filter drawer {%- endcomment -%}
+<div class="mc-drawer" id="mc-drawer" role="dialog" aria-modal="true" aria-label="{{ 'collections.filter.title' | t | default: 'フィルター' }}">
+  <div class="mc-drawer__handle"></div>
+  <div class="mc-drawer__title">{{ 'collections.filter.title' | t | default: 'フィルター' }}</div>
+
+  {%- if section.settings.show_brand_filter -%}
+  <div class="mc-drawer-section">
+    <div class="mc-drawer-section__title">{{ 'collections.filter.brand' | t | default: 'ブランド' }}</div>
+    <div class="mc-drawer-chips" id="mc-drawer-brand">
+      {%- assign brands_list = section.settings.filter_brands | split: ',' -%}
+      {%- for brand in brands_list -%}
+        {%- assign brand_trim = brand | strip -%}
+        {%- if brand_trim != blank -%}
+          <button class="mc-chip" data-filter-type="brand" data-filter-value="{{ brand_trim | escape }}" onclick="mcToggleChip(this)">{{ brand_trim }}</button>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+  {%- endif -%}
+
+  {%- if section.settings.show_material_filter -%}
+  <div class="mc-drawer-section">
+    <div class="mc-drawer-section__title">{{ 'collections.filter.material' | t | default: '素材' }}</div>
+    <div class="mc-drawer-chips" id="mc-drawer-material">
+      {%- assign materials_list = section.settings.filter_materials | split: ',' -%}
+      {%- for mat in materials_list -%}
+        {%- assign mat_trim = mat | strip -%}
+        {%- if mat_trim != blank -%}
+          <button class="mc-chip" data-filter-type="material" data-filter-value="{{ mat_trim | escape }}" onclick="mcToggleChip(this)">{{ mat_trim }}</button>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+  {%- endif -%}
+
+  {%- if section.settings.show_price_filter -%}
+  <div class="mc-drawer-section">
+    <div class="mc-drawer-section__title">{{ 'collections.filter.price' | t | default: '価格帯' }}</div>
+    <div class="mc-drawer-chips" id="mc-drawer-price">
+      <button class="mc-chip" data-filter-type="price" data-filter-value="0-3000" onclick="mcToggleChip(this)">〜¥3,000</button>
+      <button class="mc-chip" data-filter-type="price" data-filter-value="3000-10000" onclick="mcToggleChip(this)">¥3,000〜¥10,000</button>
+      <button class="mc-chip" data-filter-type="price" data-filter-value="10000-30000" onclick="mcToggleChip(this)">¥10,000〜¥30,000</button>
+      <button class="mc-chip" data-filter-type="price" data-filter-value="30000-" onclick="mcToggleChip(this)">¥30,000〜</button>
+    </div>
+  </div>
+  {%- endif -%}
+
+  <div class="mc-drawer-footer">
+    <button class="mc-drawer-reset" onclick="mcResetDrawer()">{{ 'collections.filter.reset' | t | default: 'リセット' }}</button>
+    <button class="mc-drawer-apply" onclick="mcApplyDrawer()">{{ 'collections.filter.apply' | t | default: '適用する' }}</button>
+  </div>
+</div>
+
+{%- comment -%} ===== COLLECTION HERO ===== {%- endcomment -%}
+<section class="mc-hero">
+  {%- if collection.image -%}
+    <img
+      class="mc-hero__bg"
+      src="{{ collection.image | image_url: width: 1400 }}"
+      srcset="{{ collection.image | image_url: width: 800 }} 800w, {{ collection.image | image_url: width: 1400 }} 1400w"
+      sizes="100vw"
+      alt="{{ collection.image.alt | escape }}"
+      loading="lazy"
+    >
+  {%- endif -%}
+  <div class="mc-hero__body">
+    <p class="mc-hero__eyebrow">{{ 'collections.hero.eyebrow' | t | default: 'Collection' }}</p>
+    <h1 class="mc-hero__title">{{ collection.title }}</h1>
+    {%- if collection.description != blank -%}
+      <div class="mc-hero__desc">{{ collection.description | truncate: 160 }}</div>
+    {%- endif -%}
+    <p class="mc-hero__count">
+      {{ collection.products_count }}
+      {{ 'collections.hero.products' | t | default: ' items' }}
+    </p>
+  </div>
+</section>
+
+{%- comment -%} ===== BREADCRUMB ===== {%- endcomment -%}
+<nav class="mc-breadcrumb" aria-label="パンくずリスト">
+  <a href="{{ routes.root_url }}">{{ 'general.breadcrumb.home' | t | default: 'Home' }}</a>
+  <span class="mc-breadcrumb__sep" aria-hidden="true">
+    <svg width="6" height="10" viewBox="0 0 6 10" fill="none"><path d="M1 1l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </span>
+  <a href="{{ routes.collections_url }}">{{ 'general.breadcrumb.collections' | t | default: 'Collections' }}</a>
+  <span class="mc-breadcrumb__sep" aria-hidden="true">
+    <svg width="6" height="10" viewBox="0 0 6 10" fill="none"><path d="M1 1l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </span>
+  <span aria-current="page">{{ collection.title }}</span>
+</nav>
+
+{%- comment -%} ===== MAIN LAYOUT ===== {%- endcomment -%}
+<div class="mc-layout">
+
+  {%- comment -%} ── Filter Bar (Desktop) ── {%- endcomment -%}
+  {%- if section.settings.show_filter_bar -%}
+  <div class="mc-filterbar" id="mc-filterbar" role="search" aria-label="商品フィルター">
+    <span class="mc-filterbar__label">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="vertical-align:middle;margin-right:4px">
+        <path d="M1 2.5h12M3 7h8M5 11.5h4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+      </svg>
+      {{ 'collections.filter.label' | t | default: '絞り込み' }}
+    </span>
+
+    {%- if section.settings.show_brand_filter -%}
+    <div class="mc-filter-group">
+      <button class="mc-filter-btn" id="mc-btn-brand" onclick="mcToggleDropdown('brand')" aria-haspopup="listbox" aria-expanded="false">
+        {{ 'collections.filter.brand' | t | default: 'ブランド' }}
+        <svg viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="mc-filter-dropdown" id="mc-dd-brand" role="listbox">
+        {%- assign brands_list = section.settings.filter_brands | split: ',' -%}
+        {%- for brand in brands_list -%}
+          {%- assign brand_trim = brand | strip -%}
+          {%- if brand_trim != blank -%}
+            <label>
+              <input type="checkbox" name="filter[brand][]" value="{{ brand_trim | url_encode }}" onchange="mcUpdateActiveFilters()">
+              {{ brand_trim }}
+            </label>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+    {%- endif -%}
+
+    {%- if section.settings.show_price_filter -%}
+    <div class="mc-filter-group">
+      <button class="mc-filter-btn" id="mc-btn-price" onclick="mcToggleDropdown('price')" aria-haspopup="dialog" aria-expanded="false">
+        {{ 'collections.filter.price' | t | default: '価格' }}
+        <svg viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="mc-filter-dropdown" id="mc-dd-price">
+        <div class="mc-price-range">
+          <div class="mc-price-range__row">
+            <span style="font-size:.8rem;color:#888">¥</span>
+            <input type="number" id="mc-price-min" placeholder="0" min="0" step="100">
+            <span class="mc-price-range__sep">〜</span>
+            <span style="font-size:.8rem;color:#888">¥</span>
+            <input type="number" id="mc-price-max" placeholder="99999" min="0" step="100">
+          </div>
+          <button class="mc-price-range__apply" onclick="mcApplyPriceFilter()">
+            {{ 'collections.filter.price_apply' | t | default: '価格で絞り込む' }}
+          </button>
+        </div>
+      </div>
+    </div>
+    {%- endif -%}
+
+    {%- if section.settings.show_material_filter -%}
+    <div class="mc-filter-group">
+      <button class="mc-filter-btn" id="mc-btn-material" onclick="mcToggleDropdown('material')" aria-haspopup="listbox" aria-expanded="false">
+        {{ 'collections.filter.material' | t | default: '素材' }}
+        <svg viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="mc-filter-dropdown" id="mc-dd-material" role="listbox">
+        {%- assign materials_list = section.settings.filter_materials | split: ',' -%}
+        {%- for mat in materials_list -%}
+          {%- assign mat_trim = mat | strip -%}
+          {%- if mat_trim != blank -%}
+            <label>
+              <input type="checkbox" name="filter[material][]" value="{{ mat_trim | url_encode }}" onchange="mcUpdateActiveFilters()">
+              {{ mat_trim }}
+            </label>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+    {%- endif -%}
+
+    {%- if section.settings.show_size_filter -%}
+    <div class="mc-filter-group">
+      <button class="mc-filter-btn" id="mc-btn-size" onclick="mcToggleDropdown('size')" aria-haspopup="listbox" aria-expanded="false">
+        {{ 'collections.filter.size' | t | default: 'サイズ' }}
+        <svg viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="mc-filter-dropdown" id="mc-dd-size" role="listbox">
+        {%- for size in 'XS,S,M,L,XL,XXL,フリー' | split: ',' -%}
+          <label>
+            <input type="checkbox" name="filter[size][]" value="{{ size }}" onchange="mcUpdateActiveFilters()">
+            {{ size }}
+          </label>
+        {%- endfor -%}
+      </div>
+    </div>
+    {%- endif -%}
+
+    {%- if section.settings.show_sort -%}
+    <div class="mc-sort">
+      <label class="mc-sort__label" for="mc-sort-select">{{ 'collections.sort.label' | t | default: '並び替え' }}:</label>
+      <select class="mc-sort__select" id="mc-sort-select" onchange="mcApplySort(this.value)" aria-label="並び替え">
+        <option value="manual"       {% if sort_by == 'manual'       %}selected{% endif %}>{{ 'collections.sort.featured'   | t | default: 'おすすめ順' }}</option>
+        <option value="best-selling" {% if sort_by == 'best-selling' %}selected{% endif %}>{{ 'collections.sort.best_selling'| t | default: '人気順' }}</option>
+        <option value="created-desc" {% if sort_by == 'created-desc' %}selected{% endif %}>{{ 'collections.sort.new'        | t | default: '新着順' }}</option>
+        <option value="price-asc"    {% if sort_by == 'price-asc'    %}selected{% endif %}>{{ 'collections.sort.price_asc'  | t | default: '価格が安い順' }}</option>
+        <option value="price-desc"   {% if sort_by == 'price-desc'   %}selected{% endif %}>{{ 'collections.sort.price_desc' | t | default: '価格が高い順' }}</option>
+        <option value="title-asc"    {% if sort_by == 'title-asc'    %}selected{% endif %}>{{ 'collections.sort.title_asc'  | t | default: 'A → Z' }}</option>
+        <option value="title-desc"   {% if sort_by == 'title-desc'   %}selected{% endif %}>{{ 'collections.sort.title_desc' | t | default: 'Z → A' }}</option>
+      </select>
+    </div>
+    {%- endif -%}
+  </div>
+  {%- endif -%}
+
+  {%- comment -%} ── Active Filters ── {%- endcomment -%}
+  <div class="mc-active-filters" id="mc-active-filters" aria-live="polite"></div>
+
+  {%- comment -%} ── Result Meta ── {%- endcomment -%}
+  <div class="mc-result-meta">
+    <p class="mc-result-meta__count">
+      <strong>{{ collection.products_count }}</strong>
+      {{ 'collections.meta.count' | t | default: '件の商品' }}
+    </p>
+    <div style="display:flex;align-items:center;gap:12px">
+      {%- comment -%} Mobile filter button {%- endcomment -%}
+      <button class="mc-mobile-filter-btn" onclick="mcOpenDrawer()" aria-label="フィルターを開く">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M4 8h8M6 12h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        {{ 'collections.filter.title' | t | default: 'フィルター' }}
+        <span class="mc-mobile-filter-badge" id="mc-filter-badge" style="display:none">0</span>
+      </button>
+      {%- comment -%} View toggle {%- endcomment -%}
+      <div class="mc-view-toggle" role="group" aria-label="表示形式">
+        <button class="mc-view-btn active" id="mc-view-grid" onclick="mcSetView(4)" aria-label="4列グリッド表示" title="4列">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="8" y="1" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="1" y="8" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="8" y="8" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/></svg>
+        </button>
+        <button class="mc-view-btn" id="mc-view-2col" onclick="mcSetView(2)" aria-label="2列グリッド表示" title="2列">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5.5" height="12" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="7.5" y="1" width="5.5" height="12" rx="1" stroke="currentColor" stroke-width="1.3"/></svg>
+        </button>
+        <button class="mc-view-btn" id="mc-view-list" onclick="mcSetView(1)" aria-label="リスト表示" title="リスト">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 3h12M1 7h12M1 11h12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} ── Product Grid ── {%- endcomment -%}
+  {%- paginate collection.products by products_per_page -%}
+
+    {%- if collection.products.size > 0 -%}
+      <ul
+        class="mc-grid"
+        id="mc-grid"
+        data-cols="{{ columns_desktop }}"
+        role="list"
+        aria-label="{{ collection.title }} 商品一覧"
+        style="--cols:{{ columns_desktop }}"
+      >
+        {%- for product in collection.products -%}
+          <li class="sr" style="animation-delay:{{ forloop.index0 | times: 0.04 }}s">
+            {%- render 'product-card', product: product, index: forloop.index -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+
+      {%- comment -%} ── Pagination ── {%- endcomment -%}
+      {%- if paginate.pages > 1 -%}
+        <nav class="mc-pagination" role="navigation" aria-label="ページナビゲーション">
+
+          {%- if paginate.previous -%}
+            <a href="{{ paginate.previous.url }}" class="mc-page-btn prev" aria-label="前のページ">
+              <svg width="8" height="12" viewBox="0 0 8 12" fill="none"><path d="M6 1L1 6l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              {{ 'general.pagination.previous' | t | default: '前へ' }}
+            </a>
+          {%- else -%}
+            <span class="mc-page-btn prev disabled" aria-disabled="true">
+              <svg width="8" height="12" viewBox="0 0 8 12" fill="none"><path d="M6 1L1 6l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              {{ 'general.pagination.previous' | t | default: '前へ' }}
+            </span>
+          {%- endif -%}
+
+          {%- for part in paginate.parts -%}
+            {%- if part.is_link -%}
+              <a href="{{ part.url }}" class="mc-page-btn" aria-label="{{ part.title }}ページ">{{ part.title }}</a>
+            {%- else -%}
+              {%- if part.title == paginate.current_page -%}
+                <span class="mc-page-btn current" aria-current="page">{{ part.title }}</span>
+              {%- else -%}
+                <span class="mc-page-ellipsis" aria-hidden="true">&hellip;</span>
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+
+          {%- if paginate.next -%}
+            <a href="{{ paginate.next.url }}" class="mc-page-btn next" aria-label="次のページ">
+              {{ 'general.pagination.next' | t | default: '次へ' }}
+              <svg width="8" height="12" viewBox="0 0 8 12" fill="none"><path d="M2 1l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          {%- else -%}
+            <span class="mc-page-btn next disabled" aria-disabled="true">
+              {{ 'general.pagination.next' | t | default: '次へ' }}
+              <svg width="8" height="12" viewBox="0 0 8 12" fill="none"><path d="M2 1l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          {%- endif -%}
+
+        </nav>
+      {%- endif -%}
+
+    {%- else -%}
+      {%- comment -%} No results state {%- endcomment -%}
+      <div class="mc-no-results">
+        <div class="mc-no-results__icon">🔍</div>
+        <h2 class="mc-no-results__title">{{ 'collections.empty.title' | t | default: '商品が見つかりません' }}</h2>
+        <p class="mc-no-results__text">{{ 'collections.empty.text' | t | default: '検索条件を変えてもう一度お試しください。' }}</p>
+        <a href="{{ routes.collections_url }}" class="mc-no-results__btn">
+          {{ 'collections.empty.cta' | t | default: 'すべてのコレクションを見る' }}
+        </a>
+      </div>
+    {%- endif -%}
+
+  {%- endpaginate -%}
+
+</div>{%- comment -%} .mc-layout end {%- endcomment -%}
+
+<script>
+(function() {
+  // =========================================================
+  // F'sPlanet — main-collection.js (inline)
+  // =========================================================
+
+  /* ── Dropdown ── */
+  const dropdowns = {};
+  window.mcToggleDropdown = function(name) {
+    const dd  = document.getElementById('mc-dd-' + name);
+    const btn = document.getElementById('mc-btn-' + name);
+    if (!dd) return;
+    const isOpen = dd.classList.contains('open');
+    // Close all others
+    document.querySelectorAll('.mc-filter-dropdown.open').forEach(el => {
+      el.classList.remove('open');
+      const id = el.id.replace('mc-dd-', '');
+      const b  = document.getElementById('mc-btn-' + id);
+      if (b) { b.classList.remove('open'); b.setAttribute('aria-expanded', 'false'); }
+    });
+    if (!isOpen) {
+      dd.classList.add('open');
+      btn.classList.add('open');
+      btn.setAttribute('aria-expanded', 'true');
+      dropdowns[name] = true;
+    }
+  };
+
+  /* Close dropdowns on outside click */
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.mc-filter-group')) {
+      document.querySelectorAll('.mc-filter-dropdown.open').forEach(el => {
+        el.classList.remove('open');
+        const id = el.id.replace('mc-dd-', '');
+        const b  = document.getElementById('mc-btn-' + id);
+        if (b) { b.classList.remove('open'); b.setAttribute('aria-expanded', 'false'); }
+      });
+    }
+  });
+
+  /* ── Active Filters ── */
+  window.mcUpdateActiveFilters = function() {
+    const container  = document.getElementById('mc-active-filters');
+    const badge      = document.getElementById('mc-filter-badge');
+    if (!container) return;
+
+    const checked = document.querySelectorAll('.mc-filterbar input[type="checkbox"]:checked');
+    container.innerHTML = '';
+    if (checked.length === 0) {
+      if (badge) badge.style.display = 'none';
+      return;
+    }
+    if (badge) { badge.style.display = 'inline-flex'; badge.textContent = checked.length; }
+
+    checked.forEach(function(input) {
+      const tag = document.createElement('span');
+      tag.className = 'mc-active-tag';
+      tag.innerHTML = input.value.replace(/%20/g,' ') +
+        '<button class="mc-active-tag__remove" aria-label="' + input.value.replace(/%20/g,' ') + 'を削除" onclick="mcRemoveFilter(this)">×</button>';
+      tag.querySelector('button').dataset.inputId = input.id || (input.id = 'mc-cb-' + Math.random().toString(36).slice(2));
+      container.appendChild(tag);
+    });
+
+    const clearAll = document.createElement('button');
+    clearAll.className = 'mc-clear-all';
+    clearAll.textContent = 'すべてクリア';
+    clearAll.onclick = mcClearAllFilters;
+    container.appendChild(clearAll);
+  };
+
+  window.mcRemoveFilter = function(btn) {
+    const cb = document.getElementById(btn.dataset.inputId);
+    if (cb) { cb.checked = false; }
+    mcUpdateActiveFilters();
+  };
+
+  window.mcClearAllFilters = function() {
+    document.querySelectorAll('.mc-filterbar input[type="checkbox"]:checked').forEach(function(cb) { cb.checked = false; });
+    mcUpdateActiveFilters();
+  };
+
+  /* ── Price Filter ── */
+  window.mcApplyPriceFilter = function() {
+    const min = document.getElementById('mc-price-min')?.value || '';
+    const max = document.getElementById('mc-price-max')?.value || '';
+    const container = document.getElementById('mc-active-filters');
+    if (!container || (!min && !max)) return;
+    const label = (min ? '¥' + Number(min).toLocaleString() : '') + '〜' + (max ? '¥' + Number(max).toLocaleString() : '');
+    const tag = document.createElement('span');
+    tag.className = 'mc-active-tag';
+    tag.innerHTML = label + '<button class="mc-active-tag__remove" aria-label="価格フィルターを削除" onclick="mcRemovePriceFilter(this)">×</button>';
+    container.appendChild(tag);
+    // Close dropdown
+    const dd = document.getElementById('mc-dd-price');
+    if (dd) dd.classList.remove('open');
+    const btn = document.getElementById('mc-btn-price');
+    if (btn) { btn.classList.remove('open'); btn.setAttribute('aria-expanded','false'); }
+  };
+
+  window.mcRemovePriceFilter = function(btn) {
+    btn.closest('.mc-active-tag').remove();
+    const min = document.getElementById('mc-price-min');
+    const max = document.getElementById('mc-price-max');
+    if (min) min.value = '';
+    if (max) max.value = '';
+  };
+
+  /* ── Sort ── */
+  window.mcApplySort = function(value) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('sort_by', value);
+    window.location.href = url.toString();
+  };
+
+  /* ── View Toggle ── */
+  window.mcSetView = function(cols) {
+    const grid = document.getElementById('mc-grid');
+    if (!grid) return;
+    grid.style.setProperty('--cols', cols);
+    grid.dataset.cols = cols;
+    ['4','2','1'].forEach(function(c) {
+      const btn = document.getElementById('mc-view-' + (c === '4' ? 'grid' : c === '2' ? '2col' : 'list'));
+      if (btn) btn.classList.toggle('active', parseInt(c) === cols);
+    });
+    try { localStorage.setItem('mc_view_cols', cols); } catch(e) {}
+  };
+
+  /* ── Mobile Drawer ── */
+  window.mcOpenDrawer = function() {
+    document.getElementById('mc-drawer')?.classList.add('open');
+    document.getElementById('mc-drawer-overlay')?.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  };
+  window.mcCloseDrawer = function() {
+    document.getElementById('mc-drawer')?.classList.remove('open');
+    document.getElementById('mc-drawer-overlay')?.classList.remove('open');
+    document.body.style.overflow = '';
+  };
+  window.mcToggleChip = function(chip) {
+    chip.classList.toggle('selected');
+  };
+  window.mcResetDrawer = function() {
+    document.querySelectorAll('#mc-drawer .mc-chip.selected').forEach(function(c) { c.classList.remove('selected'); });
+  };
+  window.mcApplyDrawer = function() {
+    const selected = document.querySelectorAll('#mc-drawer .mc-chip.selected');
+    const container = document.getElementById('mc-active-filters');
+    if (!container) { mcCloseDrawer(); return; }
+    selected.forEach(function(chip) {
+      const label = chip.textContent.trim();
+      const tag = document.createElement('span');
+      tag.className = 'mc-active-tag';
+      tag.innerHTML = label + '<button class="mc-active-tag__remove" aria-label="' + label + 'を削除" onclick="this.closest(\'.mc-active-tag\').remove()">×</button>';
+      container.appendChild(tag);
+    });
+    const badge = document.getElementById('mc-filter-badge');
+    const count = container.querySelectorAll('.mc-active-tag').length;
+    if (badge) {
+      badge.textContent = count;
+      badge.style.display = count > 0 ? 'inline-flex' : 'none';
+    }
+    mcCloseDrawer();
+  };
+
+  /* ── Restore view preference ── */
+  document.addEventListener('DOMContentLoaded', function() {
+    try {
+      const saved = localStorage.getItem('mc_view_cols');
+      if (saved) mcSetView(parseInt(saved));
+    } catch(e) {}
+  });
+
+  /* ── Keyboard: Escape closes drawer/dropdown ── */
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      mcCloseDrawer();
+      document.querySelectorAll('.mc-filter-dropdown.open').forEach(function(el) {
+        el.classList.remove('open');
+        const id = el.id.replace('mc-dd-','');
+        const b = document.getElementById('mc-btn-' + id);
+        if (b) { b.classList.remove('open'); b.setAttribute('aria-expanded','false'); }
+      });
+    }
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "コレクション一覧",
+  "tag": "section",
+  "class": "mc-page",
+  "settings": [
+    {
+      "type": "header",
+      "content": "表示設定"
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "default": 24,
+      "label": "1ページの商品数"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4,
+      "label": "PC列数"
+    },
+    {
+      "type": "range",
+      "id": "columns_mobile",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 2,
+      "label": "スマホ列数"
+    },
+    {
+      "type": "header",
+      "content": "フィルター設定"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_filter_bar",
+      "default": true,
+      "label": "フィルターバーを表示"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sort",
+      "default": true,
+      "label": "並び替えを表示"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_brand_filter",
+      "default": true,
+      "label": "ブランドフィルターを表示"
+    },
+    {
+      "type": "text",
+      "id": "filter_brands",
+      "default": "F'sPlanet Original,Natural Living,Eco Life,Kids & Baby,Outdoor,Home & Kitchen",
+      "label": "ブランド一覧（カンマ区切り）"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price_filter",
+      "default": true,
+      "label": "価格フィルターを表示"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_material_filter",
+      "default": true,
+      "label": "素材フィルターを表示"
+    },
+    {
+      "type": "text",
+      "id": "filter_materials",
+      "default": "オーガニックコットン,リネン,ウール,シルク,竹繊維,再生素材",
+      "label": "素材一覧（カンマ区切り）"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_size_filter",
+      "default": false,
+      "label": "サイズフィルターを表示"
+    }
+  ]
+}
+{% endschema %}
