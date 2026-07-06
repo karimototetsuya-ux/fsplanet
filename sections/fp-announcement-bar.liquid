@@ -1,0 +1,98 @@
+{%- if section.settings.show_bar -%}
+<div
+  class="fp-announce"
+  role="complementary"
+  aria-label="{{ 'sections.announcement_bar.label' | t | default: 'お知らせ' }}"
+  style="
+    --announce-bg: {{ section.settings.bg_color }};
+    --announce-color: {{ section.settings.text_color }};
+    --announce-speed: {{ section.settings.marquee_speed }}s;
+  "
+>
+  <div class="fp-announce__track" aria-hidden="true">
+    {%- for i in (1..4) -%}
+      {%- assign t1 = section.settings.text_1 -%}
+      {%- assign t2 = section.settings.text_2 -%}
+      {%- assign t3 = section.settings.text_3 -%}
+      {%- if t1 != blank -%}<span>{{ t1 }}</span><span class="fp-announce__sep" aria-hidden="true">✦</span>{%- endif -%}
+      {%- if t2 != blank -%}<span>{{ t2 }}</span><span class="fp-announce__sep" aria-hidden="true">✦</span>{%- endif -%}
+      {%- if t3 != blank -%}<span>{{ t3 }}</span><span class="fp-announce__sep" aria-hidden="true">✦</span>{%- endif -%}
+    {%- endfor -%}
+  </div>
+
+  {%- comment -%} Screen-reader accessible static content {%- endcomment -%}
+  <div class="visually-hidden">
+    {%- if section.settings.text_1 != blank -%}{{ section.settings.text_1 }}{%- endif -%}
+    {%- if section.settings.text_2 != blank -%}{{ section.settings.text_2 }}{%- endif -%}
+    {%- if section.settings.text_3 != blank -%}{{ section.settings.text_3 }}{%- endif -%}
+  </div>
+</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "お知らせバー",
+  "tag": "div",
+  "class": "fp-announce-wrapper",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_bar",
+      "label": "バーを表示",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "テキスト"
+    },
+    {
+      "type": "text",
+      "id": "text_1",
+      "label": "テキスト 1",
+      "default": "🚚 税込5,000円以上で送料無料"
+    },
+    {
+      "type": "text",
+      "id": "text_2",
+      "label": "テキスト 2",
+      "default": "✨ 新規会員登録で10%OFFクーポンプレゼント"
+    },
+    {
+      "type": "text",
+      "id": "text_3",
+      "label": "テキスト 3",
+      "default": "🎁 ギフトラッピング無料対応中"
+    },
+    {
+      "type": "header",
+      "content": "デザイン"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "背景色",
+      "default": "#222222"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "文字色",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "marquee_speed",
+      "label": "スクロール速度（秒）",
+      "min": 10,
+      "max": 60,
+      "step": 2,
+      "default": 28
+    }
+  ],
+  "presets": [
+    {
+      "name": "お知らせバー"
+    }
+  ]
+}
+{% endschema %}

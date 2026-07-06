@@ -1,0 +1,340 @@
+{%- liquid
+  assign pt = section.settings.padding_top    | default: 80
+  assign pb = section.settings.padding_bottom | default: 80
+-%}
+
+<section
+  class="fp-topics"
+  id="fp-topics-{{ section.id }}"
+  aria-labelledby="fp-topics-heading-{{ section.id }}"
+  style="
+    --fp-topics-bg: {{ section.settings.bg_color }};
+    padding-top: {{ pt }}px;
+    padding-bottom: {{ pb }}px;
+  "
+>
+  <div class="fp-container">
+
+    <div class="fp-section-head fp-sr">
+      {%- if section.settings.label != blank -%}
+        <span class="fp-section-label">{{ section.settings.label }}</span>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="fp-section-title" id="fp-topics-heading-{{ section.id }}">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.subtext != blank -%}
+        <p class="fp-section-desc" style="margin-top:12px">{{ section.settings.subtext }}</p>
+      {%- endif -%}
+    </div>
+
+    <ul class="fp-topics__grid" role="list">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'article_card' -%}
+          {%- liquid
+            assign article_obj = block.settings.article
+            assign card_title  = block.settings.card_title  | default: article_obj.title
+            assign card_date   = article_obj.published_at   | date: '%Y.%m.%d'
+            assign card_url    = article_obj.url            | default: '#'
+            assign card_img    = block.settings.card_image  | default: article_obj.image
+            assign card_tag    = block.settings.card_tag
+            assign card_cat    = block.settings.card_category
+            assign card_desc   = block.settings.card_excerpt | default: article_obj.excerpt_or_content | strip_html | truncate: 80
+          -%}
+          <li
+            class="fp-sr"
+            style="animation-delay: {{ forloop.index0 | times: 0.1 }}s"
+            {{ block.shopify_attributes }}
+          >
+            <a href="{{ card_url }}" class="fp-topics__card" aria-label="{{ card_title | escape }}">
+              <div class="fp-topics__img" aria-hidden="true">
+                {%- if card_img -%}
+                  <img
+                    src="{{ card_img | image_url: width: 640 }}"
+                    srcset="{{ card_img | image_url: width: 400 }} 400w, {{ card_img | image_url: width: 640 }} 640w"
+                    sizes="(max-width:768px) 90vw, 400px"
+                    alt="{{ card_img.alt | escape | default: card_title }}"
+                    width="640" height="440"
+                    loading="lazy"
+                  >
+                {%- else -%}
+                  <div class="fp-topics__img-placeholder" aria-hidden="true"></div>
+                {%- endif -%}
+                {%- if card_tag != blank -%}
+                  <span class="fp-topics__tag">{{ card_tag }}</span>
+                {%- endif -%}
+              </div>
+              <div class="fp-topics__body">
+                <div class="fp-topics__meta">
+                  {%- if card_date != blank -%}
+                    <time class="fp-topics__date" datetime="{{ article_obj.published_at }}">{{ card_date }}</time>
+                  {%- endif -%}
+                  {%- if card_cat != blank -%}
+                    <span class="fp-topics__cat">{{ card_cat }}</span>
+                  {%- endif -%}
+                </div>
+                {%- if card_title != blank -%}
+                  <h3 class="fp-topics__title">{{ card_title }}</h3>
+                {%- endif -%}
+                {%- if card_desc != blank -%}
+                  <p class="fp-topics__desc">{{ card_desc }}</p>
+                {%- endif -%}
+              </div>
+            </a>
+          </li>
+
+        {%- elsif block.type == 'manual_card' -%}
+          <li
+            class="fp-sr"
+            style="animation-delay: {{ forloop.index0 | times: 0.1 }}s"
+            {{ block.shopify_attributes }}
+          >
+            <a href="{{ block.settings.url | default: '#' }}" class="fp-topics__card" aria-label="{{ block.settings.title | escape }}">
+              <div class="fp-topics__img" aria-hidden="true">
+                {%- if block.settings.image -%}
+                  <img
+                    src="{{ block.settings.image | image_url: width: 640 }}"
+                    srcset="{{ block.settings.image | image_url: width: 400 }} 400w, {{ block.settings.image | image_url: width: 640 }} 640w"
+                    sizes="(max-width:768px) 90vw, 400px"
+                    alt="{{ block.settings.image.alt | escape | default: block.settings.title }}"
+                    width="640" height="440"
+                    loading="lazy"
+                  >
+                {%- else -%}
+                  <div class="fp-topics__img-placeholder"></div>
+                {%- endif -%}
+                {%- if block.settings.tag != blank -%}
+                  <span class="fp-topics__tag">{{ block.settings.tag }}</span>
+                {%- endif -%}
+              </div>
+              <div class="fp-topics__body">
+                <div class="fp-topics__meta">
+                  {%- if block.settings.date != blank -%}
+                    <span class="fp-topics__date">{{ block.settings.date }}</span>
+                  {%- endif -%}
+                  {%- if block.settings.category != blank -%}
+                    <span class="fp-topics__cat">{{ block.settings.category }}</span>
+                  {%- endif -%}
+                </div>
+                {%- if block.settings.title != blank -%}
+                  <h3 class="fp-topics__title">{{ block.settings.title }}</h3>
+                {%- endif -%}
+                {%- if block.settings.excerpt != blank -%}
+                  <p class="fp-topics__desc">{{ block.settings.excerpt | truncate: 80 }}</p>
+                {%- endif -%}
+              </div>
+            </a>
+          </li>
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
+
+    {%- if section.settings.cta_label != blank -%}
+      <div class="fp-section-footer fp-sr" style="text-align:center; margin-top: 48px">
+        <a
+          href="{{ section.settings.cta_url | default: '#' }}"
+          class="fp-btn fp-btn--outline"
+        >
+          {{ section.settings.cta_label }}
+          <svg width="16" height="10" viewBox="0 0 16 10" fill="none" aria-hidden="true">
+            <path d="M1 5h14M10 1l5 4-5 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Topics",
+  "tag": "section",
+  "class": "fp-topics-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "見出し"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "ラベル（英字）",
+      "default": "Topics"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "見出し",
+      "default": "Topics"
+    },
+    {
+      "type": "text",
+      "id": "subtext",
+      "label": "サブテキスト",
+      "default": "F'sPlanetからのお知らせ・読みもの"
+    },
+    {
+      "type": "header",
+      "content": "CTAボタン"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "ボタンテキスト",
+      "default": "すべての記事を見る"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "ボタンURL"
+    },
+    {
+      "type": "header",
+      "content": "デザイン"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "背景色",
+      "default": "#FBF8F4"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "上余白（px）",
+      "min": 0, "max": 160, "step": 8,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "下余白（px）",
+      "min": 0, "max": 160, "step": 8,
+      "default": 80
+    }
+  ],
+  "blocks": [
+    {
+      "type": "article_card",
+      "name": "記事カード（ブログ連携）",
+      "settings": [
+        {
+          "type": "article",
+          "id": "article",
+          "label": "記事を選択"
+        },
+        {
+          "type": "text",
+          "id": "card_title",
+          "label": "タイトルを上書き（任意）"
+        },
+        {
+          "type": "textarea",
+          "id": "card_excerpt",
+          "label": "抜粋を上書き（任意）"
+        },
+        {
+          "type": "image_picker",
+          "id": "card_image",
+          "label": "サムネイル画像を上書き（任意）"
+        },
+        {
+          "type": "text",
+          "id": "card_tag",
+          "label": "タグラベル",
+          "default": "News"
+        },
+        {
+          "type": "text",
+          "id": "card_category",
+          "label": "カテゴリラベル",
+          "default": "ライフスタイル"
+        }
+      ]
+    },
+    {
+      "type": "manual_card",
+      "name": "手動カード",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "サムネイル画像"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "タイトル",
+          "default": "F'sPlanetの新しいコレクションが入荷しました"
+        },
+        {
+          "type": "textarea",
+          "id": "excerpt",
+          "label": "抜粋",
+          "default": "今シーズンのおすすめアイテムをご紹介します。"
+        },
+        {
+          "type": "text",
+          "id": "date",
+          "label": "日付（例：2025.06.20）",
+          "default": "2025.06.20"
+        },
+        {
+          "type": "text",
+          "id": "tag",
+          "label": "タグ",
+          "default": "News"
+        },
+        {
+          "type": "text",
+          "id": "category",
+          "label": "カテゴリ",
+          "default": "ライフスタイル"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "リンク先"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Topics",
+      "blocks": [
+        {
+          "type": "manual_card",
+          "settings": {
+            "title": "オーガニックコットンの新作コレクション入荷",
+            "excerpt": "肌に優しいオーガニックコットンを使用した新作アイテムが入荷しました。",
+            "date": "2025.06.20",
+            "tag": "News",
+            "category": "ファッション"
+          }
+        },
+        {
+          "type": "manual_card",
+          "settings": {
+            "title": "夏の食卓を彩るレシピ特集",
+            "excerpt": "旬の野菜を使ったヘルシーレシピを紹介。家族みんなで楽しめる簡単メニューを集めました。",
+            "date": "2025.06.15",
+            "tag": "Recipe",
+            "category": "フード"
+          }
+        },
+        {
+          "type": "manual_card",
+          "settings": {
+            "title": "エコなライフスタイルを始めるための7つのヒント",
+            "excerpt": "毎日の小さな選択が、地球と家族の未来をつくります。",
+            "date": "2025.06.10",
+            "tag": "Guide",
+            "category": "ライフスタイル"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

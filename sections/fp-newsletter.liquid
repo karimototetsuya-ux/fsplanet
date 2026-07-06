@@ -1,0 +1,219 @@
+{%- liquid
+  assign pt = section.settings.padding_top    | default: 80
+  assign pb = section.settings.padding_bottom | default: 80
+-%}
+
+<section
+  class="fp-newsletter"
+  id="fp-newsletter-{{ section.id }}"
+  aria-labelledby="fp-nl-heading-{{ section.id }}"
+  style="
+    --fp-nl-bg: {{ section.settings.bg_color }};
+    --fp-nl-text: {{ section.settings.text_color }};
+    padding-top: {{ pt }}px;
+    padding-bottom: {{ pb }}px;
+  "
+>
+  <div class="fp-container-sm">
+
+    {%- if section.settings.label != blank -%}
+      <p class="fp-newsletter__label">{{ section.settings.label }}</p>
+    {%- endif -%}
+
+    {%- if section.settings.heading != blank -%}
+      <h2 class="fp-newsletter__title" id="fp-nl-heading-{{ section.id }}">
+        {{ section.settings.heading | newline_to_br }}
+      </h2>
+    {%- endif -%}
+
+    {%- if section.settings.subtext != blank -%}
+      <p class="fp-newsletter__sub">{{ section.settings.subtext }}</p>
+    {%- endif -%}
+
+    {%- comment -%} Benefits list {%- endcomment -%}
+    {%- if section.blocks.size > 0 -%}
+      <ul class="fp-newsletter__benefits" role="list" aria-label="登録特典">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'benefit' -%}
+            <li class="fp-newsletter__benefit" {{ block.shopify_attributes }}>
+              <span class="fp-newsletter__benefit-icon" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path d="M2 7l3.5 3.5L12 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              {{ block.settings.text }}
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+
+    {%- comment -%} Subscription Form {%- endcomment -%}
+    {%- form 'customer', id: 'fp-newsletter-form-{{ section.id }}' -%}
+      <input type="hidden" name="contact[tags]" value="newsletter">
+
+      {%- if form.posted_successfully? -%}
+        <div class="fp-newsletter__success" role="alert" aria-live="polite">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <circle cx="10" cy="10" r="9" stroke="#62ADED" stroke-width="1.5"/>
+            <path d="M6 10l3 3 5-5" stroke="#62ADED" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          {{ section.settings.success_msg | default: 'ご登録ありがとうございます！' }}
+        </div>
+      {%- else -%}
+        {%- if form.errors -%}
+          <div class="fp-newsletter__error" role="alert" aria-live="polite">
+            {{ form.errors.translated_fields['email'] | capitalize }}
+            {{ form.errors.messages['email'] }}
+          </div>
+        {%- endif -%}
+
+        <div class="fp-newsletter__form">
+          <label for="fp-nl-email-{{ section.id }}" class="visually-hidden">
+            {{ section.settings.email_placeholder | default: 'メールアドレス' }}
+          </label>
+          <input
+            type="email"
+            id="fp-nl-email-{{ section.id }}"
+            name="contact[email]"
+            class="fp-newsletter__input"
+            placeholder="{{ section.settings.email_placeholder | default: 'メールアドレスを入力してください' }}"
+            autocomplete="email"
+            required
+            aria-required="true"
+            {% if form.errors contains 'email' %}aria-invalid="true"{% endif %}
+          >
+          <button
+            type="submit"
+            class="fp-newsletter__submit"
+            aria-label="{{ section.settings.submit_label | default: '登録する' }}"
+          >
+            {{ section.settings.submit_label | default: '登録する' }}
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <path d="M1 7h12M7.5 2l5 5-5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+
+        {%- if section.settings.privacy_note != blank -%}
+          <p class="fp-newsletter__privacy">{{ section.settings.privacy_note }}</p>
+        {%- endif -%}
+      {%- endif -%}
+    {%- endform -%}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "tag": "section",
+  "class": "fp-newsletter-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "コンテンツ"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "ラベル（英字）",
+      "default": "Newsletter"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "見出し",
+      "default": "最新情報を\nお届けします。"
+    },
+    {
+      "type": "text",
+      "id": "subtext",
+      "label": "サブテキスト",
+      "default": "新着商品・セール情報・限定クーポンをいち早くお届けします"
+    },
+    {
+      "type": "header",
+      "content": "フォーム"
+    },
+    {
+      "type": "text",
+      "id": "email_placeholder",
+      "label": "メール入力欄プレースホルダー",
+      "default": "メールアドレスを入力してください"
+    },
+    {
+      "type": "text",
+      "id": "submit_label",
+      "label": "送信ボタンテキスト",
+      "default": "無料で登録する"
+    },
+    {
+      "type": "text",
+      "id": "success_msg",
+      "label": "登録完了メッセージ",
+      "default": "ご登録ありがとうございます！"
+    },
+    {
+      "type": "text",
+      "id": "privacy_note",
+      "label": "注意書き（任意）",
+      "default": "個人情報保護方針に同意の上、登録してください。"
+    },
+    {
+      "type": "header",
+      "content": "デザイン"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "背景色",
+      "default": "#1A2533"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "文字色",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "上余白（px）",
+      "min": 0, "max": 160, "step": 8,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "下余白（px）",
+      "min": 0, "max": 160, "step": 8,
+      "default": 80
+    }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "登録特典",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "特典テキスト",
+          "default": "新規登録で10%OFFクーポンをプレゼント"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter",
+      "blocks": [
+        { "type": "benefit", "settings": { "text": "新規登録で10%OFFクーポンをプレゼント" } },
+        { "type": "benefit", "settings": { "text": "セール情報をいち早くお知らせ" } },
+        { "type": "benefit", "settings": { "text": "限定アイテムへの優先アクセス" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

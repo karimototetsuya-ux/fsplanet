@@ -1,0 +1,218 @@
+{%- liquid
+  assign pt = section.settings.padding_top    | default: 0
+  assign pb = section.settings.padding_bottom | default: 0
+-%}
+
+<section
+  class="fp-brand"
+  id="fp-brand-{{ section.id }}"
+  aria-labelledby="fp-brand-heading-{{ section.id }}"
+  style="
+    --fp-brand-bg: {{ section.settings.bg_color }};
+    padding-top: {{ pt }}px;
+    padding-bottom: {{ pb }}px;
+  "
+>
+  <div class="fp-brand__split">
+
+    {%- comment -%} Visual side {%- endcomment -%}
+    <div class="fp-brand__visual fp-sr-l">
+      {%- if section.settings.image -%}
+        <img
+          src="{{ section.settings.image | image_url: width: 900 }}"
+          srcset="
+            {{ section.settings.image | image_url: width: 600 }} 600w,
+            {{ section.settings.image | image_url: width: 900 }} 900w
+          "
+          sizes="(max-width:768px) 100vw, 50vw"
+          alt="{{ section.settings.image.alt | escape | default: section.settings.heading }}"
+          width="{{ section.settings.image.width }}"
+          height="{{ section.settings.image.height }}"
+          loading="lazy"
+          class="fp-brand__visual-img"
+        >
+      {%- else -%}
+        <div class="fp-brand__visual-placeholder" aria-hidden="true"></div>
+      {%- endif -%}
+      <div class="fp-brand__visual-overlay" aria-hidden="true"></div>
+    </div>
+
+    {%- comment -%} Content side {%- endcomment -%}
+    <div class="fp-brand__content fp-sr-r">
+      {%- if section.settings.label != blank -%}
+        <span class="fp-section-label">{{ section.settings.label }}</span>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h2
+          class="fp-brand__title"
+          id="fp-brand-heading-{{ section.id }}"
+          style="color: {{ section.settings.heading_color }}"
+        >
+          {{ section.settings.heading | newline_to_br }}
+        </h2>
+      {%- endif -%}
+
+      {%- if section.settings.body != blank -%}
+        <div
+          class="fp-brand__body"
+          style="color: {{ section.settings.text_color }}"
+        >
+          {{ section.settings.body }}
+        </div>
+      {%- endif -%}
+
+      {%- comment -%} Stats {%- endcomment -%}
+      {%- if section.blocks.size > 0 -%}
+        <dl class="fp-brand__stats" aria-label="ブランド実績">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'stat' -%}
+              <div class="fp-brand__stat fp-sr" style="animation-delay:{{ forloop.index0 | times: 0.12 }}s" {{ block.shopify_attributes }}>
+                <dt class="fp-brand__stat-label">{{ block.settings.label }}</dt>
+                <dd class="fp-brand__stat-num" style="color: {{ section.settings.accent_color }}">{{ block.settings.number }}</dd>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </dl>
+      {%- endif -%}
+
+      {%- if section.settings.btn_label != blank -%}
+        <a
+          href="{{ section.settings.btn_url | default: '#' }}"
+          class="fp-btn fp-btn--outline"
+          style="margin-top: 32px"
+        >
+          {{ section.settings.btn_label }}
+          <svg width="16" height="10" viewBox="0 0 16 10" fill="none" aria-hidden="true">
+            <path d="M1 5h14M10 1l5 4-5 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      {%- endif -%}
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Brand Story",
+  "tag": "section",
+  "class": "fp-brand-section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "ブランド画像"
+    },
+    {
+      "type": "header",
+      "content": "テキスト"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "ラベル（英字）",
+      "default": "Our Story"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "見出し",
+      "default": "家族の笑顔のために。\nEvery Day."
+    },
+    {
+      "type": "richtext",
+      "id": "body",
+      "label": "本文",
+      "default": "<p>F'sPlanetは、家族の時間をもっと豊かにするために生まれたライフスタイルブランドです。上質でナチュラルなアイテムを通じて、毎日の暮らしに小さな幸せをお届けします。</p>"
+    },
+    {
+      "type": "header",
+      "content": "ボタン"
+    },
+    {
+      "type": "text",
+      "id": "btn_label",
+      "label": "ボタンテキスト",
+      "default": "About F'sPlanet"
+    },
+    {
+      "type": "url",
+      "id": "btn_url",
+      "label": "ボタンURL"
+    },
+    {
+      "type": "header",
+      "content": "カラー"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "背景色",
+      "default": "#FCFCFD"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "見出し色",
+      "default": "#222222"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "本文色",
+      "default": "#555555"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "数字色（アクセント）",
+      "default": "#62ADED"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "上余白（px）",
+      "min": 0, "max": 120, "step": 8,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "下余白（px）",
+      "min": 0, "max": 120, "step": 8,
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "統計数値",
+      "settings": [
+        {
+          "type": "text",
+          "id": "number",
+          "label": "数値",
+          "default": "5,000+"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "ラベル",
+          "default": "取扱商品数"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brand Story",
+      "blocks": [
+        { "type": "stat", "settings": { "number": "5,000+", "label": "取扱商品数" } },
+        { "type": "stat", "settings": { "number": "200+",   "label": "セレクトブランド" } },
+        { "type": "stat", "settings": { "number": "98%",    "label": "顧客満足度" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

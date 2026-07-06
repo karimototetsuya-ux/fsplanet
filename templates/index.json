@@ -1,16 +1,19 @@
 {
   "sections": {
-    "announcement-bar": {
-      "type": "announcement-bar",
+    "fp-announcement-bar": {
+      "type": "fp-announcement-bar",
       "settings": {
         "show_bar": true,
         "text_1": "🚚 税込5,000円以上で送料無料",
         "text_2": "✨ 新規会員登録で10%OFFクーポンプレゼント",
-        "text_3": "🎁 ギフトラッピング無料対応中"
+        "text_3": "🎁 ギフトラッピング無料対応中",
+        "bg_color": "#62ADED",
+        "text_color": "#ffffff",
+        "marquee_speed": 40
       }
     },
-    "hero-slideshow": {
-      "type": "hero-slideshow",
+    "fp-hero": {
+      "type": "fp-hero",
       "blocks": {
         "slide-1": {
           "type": "slide",
@@ -19,8 +22,11 @@
             "title": "家族の時間を\nもっと豊かに。",
             "subtitle": "上質なアイテムで、毎日の暮らしに\n小さな幸せを届けます。",
             "btn1_label": "Shop Now",
+            "btn1_url": "/collections/all",
             "btn2_label": "New Arrivals",
-            "overlay_opacity": 55
+            "btn2_url": "/collections/new-arrivals",
+            "overlay_opacity": 55,
+            "text_align": "center"
           }
         },
         "slide-2": {
@@ -30,8 +36,11 @@
             "title": "大切な人への\n贈りもの。",
             "subtitle": "心を込めたギフトで、\n特別な瞬間を彩る。",
             "btn1_label": "Gift Guide",
+            "btn1_url": "/collections/gift",
             "btn2_label": "View All",
-            "overlay_opacity": 50
+            "btn2_url": "/collections/all",
+            "overlay_opacity": 50,
+            "text_align": "center"
           }
         },
         "slide-3": {
@@ -41,72 +50,92 @@
             "title": "暮らしを整える、\n上質な日用品。",
             "subtitle": "こだわりのインテリアと雑貨で、\nお家の時間を豊かに。",
             "btn1_label": "Explore Home",
+            "btn1_url": "/collections/home",
             "btn2_label": "Sale Items",
-            "overlay_opacity": 50
+            "btn2_url": "/collections/sale",
+            "overlay_opacity": 50,
+            "text_align": "center"
           }
         }
       },
       "block_order": ["slide-1", "slide-2", "slide-3"],
       "settings": {
         "autoplay": true,
-        "autoplay_speed": 6000
+        "autoplay_speed": 6000,
+        "hero_height": "full",
+        "scroll_hint": true
       }
     },
-    "category-grid": {
-      "type": "category-grid",
+    "fp-category": {
+      "type": "fp-category",
       "blocks": {
         "cat-1": {
           "type": "category",
           "settings": {
             "name_en": "Gift",
-            "name_ja": "ギフト"
+            "name_ja": "ギフト",
+            "url": "/collections/gift",
+            "icon_bg_color": "#FFF5E6"
           }
         },
         "cat-2": {
           "type": "category",
           "settings": {
             "name_en": "Kids & Baby",
-            "name_ja": "キッズ・ベビー"
+            "name_ja": "キッズ・ベビー",
+            "url": "/collections/kids-baby",
+            "icon_bg_color": "#E8F4FD"
           }
         },
         "cat-3": {
           "type": "category",
           "settings": {
             "name_en": "Women",
-            "name_ja": "ウィメンズ"
+            "name_ja": "ウィメンズ",
+            "url": "/collections/women",
+            "icon_bg_color": "#FCF0F5"
           }
         },
         "cat-4": {
           "type": "category",
           "settings": {
             "name_en": "Men",
-            "name_ja": "メンズ"
+            "name_ja": "メンズ",
+            "url": "/collections/men",
+            "icon_bg_color": "#F0F4F8"
           }
         },
         "cat-5": {
           "type": "category",
           "settings": {
             "name_en": "Home",
-            "name_ja": "インテリア・雑貨"
+            "name_ja": "インテリア・雑貨",
+            "url": "/collections/home",
+            "icon_bg_color": "#F5FAF0"
           }
         },
         "cat-6": {
           "type": "category",
           "settings": {
             "name_en": "Food & Drink",
-            "name_ja": "フード・ドリンク"
+            "name_ja": "フード・ドリンク",
+            "url": "/collections/food-drink",
+            "icon_bg_color": "#FFF8E8"
           }
         }
       },
       "block_order": ["cat-1", "cat-2", "cat-3", "cat-4", "cat-5", "cat-6"],
       "settings": {
-        "show_heading": true,
         "label": "Category",
-        "heading": "カテゴリから探す"
+        "heading": "カテゴリから探す",
+        "show_heading": true,
+        "columns": 6,
+        "padding_top": 80,
+        "padding_bottom": 80
       }
     },
-    "topics": {
-      "type": "topics",
+    "fp-topics": {
+      "type": "fp-topics",
       "blocks": {
         "topic-1": {
           "type": "manual_card",
@@ -114,7 +143,8 @@
             "card_title": "オーガニックコットンの新作コレクション入荷",
             "card_excerpt": "肌に優しいオーガニックコットンを使用した新作アイテムが入荷しました。ベビーから大人まで安心してお使いいただけます。",
             "card_date": "2025.06.20",
-            "card_tag": "news"
+            "card_tag": "news",
+            "card_url": "/blogs/news"
           }
         },
         "topic-2": {
@@ -123,7 +153,8 @@
             "card_title": "夏の食卓を彩るレシピ特集",
             "card_excerpt": "旬の野菜を使ったヘルシーレシピを紹介。家族みんなで楽しめる簡単メニューを集めました。",
             "card_date": "2025.06.15",
-            "card_tag": "recipe"
+            "card_tag": "recipe",
+            "card_url": "/blogs/news"
           }
         },
         "topic-3": {
@@ -132,46 +163,55 @@
             "card_title": "エコなライフスタイルを始めるための7つのヒント",
             "card_excerpt": "毎日の小さな選択が、地球と家族の未来をつくります。今日からできるサステナブルな暮らしのヒントをご紹介。",
             "card_date": "2025.06.10",
-            "card_tag": "guide"
+            "card_tag": "guide",
+            "card_url": "/blogs/news"
           }
         }
       },
       "block_order": ["topic-1", "topic-2", "topic-3"],
       "settings": {
-        "heading": "Topics",
-        "subheading": "F'sPlanetからのお知らせ・読みもの",
+        "label": "Topics",
+        "heading": "F'sPlanetからのお知らせ",
         "layout": "grid",
-        "bg_color": "light",
+        "bg_color": "#FCFCFD",
         "show_date": true,
         "show_tag": true,
-        "cta_text": "すべての記事を見る",
-        "cta_url": "/blogs/news"
+        "cta_label": "すべての記事を見る",
+        "cta_url": "/blogs/news",
+        "padding_top": 80,
+        "padding_bottom": 80
       }
     },
-    "new-arrivals": {
-      "type": "featured-collection",
+    "fp-new-arrivals": {
+      "type": "fp-new-arrivals",
       "settings": {
         "label": "New Arrival",
         "heading": "新着アイテム",
         "products_to_show": 4,
         "show_view_all": true,
         "view_all_label": "View All",
-        "bg_warm": false
+        "view_all_url": "/collections/new-arrivals",
+        "bg_color": "#FCFCFD",
+        "padding_top": 80,
+        "padding_bottom": 80
       }
     },
-    "best-sellers": {
-      "type": "featured-collection",
+    "fp-best-sellers": {
+      "type": "fp-best-sellers",
       "settings": {
         "label": "Best Sellers",
         "heading": "人気ランキング",
         "products_to_show": 4,
         "show_view_all": true,
         "view_all_label": "All Rankings",
-        "bg_warm": true
+        "view_all_url": "/collections/best-sellers",
+        "bg_color": "#FDF8F2",
+        "padding_top": 80,
+        "padding_bottom": 80
       }
     },
-    "brand-story": {
-      "type": "brand-story",
+    "fp-brand": {
+      "type": "fp-brand",
       "blocks": {
         "stat-1": {
           "type": "stat",
@@ -190,18 +230,26 @@
       "settings": {
         "label": "Our Story",
         "heading": "家族の笑顔のために。\nEvery Day.",
-        "btn_label": "About F'sPlanet"
+        "body": "<p>F'sPlanetは、家族みんなの「好き」を一つに集めた、総合ライフスタイルセレクトショップです。</p><p>食・住・ファッション・ギフト、5,000点以上の厳選アイテムから、ご家族のあらゆるシーンに寄り添う商品をお届けします。</p>",
+        "btn_label": "About F'sPlanet",
+        "btn_url": "/pages/about",
+        "heading_color": "#222222",
+        "text_color": "#555555",
+        "accent_color": "#CFAE6B",
+        "padding_top": 80,
+        "padding_bottom": 80
       }
     },
-    "gift-guide": {
-      "type": "gift-guide",
+    "fp-gift-guide": {
+      "type": "fp-gift-guide",
       "blocks": {
         "gift-1": {
           "type": "card",
           "settings": {
             "price_range": "¥3,000 – ¥5,000",
             "title": "Birthday\nGift",
-            "btn_label": "Shop Now"
+            "btn_label": "Shop Now",
+            "btn_url": "/collections/gift-under-5000"
           }
         },
         "gift-2": {
@@ -209,7 +257,8 @@
           "settings": {
             "price_range": "¥5,000 – ¥10,000",
             "title": "Wedding\nGift",
-            "btn_label": "Shop Now"
+            "btn_label": "Shop Now",
+            "btn_url": "/collections/gift-under-10000"
           }
         },
         "gift-3": {
@@ -217,7 +266,8 @@
           "settings": {
             "price_range": "¥10,000+",
             "title": "Luxury\nGift",
-            "btn_label": "Shop Now"
+            "btn_label": "Shop Now",
+            "btn_url": "/collections/luxury-gift"
           }
         }
       },
@@ -225,49 +275,71 @@
       "settings": {
         "label": "Gift Guide",
         "heading": "贈りものガイド",
-        "subtext": "シーンや予算に合わせた、とっておきのギフトをご提案します。"
+        "subtext": "シーンや予算に合わせた、とっておきのギフトをご提案します。",
+        "padding_top": 80,
+        "padding_bottom": 80
       }
     },
-    "instagram-grid": {
-      "type": "instagram-grid",
+    "fp-instagram": {
+      "type": "fp-instagram",
       "blocks": {
-        "photo-1": { "type": "photo", "settings": {} },
-        "photo-2": { "type": "photo", "settings": {} },
-        "photo-3": { "type": "photo", "settings": {} },
-        "photo-4": { "type": "photo", "settings": {} },
-        "photo-5": { "type": "photo", "settings": {} },
-        "photo-6": { "type": "photo", "settings": {} }
+        "photo-1": { "type": "photo", "settings": { "url": "https://www.instagram.com/fsplanet_official/" } },
+        "photo-2": { "type": "photo", "settings": { "url": "https://www.instagram.com/fsplanet_official/" } },
+        "photo-3": { "type": "photo", "settings": { "url": "https://www.instagram.com/fsplanet_official/" } },
+        "photo-4": { "type": "photo", "settings": { "url": "https://www.instagram.com/fsplanet_official/" } },
+        "photo-5": { "type": "photo", "settings": { "url": "https://www.instagram.com/fsplanet_official/" } },
+        "photo-6": { "type": "photo", "settings": { "url": "https://www.instagram.com/fsplanet_official/" } }
       },
       "block_order": ["photo-1", "photo-2", "photo-3", "photo-4", "photo-5", "photo-6"],
       "settings": {
+        "label": "Instagram",
         "heading": "暮らしのスナップ",
-        "handle": "fsplanet_official"
+        "handle": "fsplanet_official",
+        "follow_label": "@fsplanet_officialをフォロー",
+        "follow_url": "https://www.instagram.com/fsplanet_official/",
+        "padding_top": 80,
+        "padding_bottom": 80
       }
     },
-    "newsletter": {
-      "type": "newsletter",
+    "fp-newsletter": {
+      "type": "fp-newsletter",
       "blocks": {
-        "benefit-1": { "type": "benefit", "settings": { "text": "新規登録で10%OFFクーポンをプレゼント" } },
-        "benefit-2": { "type": "benefit", "settings": { "text": "セール情報をいち早くお知らせ" } },
-        "benefit-3": { "type": "benefit", "settings": { "text": "限定アイテムへの優先アクセス" } }
+        "benefit-1": {
+          "type": "benefit",
+          "settings": { "text": "新規登録で10%OFFクーポンをプレゼント" }
+        },
+        "benefit-2": {
+          "type": "benefit",
+          "settings": { "text": "セール情報をいち早くお知らせ" }
+        },
+        "benefit-3": {
+          "type": "benefit",
+          "settings": { "text": "限定アイテムへの優先アクセス" }
+        }
       },
       "block_order": ["benefit-1", "benefit-2", "benefit-3"],
       "settings": {
         "label": "Newsletter",
-        "heading": "最新情報を\nお届けします。"
+        "heading": "最新情報を\nお届けします。",
+        "subtext": "新着商品・セール情報・限定クーポンをいち早くお届けします。",
+        "btn_label": "無料で登録する",
+        "bg_color": "#62ADED",
+        "text_color": "#ffffff",
+        "padding_top": 80,
+        "padding_bottom": 80
       }
     }
   },
   "order": [
-    "announcement-bar",
-    "hero-slideshow",
-    "category-grid",
-    "topics",
-    "new-arrivals",
-    "best-sellers",
-    "brand-story",
-    "gift-guide",
-    "instagram-grid",
-    "newsletter"
+    "fp-announcement-bar",
+    "fp-hero",
+    "fp-category",
+    "fp-topics",
+    "fp-new-arrivals",
+    "fp-best-sellers",
+    "fp-brand",
+    "fp-gift-guide",
+    "fp-instagram",
+    "fp-newsletter"
   ]
 }

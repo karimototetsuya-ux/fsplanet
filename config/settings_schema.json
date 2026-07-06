@@ -2,176 +2,180 @@
   {
     "name": "theme_info",
     "theme_name": "F'sPlanet",
-    "theme_version": "1.0.0",
+    "theme_version": "2.0.0",
     "theme_author": "F'sPlanet",
     "theme_documentation_url": "https://fsplanet.jp",
     "theme_support_url": "https://fsplanet.jp/support"
   },
   {
-    "name": "カラー設定",
+    "name": "F'sPlanet カラー設定",
     "settings": [
+      {
+        "type": "header",
+        "content": "ブランドカラー（--fp-* トークン）"
+      },
+      {
+        "type": "color",
+        "id": "fp_main",
+        "label": "メインカラー（fp-main）",
+        "default": "#62ADED",
+        "info": "ヘッダー・バッジ・リンクのメインカラー"
+      },
+      {
+        "type": "color",
+        "id": "fp_sub",
+        "label": "サブカラー（fp-sub）",
+        "default": "#3E7CB1",
+        "info": "ホバー・サブ要素カラー"
+      },
+      {
+        "type": "color",
+        "id": "fp_bg",
+        "label": "背景色（fp-bg）",
+        "default": "#FCFCFD",
+        "info": "ページ全体の基本背景色"
+      },
+      {
+        "type": "color",
+        "id": "fp_accent",
+        "label": "アクセントカラー（fp-accent）",
+        "default": "#CFAE6B",
+        "info": "見出し装飾・ランキング・星マークカラー"
+      },
+      {
+        "type": "color",
+        "id": "fp_btn",
+        "label": "通常ボタン色（fp-btn）",
+        "default": "#4A90E2",
+        "info": "CTAボタン・リンクボタンのベースカラー"
+      },
+      {
+        "type": "color",
+        "id": "fp_buy",
+        "label": "購入ボタン色（fp-buy）",
+        "default": "#F2994A",
+        "info": "カートに追加・購入ボタンのカラー"
+      },
+      {
+        "type": "color",
+        "id": "fp_text",
+        "label": "テキストカラー（fp-text）",
+        "default": "#222222",
+        "info": "本文・見出しの基本テキストカラー"
+      },
+      {
+        "type": "header",
+        "content": "Dawn 互換カラー設定"
+      },
       {
         "type": "color",
         "id": "color_main",
-        "label": "メインカラー",
+        "label": "メインカラー（Dawn互換）",
         "default": "#62ADED"
       },
       {
         "type": "color",
         "id": "color_sub",
-        "label": "サブカラー",
+        "label": "サブカラー（Dawn互換）",
         "default": "#3E7CB1"
       },
       {
         "type": "color",
         "id": "color_accent",
-        "label": "アクセントカラー",
+        "label": "アクセントカラー（Dawn互換）",
         "default": "#CFAE6B"
       },
       {
         "type": "color",
         "id": "color_bg",
-        "label": "背景色",
+        "label": "背景色（Dawn互換）",
         "default": "#FCFCFD"
       },
       {
         "type": "color",
         "id": "color_btn",
-        "label": "通常ボタン色",
+        "label": "通常ボタン色（Dawn互換）",
         "default": "#4A90E2"
       },
       {
         "type": "color",
         "id": "color_buy",
-        "label": "購入ボタン色",
+        "label": "購入ボタン色（Dawn互換）",
         "default": "#F2994A"
       },
       {
         "type": "color",
         "id": "color_text",
-        "label": "テキストカラー",
+        "label": "テキストカラー（Dawn互換）",
         "default": "#222222"
       }
     ]
   },
   {
-    "name": "タイポグラフィ",
+    "name": "タイポグラフィ設定",
     "settings": [
+      {
+        "type": "header",
+        "content": "英字フォント"
+      },
       {
         "type": "font_picker",
         "id": "font_heading",
         "label": "見出しフォント",
-        "default": "cormorant_garamond_n3"
+        "default": "cormorant_garamond_n4",
+        "info": "英字見出しに使用（デフォルト: Cormorant Garamond）"
+      },
+      {
+        "type": "header",
+        "content": "日本語フォント"
       },
       {
         "type": "font_picker",
         "id": "font_body",
         "label": "本文フォント",
-        "default": "noto_sans_jp_n3"
+        "default": "assistant_n4",
+        "info": "Noto Sans JP は @import で読み込まれます"
       },
       {
         "type": "range",
-        "id": "font_body_size",
-        "label": "本文フォントサイズ",
-        "min": 12,
-        "max": 18,
+        "id": "font_size_base",
+        "min": 14,
+        "max": 20,
         "step": 1,
         "unit": "px",
-        "default": 15
+        "label": "基本フォントサイズ",
+        "default": 16
       }
     ]
   },
   {
-    "name": "ヘッダー設定",
+    "name": "ファビコン",
     "settings": [
       {
         "type": "image_picker",
-        "id": "logo",
-        "label": "ロゴ画像"
-      },
-      {
-        "type": "range",
-        "id": "logo_width",
-        "label": "ロゴ幅",
-        "min": 80,
-        "max": 280,
-        "step": 10,
-        "unit": "px",
-        "default": 140
-      },
-      {
-        "type": "checkbox",
-        "id": "header_sticky",
-        "label": "ヘッダーを固定する",
-        "default": true
-      },
-      {
-        "type": "checkbox",
-        "id": "header_show_search",
-        "label": "検索バーを表示",
-        "default": true
-      },
-      {
-        "type": "checkbox",
-        "id": "header_show_wishlist",
-        "label": "お気に入りアイコンを表示",
-        "default": true
+        "id": "favicon",
+        "label": "ファビコン画像",
+        "info": "32×32px PNG 推奨"
       }
     ]
   },
   {
-    "name": "お知らせバー",
+    "name": "SNS設定",
     "settings": [
       {
-        "type": "checkbox",
-        "id": "announce_show",
-        "label": "お知らせバーを表示",
-        "default": true
+        "type": "header",
+        "content": "SNSリンク"
       },
-      {
-        "type": "color",
-        "id": "announce_bg",
-        "label": "背景色",
-        "default": "#222222"
-      },
-      {
-        "type": "color",
-        "id": "announce_text",
-        "label": "テキスト色",
-        "default": "#FFFFFF"
-      },
-      {
-        "type": "text",
-        "id": "announce_text_1",
-        "label": "お知らせ文1",
-        "default": "🚚 税込5,000円以上で送料無料"
-      },
-      {
-        "type": "text",
-        "id": "announce_text_2",
-        "label": "お知らせ文2",
-        "default": "✨ 新規会員登録で10%OFFクーポンプレゼント"
-      },
-      {
-        "type": "text",
-        "id": "announce_text_3",
-        "label": "お知らせ文3",
-        "default": "🎁 ギフトラッピング無料対応中"
-      }
-    ]
-  },
-  {
-    "name": "SNS・ソーシャル",
-    "settings": [
       {
         "type": "text",
         "id": "social_instagram",
-        "label": "Instagram URL"
+        "label": "Instagram URL",
+        "default": "https://www.instagram.com/fsplanet_official/"
       },
       {
         "type": "text",
         "id": "social_twitter",
-        "label": "X (Twitter) URL"
+        "label": "Twitter / X URL"
       },
       {
         "type": "text",
@@ -185,97 +189,102 @@
       },
       {
         "type": "text",
+        "id": "social_pinterest",
+        "label": "Pinterest URL"
+      },
+      {
+        "type": "text",
         "id": "social_line",
-        "label": "LINE URL"
+        "label": "LINE Official URL"
       }
     ]
   },
   {
-    "name": "カート設定",
+    "name": "ショッピング設定",
     "settings": [
+      {
+        "type": "header",
+        "content": "カート設定"
+      },
       {
         "type": "select",
         "id": "cart_type",
-        "label": "カートタイプ",
+        "label": "カートの種類",
         "options": [
+          { "value": "drawer", "label": "ドロワー（スライドイン）" },
           { "value": "page", "label": "カートページ" },
-          { "value": "drawer", "label": "サイドドロワー" },
-          { "value": "notification", "label": "通知のみ" }
+          { "value": "notification", "label": "通知バー" }
         ],
-        "default": "drawer"
+        "default": "notification"
       },
       {
         "type": "checkbox",
-        "id": "cart_show_fab",
-        "label": "カートFABボタンを表示",
-        "default": true
-      }
-    ]
-  },
-  {
-    "name": "商品設定",
-    "settings": [
+        "id": "show_cart_note",
+        "label": "カートメモを表示",
+        "default": false
+      },
       {
         "type": "checkbox",
-        "id": "product_show_vendor",
+        "id": "enable_gift_wrap",
+        "label": "ギフトラッピングオプションを表示",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "商品設定"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_product_rating",
+        "label": "商品評価を表示（metafields連携）",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_quick_add",
+        "label": "クイック追加ボタンを表示",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_wishlist",
+        "label": "ウィッシュリストボタンを表示",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_vendor",
         "label": "ブランド名を表示",
         "default": true
       },
       {
         "type": "checkbox",
-        "id": "product_show_rating",
-        "label": "評価・レビューを表示",
+        "id": "show_sale_badge",
+        "label": "セールバッジを表示",
         "default": true
       },
       {
         "type": "checkbox",
-        "id": "product_show_wishlist",
-        "label": "お気に入りボタンを表示",
+        "id": "show_new_badge",
+        "label": "NEWバッジを表示",
         "default": true
-      },
-      {
-        "type": "checkbox",
-        "id": "product_show_quick_add",
-        "label": "クイック追加を表示",
-        "default": true
-      },
-      {
-        "type": "select",
-        "id": "product_image_ratio",
-        "label": "商品画像アスペクト比",
-        "options": [
-          { "value": "square", "label": "正方形 (1:1)" },
-          { "value": "portrait", "label": "縦長 (3:4)" },
-          { "value": "landscape", "label": "横長 (4:3)" }
-        ],
-        "default": "portrait"
       }
     ]
   },
   {
-    "name": "フッター設定",
+    "name": "アニメーション設定",
     "settings": [
       {
-        "type": "image_picker",
-        "id": "footer_logo",
-        "label": "フッターロゴ"
-      },
-      {
-        "type": "richtext",
-        "id": "footer_description",
-        "label": "ブランド説明文",
-        "default": "<p>家族の時間をもっと豊かに。上質なライフスタイルアイテムをセレクトしてお届けします。</p>"
+        "type": "checkbox",
+        "id": "enable_scroll_reveal",
+        "label": "スクロールアニメーションを有効化",
+        "default": true,
+        "info": "prefers-reduced-motion が設定されている場合は自動的に無効になります"
       },
       {
         "type": "checkbox",
-        "id": "footer_show_payment",
-        "label": "支払い方法アイコンを表示",
-        "default": true
-      },
-      {
-        "type": "checkbox",
-        "id": "footer_show_app_badges",
-        "label": "アプリDLバッジを表示",
+        "id": "enable_hover_effects",
+        "label": "ホバーエフェクトを有効化",
         "default": true
       }
     ]
@@ -284,15 +293,40 @@
     "name": "SEO設定",
     "settings": [
       {
-        "type": "image_picker",
-        "id": "share_image",
-        "label": "OGP画像（SNSシェア用）"
+        "type": "checkbox",
+        "id": "seo_structured_data",
+        "label": "構造化データ（Schema.org）を出力",
+        "default": true
       },
       {
         "type": "checkbox",
-        "id": "seo_structured_data",
-        "label": "構造化データを有効化",
+        "id": "seo_open_graph",
+        "label": "Open Graphタグを出力",
         "default": true
+      },
+      {
+        "type": "text",
+        "id": "seo_default_title_suffix",
+        "label": "タイトルの接尾辞",
+        "default": "F'sPlanet",
+        "info": "「商品名 | F'sPlanet」のような形式で使用"
+      }
+    ]
+  },
+  {
+    "name": "カスタムコード",
+    "settings": [
+      {
+        "type": "html",
+        "id": "custom_head_code",
+        "label": "<head> に追加するコード",
+        "info": "Google Tag Manager や追加CSSなどを入力"
+      },
+      {
+        "type": "html",
+        "id": "custom_body_end_code",
+        "label": "</body> 直前に追加するコード",
+        "info": "チャットウィジェットや計測コードを入力"
       }
     ]
   }

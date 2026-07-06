@@ -1,0 +1,197 @@
+{%- liquid
+  assign pt = section.settings.padding_top    | default: 80
+  assign pb = section.settings.padding_bottom | default: 80
+-%}
+
+<section
+  class="fp-instagram"
+  id="fp-instagram-{{ section.id }}"
+  aria-labelledby="fp-ig-heading-{{ section.id }}"
+  style="
+    --fp-ig-bg: {{ section.settings.bg_color }};
+    padding-top: {{ pt }}px;
+    padding-bottom: {{ pb }}px;
+  "
+>
+  <div class="fp-container">
+    <div class="fp-section-head fp-sr">
+      {%- if section.settings.label != blank -%}
+        <span class="fp-section-label">{{ section.settings.label }}</span>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="fp-section-title" id="fp-ig-heading-{{ section.id }}">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.handle != blank -%}
+        <p class="fp-instagram__handle">
+          <a href="https://instagram.com/{{ section.settings.handle }}" target="_blank" rel="noopener noreferrer" aria-label="Instagramをフォロー @{{ section.settings.handle }}">
+            @{{ section.settings.handle }}
+          </a>
+        </p>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <div class="fp-instagram__grid" role="list" aria-label="Instagram フォトグリッド">
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'photo' -%}
+        <div
+          class="fp-instagram__cell fp-sr"
+          role="listitem"
+          style="animation-delay: {{ forloop.index0 | times: 0.06 }}s"
+          {{ block.shopify_attributes }}
+        >
+          <a
+            href="{{ block.settings.url | default: 'https://instagram.com/' | append: section.settings.handle }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="fp-instagram__link"
+            aria-label="Instagram投稿 {{ forloop.index }}"
+          >
+            {%- if block.settings.image -%}
+              <img
+                src="{{ block.settings.image | image_url: width: 480 }}"
+                srcset="{{ block.settings.image | image_url: width: 300 }} 300w, {{ block.settings.image | image_url: width: 480 }} 480w"
+                sizes="(max-width:480px) 50vw, (max-width:768px) 33vw, 16vw"
+                alt="{{ block.settings.image.alt | escape | default: 'Instagram photo ' | append: forloop.index }}"
+                width="480" height="480"
+                loading="lazy"
+                class="fp-instagram__img"
+              >
+            {%- else -%}
+              <div class="fp-instagram__placeholder fp-instagram__placeholder--{{ forloop.index }}" aria-hidden="true"></div>
+            {%- endif -%}
+            <div class="fp-instagram__hover" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5">
+                <rect x="2" y="2" width="20" height="20" rx="5"/>
+                <circle cx="12" cy="12" r="4"/>
+                <circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/>
+              </svg>
+            </div>
+          </a>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+
+  {%- if section.settings.show_follow_btn and section.settings.handle != blank -%}
+    <div style="text-align:center; margin-top:40px" class="fp-sr">
+      <a
+        href="https://instagram.com/{{ section.settings.handle }}"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="fp-btn fp-btn--outline"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <rect x="2" y="2" width="20" height="20" rx="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/>
+        </svg>
+        {{ section.settings.follow_label | default: 'Instagramをフォロー' }}
+      </a>
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Instagram グリッド",
+  "tag": "section",
+  "class": "fp-instagram-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "見出し"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "ラベル（英字）",
+      "default": "Instagram"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "見出し",
+      "default": "暮らしのスナップ"
+    },
+    {
+      "type": "text",
+      "id": "handle",
+      "label": "Instagramハンドル（@なし）",
+      "default": "fsplanet_official"
+    },
+    {
+      "type": "header",
+      "content": "フォローボタン"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_follow_btn",
+      "label": "フォローボタンを表示",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "follow_label",
+      "label": "ボタンテキスト",
+      "default": "Instagramをフォロー"
+    },
+    {
+      "type": "header",
+      "content": "デザイン"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "背景色",
+      "default": "#FCFCFD"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "上余白（px）",
+      "min": 0, "max": 160, "step": 8,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "下余白（px）",
+      "min": 0, "max": 160, "step": 8,
+      "default": 80
+    }
+  ],
+  "blocks": [
+    {
+      "type": "photo",
+      "name": "フォト",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "写真"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "リンク先（投稿URL）"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "Instagram グリッド",
+      "blocks": [
+        { "type": "photo" },
+        { "type": "photo" },
+        { "type": "photo" },
+        { "type": "photo" },
+        { "type": "photo" },
+        { "type": "photo" }
+      ]
+    }
+  ]
+}
+{% endschema %}

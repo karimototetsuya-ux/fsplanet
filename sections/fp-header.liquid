@@ -1,0 +1,502 @@
+{%- liquid
+  assign main_menu = section.settings.menu | default: 'main-menu'
+  assign logo_image = section.settings.logo
+  assign logo_width = section.settings.logo_width | default: 160
+  assign show_search = section.settings.show_search
+  assign show_cart = section.settings.show_cart
+  assign show_account = section.settings.show_account
+  assign sticky = section.settings.sticky_header
+  assign bg_color = section.settings.bg_color | default: '#FCFCFD'
+  assign text_color = section.settings.text_color | default: '#222222'
+  assign accent_color = section.settings.accent_color | default: '#62ADED'
+-%}
+
+<style>
+  #fp-header-{{ section.id }} {
+    --fp-hdr-bg:      {{ bg_color }};
+    --fp-hdr-text:    {{ text_color }};
+    --fp-hdr-accent:  {{ accent_color }};
+    --fp-hdr-logo-w:  {{ logo_width }}px;
+  }
+</style>
+
+<a class="fp-skip-link visually-hidden" href="#MainContent">
+  {%- if shop.name != blank -%}コンテンツへスキップ{%- endif -%}
+</a>
+
+<header
+  id="fp-header-{{ section.id }}"
+  class="fp-header{% if sticky %} fp-header--sticky{% endif %}"
+  role="banner"
+  aria-label="{{ shop.name }} ヘッダー"
+>
+  <!-- ===== Announcement Bar ===== -->
+  {%- if section.settings.show_announce and section.settings.announce_text != blank -%}
+    <div
+      class="fp-header__announce"
+      style="background:{{ section.settings.announce_bg | default: '#62ADED' }};color:{{ section.settings.announce_text_color | default: '#fff' }};"
+      role="note"
+    >
+      <span class="fp-header__announce-text">{{ section.settings.announce_text }}</span>
+    </div>
+  {%- endif -%}
+
+  <!-- ===== Main Header Row ===== -->
+  <div class="fp-header__inner">
+
+    <!-- ハンバーガー (モバイル) -->
+    <button
+      class="fp-menu-btn fp-header__hamburger"
+      aria-label="メニューを開く"
+      aria-expanded="false"
+      aria-controls="fp-menu-drawer"
+      type="button"
+    >
+      <span class="fp-header__hamburger-icon" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </span>
+    </button>
+
+    <!-- ロゴ -->
+    <a
+      href="{{ routes.root_url }}"
+      class="fp-header__logo-link"
+      aria-label="{{ shop.name }} ホームへ戻る"
+    >
+      {%- if logo_image != blank -%}
+        <img
+          class="fp-header__logo-img"
+          src="{{ logo_image | image_url: width: logo_width }}"
+          srcset="
+            {{ logo_image | image_url: width: logo_width }} 1x,
+            {{ logo_image | image_url: width: logo_width | times: 2 }} 2x
+          "
+          alt="{{ shop.name }}"
+          width="{{ logo_width }}"
+          height="{{ logo_image.height | times: logo_width | divided_by: logo_image.width | round }}"
+          loading="eager"
+        >
+      {%- else -%}
+        <span class="fp-header__logo-text">{{ shop.name }}</span>
+      {%- endif -%}
+    </a>
+
+    <!-- ===== Desktop Navigation ===== -->
+    <nav
+      class="fp-header__nav fp-header__nav--desktop"
+      aria-label="メインナビゲーション"
+      id="fp-header-nav"
+    >
+      <ul class="fp-header__nav-list" role="list">
+        {%- for link in linklists[main_menu].links -%}
+          <li
+            class="fp-header__nav-item{% if link.links.size > 0 %} fp-header__nav-item--has-dropdown{% endif %}{% if link.active or link.child_active %} is-active{% endif %}"
+            role="none"
+          >
+            {%- if link.links.size > 0 -%}
+              <button
+                class="fp-header__nav-link fp-header__nav-btn"
+                aria-haspopup="true"
+                aria-expanded="false"
+                aria-controls="fp-dropdown-{{ forloop.index }}"
+                type="button"
+              >
+                {{ link.title }}
+                <svg class="fp-header__nav-caret" width="10" height="6" viewBox="0 0 10 6" fill="none" aria-hidden="true">
+                  <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+
+              <ul
+                class="fp-header__dropdown"
+                id="fp-dropdown-{{ forloop.index }}"
+                role="list"
+                aria-label="{{ link.title }} サブメニュー"
+              >
+                {%- for child_link in link.links -%}
+                  <li class="fp-header__dropdown-item{% if child_link.active %} is-active{% endif %}" role="none">
+                    <a
+                      class="fp-header__dropdown-link"
+                      href="{{ child_link.url }}"
+                      {% if child_link.active %}aria-current="page"{% endif %}
+                    >
+                      {{ child_link.title }}
+                    </a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+
+            {%- else -%}
+              <a
+                class="fp-header__nav-link"
+                href="{{ link.url }}"
+                {% if link.active %}aria-current="page"{% endif %}
+              >
+                {{ link.title }}
+              </a>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+
+    <!-- ===== Actions ===== -->
+    <div class="fp-header__actions">
+
+      {%- if show_search -%}
+        <button
+          class="fp-header__action-btn fp-header__search-btn"
+          aria-label="検索"
+          type="button"
+          onclick="this.closest('.fp-header').querySelector('.fp-header__search-form').classList.toggle('is-open'); this.querySelector('input')?.focus();"
+        >
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M12.5 12.5L17 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <span class="visually-hidden">検索</span>
+        </button>
+      {%- endif -%}
+
+      {%- if show_account -%}
+        {%- if customer -%}
+          <a
+            class="fp-header__action-btn"
+            href="{{ routes.account_url }}"
+            aria-label="マイアカウント"
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <circle cx="10" cy="7" r="3.5" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M3 17c0-3.314 3.134-6 7-6s7 2.686 7 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <span class="visually-hidden">マイアカウント</span>
+          </a>
+        {%- else -%}
+          <a
+            class="fp-header__action-btn"
+            href="{{ routes.account_login_url }}"
+            aria-label="ログイン"
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <circle cx="10" cy="7" r="3.5" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M3 17c0-3.314 3.134-6 7-6s7 2.686 7 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <span class="visually-hidden">ログイン</span>
+          </a>
+        {%- endif -%}
+      {%- endif -%}
+
+      {%- if show_cart -%}
+        <a
+          class="fp-header__action-btn fp-header__cart-btn"
+          href="{{ routes.cart_url }}"
+          aria-label="カート（{{ cart.item_count }}点）"
+        >
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M2 3h2l2.4 9.6A2 2 0 006.36 15h8.28a2 2 0 001.96-1.4L18 7H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="8.5" cy="17.5" r="1" fill="currentColor"/>
+            <circle cx="14.5" cy="17.5" r="1" fill="currentColor"/>
+          </svg>
+          {%- if cart.item_count > 0 -%}
+            <span
+              class="fp-cart-count"
+              aria-label="カートに{{ cart.item_count }}点"
+            >{{ cart.item_count }}</span>
+          {%- else -%}
+            <span class="fp-cart-count fp-cart-count--hidden" aria-hidden="true">0</span>
+          {%- endif -%}
+        </a>
+      {%- endif -%}
+
+    </div><!-- /.fp-header__actions -->
+  </div><!-- /.fp-header__inner -->
+
+  <!-- ===== Search Form ===== -->
+  {%- if show_search -%}
+    <div class="fp-header__search-form" role="search" aria-label="サイト内検索">
+      <form action="{{ routes.search_url }}" method="get" class="fp-header__search-inner">
+        <input type="hidden" name="type" value="product">
+        <label class="visually-hidden" for="fp-search-input">商品を検索</label>
+        <input
+          id="fp-search-input"
+          class="fp-header__search-input"
+          type="search"
+          name="q"
+          placeholder="商品を検索..."
+          autocomplete="off"
+          aria-label="商品を検索"
+        >
+        <button class="fp-header__search-submit" type="submit" aria-label="検索する">
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M12.5 12.5L17 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <button
+          class="fp-header__search-close"
+          type="button"
+          aria-label="検索を閉じる"
+          onclick="this.closest('.fp-header__search-form').classList.remove('is-open');"
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </form>
+    </div>
+  {%- endif -%}
+
+</header>
+
+<!-- ===== Mobile Drawer ===== -->
+<div
+  id="fp-menu-drawer"
+  class="fp-menu-drawer"
+  aria-hidden="true"
+  aria-label="モバイルメニュー"
+  role="dialog"
+  aria-modal="true"
+>
+  <div class="fp-menu-drawer__inner">
+    <div class="fp-menu-drawer__header">
+      <a href="{{ routes.root_url }}" class="fp-menu-drawer__logo" aria-label="{{ shop.name }} ホーム">
+        {%- if logo_image != blank -%}
+          <img
+            src="{{ logo_image | image_url: width: 120 }}"
+            alt="{{ shop.name }}"
+            width="120"
+            loading="lazy"
+          >
+        {%- else -%}
+          <span>{{ shop.name }}</span>
+        {%- endif -%}
+      </a>
+      <button
+        class="fp-menu-close"
+        aria-label="メニューを閉じる"
+        type="button"
+      >
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M3 3l14 14M17 3L3 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <nav class="fp-menu-drawer__nav" aria-label="モバイルナビゲーション">
+      <ul class="fp-menu-drawer__list" role="list">
+        {%- for link in linklists[main_menu].links -%}
+          <li
+            class="fp-menu-drawer__item{% if link.links.size > 0 %} fp-menu-drawer__item--has-children{% endif %}{% if link.active or link.child_active %} is-active{% endif %}"
+            role="none"
+          >
+            {%- if link.links.size > 0 -%}
+              <div class="fp-menu-drawer__item-header">
+                <a
+                  class="fp-menu-drawer__link"
+                  href="{{ link.url }}"
+                  {% if link.active %}aria-current="page"{% endif %}
+                >
+                  {{ link.title }}
+                </a>
+                <button
+                  class="fp-menu-drawer__toggle"
+                  aria-expanded="false"
+                  aria-label="{{ link.title }} サブメニューを開く"
+                  type="button"
+                >
+                  <svg width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
+                    <path d="M1 1.5l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  </svg>
+                </button>
+              </div>
+              <ul class="fp-menu-drawer__submenu" role="list" aria-label="{{ link.title }} サブメニュー">
+                {%- for child_link in link.links -%}
+                  <li class="fp-menu-drawer__subitem" role="none">
+                    <a
+                      class="fp-menu-drawer__sublink"
+                      href="{{ child_link.url }}"
+                      {% if child_link.active %}aria-current="page"{% endif %}
+                    >
+                      {{ child_link.title }}
+                    </a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            {%- else -%}
+              <a
+                class="fp-menu-drawer__link"
+                href="{{ link.url }}"
+                {% if link.active %}aria-current="page"{% endif %}
+              >
+                {{ link.title }}
+              </a>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+
+    <!-- モバイル アクション -->
+    <div class="fp-menu-drawer__footer">
+      {%- if show_search -%}
+        <form action="{{ routes.search_url }}" method="get" class="fp-menu-drawer__search" role="search">
+          <input type="hidden" name="type" value="product">
+          <label class="visually-hidden" for="fp-drawer-search">商品を検索</label>
+          <input
+            id="fp-drawer-search"
+            class="fp-menu-drawer__search-input"
+            type="search"
+            name="q"
+            placeholder="商品を検索..."
+          >
+          <button class="fp-menu-drawer__search-btn" type="submit" aria-label="検索">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M12.5 12.5L17 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </form>
+      {%- endif -%}
+
+      <div class="fp-menu-drawer__account-links">
+        {%- if customer -%}
+          <a href="{{ routes.account_url }}" class="fp-menu-drawer__account-link">マイアカウント</a>
+          <a href="{{ routes.account_logout_url }}" class="fp-menu-drawer__account-link">ログアウト</a>
+        {%- else -%}
+          <a href="{{ routes.account_login_url }}" class="fp-menu-drawer__account-link">ログイン</a>
+          <a href="{{ routes.account_register_url }}" class="fp-menu-drawer__account-link">新規登録</a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div><!-- /.fp-menu-drawer__inner -->
+</div><!-- /#fp-menu-drawer -->
+
+<!-- モバイルオーバーレイ -->
+<div
+  class="fp-menu-overlay"
+  aria-hidden="true"
+  tabindex="-1"
+></div>
+
+{% schema %}
+{
+  "name": "FP Header",
+  "class": "fp-header-section",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "header",
+      "content": "ロゴ設定"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "ロゴ画像"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 80,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "label": "ロゴ幅",
+      "default": 160
+    },
+    {
+      "type": "header",
+      "content": "ナビゲーション"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "default": "main-menu",
+      "label": "メインメニュー"
+    },
+    {
+      "type": "header",
+      "content": "機能設定"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "label": "検索ボタンを表示",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cart",
+      "label": "カートボタンを表示",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_account",
+      "label": "アカウントボタンを表示",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_header",
+      "label": "スクロールで固定表示",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "アナウンスバー"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_announce",
+      "label": "アナウンスバーを表示",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "announce_text",
+      "label": "お知らせテキスト",
+      "default": "🎉 送料無料キャンペーン実施中！5,000円以上のご注文で全国送料無料"
+    },
+    {
+      "type": "color",
+      "id": "announce_bg",
+      "label": "バー背景色",
+      "default": "#62ADED"
+    },
+    {
+      "type": "color",
+      "id": "announce_text_color",
+      "label": "バー文字色",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "カラー設定"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "背景色",
+      "default": "#FCFCFD"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "文字色",
+      "default": "#222222"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "アクセントカラー（ホバー・アクティブ）",
+      "default": "#62ADED"
+    }
+  ],
+  "presets": [
+    {
+      "name": "FP Header",
+      "category": "Header"
+    }
+  ]
+}
+{% endschema %}

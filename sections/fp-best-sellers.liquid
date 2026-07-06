@@ -1,0 +1,164 @@
+{%- liquid
+  assign col_count  = section.settings.collection
+  assign show_count = section.settings.products_to_show | default: 4
+  assign pt = section.settings.padding_top    | default: 80
+  assign pb = section.settings.padding_bottom | default: 80
+-%}
+
+<section
+  class="fp-best-sellers"
+  id="fp-best-{{ section.id }}"
+  aria-labelledby="fp-best-heading-{{ section.id }}"
+  style="
+    --fp-best-bg: {{ section.settings.bg_color }};
+    padding-top: {{ pt }}px;
+    padding-bottom: {{ pb }}px;
+  "
+>
+  <div class="fp-container">
+
+    <div class="fp-best__header fp-sr">
+      <div>
+        {%- if section.settings.label != blank -%}
+          <span class="fp-section-label">{{ section.settings.label }}</span>
+        {%- endif -%}
+        <h2 class="fp-section-title" id="fp-best-heading-{{ section.id }}">{{ section.settings.heading | default: '人気ランキング' }}</h2>
+      </div>
+      {%- if section.settings.show_view_all and section.settings.view_all_url != blank -%}
+        <a href="{{ section.settings.view_all_url }}" class="fp-btn-ghost" aria-label="{{ section.settings.view_all_label | default: 'All Rankings' }}">
+          {{ section.settings.view_all_label | default: 'All Rankings' }}
+          <svg width="16" height="10" viewBox="0 0 16 10" fill="none" aria-hidden="true">
+            <path d="M1 5h14M10 1l5 4-5 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      {%- endif -%}
+    </div>
+
+    {%- if col_count != blank -%}
+      <ul class="fp-prod-grid fp-prod-grid--ranking" role="list" aria-label="{{ section.settings.heading }}">
+        {%- for product in col_count.products limit: show_count -%}
+          <li
+            class="fp-sr fp-ranking-item"
+            data-rank="{{ forloop.index }}"
+            style="animation-delay:{{ forloop.index0 | times: 0.08 }}s"
+          >
+            <div
+              class="fp-rank-num fp-rank-{{ forloop.index }}"
+              aria-hidden="true"
+            >{{ forloop.index | prepend: '0' | slice: -2, 2 }}</div>
+            {%- render 'fp-product-card',
+              product: product,
+              show_badge_sale: true,
+              show_badge_best: true
+            -%}
+          </li>
+        {%- else -%}
+          {%- for i in (1..show_count) -%}
+            <li class="fp-sr fp-prod-card-placeholder fp-ranking-item" aria-hidden="true" style="animation-delay:{{ forloop.index0 | times: 0.08 }}s">
+              <div class="fp-rank-num" aria-hidden="true">0{{ i }}</div>
+              <div class="fp-prod-img-wrap fp-skeleton"></div>
+              <div class="fp-prod-info">
+                <div class="fp-skeleton fp-skeleton--line" style="width:60%;height:10px;margin-bottom:6px"></div>
+                <div class="fp-skeleton fp-skeleton--line" style="width:80%;height:12px;margin-bottom:8px"></div>
+                <div class="fp-skeleton fp-skeleton--line" style="width:40%;height:14px"></div>
+              </div>
+            </li>
+          {%- endfor -%}
+        {%- endfor -%}
+      </ul>
+    {%- else -%}
+      <p class="fp-no-collection" style="text-align:center;color:#888;padding:40px 0">
+        テーマエディターでコレクションを選択してください。
+      </p>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Best Sellers",
+  "tag": "section",
+  "class": "fp-best-sellers-section",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "コレクション"
+    },
+    {
+      "type": "header",
+      "content": "見出し"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "ラベル（英字）",
+      "default": "Best Sellers"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "見出し",
+      "default": "人気ランキング"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "表示商品数",
+      "min": 2, "max": 8, "step": 1,
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "View Allボタン"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "View Allボタンを表示",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "view_all_label",
+      "label": "ボタンテキスト",
+      "default": "All Rankings"
+    },
+    {
+      "type": "url",
+      "id": "view_all_url",
+      "label": "ボタンリンク"
+    },
+    {
+      "type": "header",
+      "content": "デザイン"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "背景色",
+      "default": "#FBF8F4"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "上余白（px）",
+      "min": 0, "max": 160, "step": 8,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "下余白（px）",
+      "min": 0, "max": 160, "step": 8,
+      "default": 80
+    }
+  ],
+  "presets": [
+    {
+      "name": "Best Sellers"
+    }
+  ]
+}
+{% endschema %}
