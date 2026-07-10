@@ -865,7 +865,8 @@
         <svg viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
       <div class="mc-filter-dropdown" id="mc-dd-size" role="listbox">
-        {%- for size in 'XS,S,M,L,XL,XXL,フリー' | split: ',' -%}
+        {%- assign size_list = 'XS,S,M,L,XL,XXL,Free' | split: ',' -%}
+        {%- for size in size_list -%}
           <label>
             <input type="checkbox" name="filter[size][]" value="{{ size }}" onchange="mcUpdateActiveFilters()">
             {{ size }}

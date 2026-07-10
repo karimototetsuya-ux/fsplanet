@@ -1,6 +1,6 @@
 {%- liquid
   assign autoplay       = section.settings.autoplay
-  assign autoplay_speed = section.settings.autoplay_speed | default: 6000
+  assign autoplay_speed = section.settings.autoplay_speed | default: 6 | times: 1000
   assign slide_count    = section.blocks | where: 'type', 'slide' | size
 -%}
 
@@ -181,11 +181,12 @@
     {
       "type": "range",
       "id": "autoplay_speed",
-      "label": "自動再生間隔（ミリ秒）",
-      "min": 3000,
-      "max": 10000,
-      "step": 500,
-      "default": 6000
+      "label": "自動再生間隔（秒）",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "unit": "s",
+      "default": 6
     }
   ],
   "blocks": [

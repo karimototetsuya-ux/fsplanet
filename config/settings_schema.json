@@ -119,22 +119,32 @@
         "content": "英字フォント"
       },
       {
-        "type": "font_picker",
-        "id": "font_heading",
+        "type": "select",
+        "id": "font_heading_choice",
         "label": "見出しフォント",
-        "default": "cormorant_garamond_n4",
-        "info": "英字見出しに使用（デフォルト: Cormorant Garamond）"
+        "options": [
+          {"value": "cormorant", "label": "Cormorant Garamond（推奨）"},
+          {"value": "georgia", "label": "Georgia"},
+          {"value": "garamond", "label": "Garamond"}
+        ],
+        "default": "cormorant",
+        "info": "Cormorant Garamond は custom.css で Google Fonts から自動読み込み済み"
       },
       {
         "type": "header",
         "content": "日本語フォント"
       },
       {
-        "type": "font_picker",
-        "id": "font_body",
+        "type": "select",
+        "id": "font_body_choice",
         "label": "本文フォント",
-        "default": "assistant_n4",
-        "info": "Noto Sans JP は @import で読み込まれます"
+        "options": [
+          {"value": "noto", "label": "Noto Sans JP（推奨）"},
+          {"value": "hiragino", "label": "Hiragino Sans"},
+          {"value": "meiryo", "label": "Meiryo"}
+        ],
+        "default": "noto",
+        "info": "Noto Sans JP は custom.css の @import で Google Fonts から自動読み込み済み"
       },
       {
         "type": "range",

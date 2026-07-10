@@ -61,7 +61,7 @@
       "block_order": ["slide-1", "slide-2", "slide-3"],
       "settings": {
         "autoplay": true,
-        "autoplay_speed": 6000,
+        "autoplay_speed": 6,
         "hero_height": "full",
         "scroll_hint": true
       }
