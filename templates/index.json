@@ -326,61 +326,15 @@
     },
     "fp-instagram": {
       "type": "fp-instagram",
-      "blocks": {
-        "photo-1": {
-          "type": "photo",
-          "settings": {
-            "url": "https://www.instagram.com/fsplanet_official/"
-          }
-        },
-        "photo-2": {
-          "type": "photo",
-          "settings": {
-            "url": "https://www.instagram.com/fsplanet_official/"
-          }
-        },
-        "photo-3": {
-          "type": "photo",
-          "settings": {
-            "url": "https://www.instagram.com/fsplanet_official/"
-          }
-        },
-        "photo-4": {
-          "type": "photo",
-          "settings": {
-            "url": "https://www.instagram.com/fsplanet_official/"
-          }
-        },
-        "photo-5": {
-          "type": "photo",
-          "settings": {
-            "url": "https://www.instagram.com/fsplanet_official/"
-          }
-        },
-        "photo-6": {
-          "type": "photo",
-          "settings": {
-            "url": "https://www.instagram.com/fsplanet_official/"
-          }
-        }
-      },
-      "block_order": [
-        "photo-1",
-        "photo-2",
-        "photo-3",
-        "photo-4",
-        "photo-5",
-        "photo-6"
-      ],
       "settings": {
         "label": "Instagram",
         "heading": "暮らしのスナップ",
-        "handle": "fsplanet_official",
-        "show_follow_btn": true,
-        "follow_label": "@fsplanet_officialをフォロー",
+        "handle": "",
+        "show_follow_btn": false,
+        "follow_label": "",
         "bg_color": "#fcfcfd",
         "padding_top": 80,
-        "padding_bottom": 80
+        "padding_bottom": 0
       }
     },
     "1783658109b3ad6aea": {
@@ -409,6 +363,19 @@
         "instafeed_app_block_pNG4MJ"
       ],
       "settings": {}
+    },
+    "fp_instagram_Ncjdbt": {
+      "type": "fp-instagram",
+      "settings": {
+        "label": "",
+        "heading": "",
+        "handle": "fsplanet_official",
+        "show_follow_btn": true,
+        "follow_label": "@fsplanet_officialをフォロー",
+        "bg_color": "#fcfcfd",
+        "padding_top": 32,
+        "padding_bottom": 80
+      }
     },
     "fp-newsletter": {
       "type": "fp-newsletter",
@@ -461,8 +428,9 @@
     "fp-best-sellers",
     "fp-brand",
     "fp-gift-guide",
-    "1783658109b3ad6aea",
     "fp-instagram",
+    "1783658109b3ad6aea",
+    "fp_instagram_Ncjdbt",
     "fp-newsletter"
   ]
 }
