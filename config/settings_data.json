@@ -1,29 +1,45 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "current": {
     "color_main": "#62ADED",
     "color_sub": "#3E7CB1",
-    "color_bg": "#FCFCFD",
     "color_accent": "#CFAE6B",
+    "color_bg": "#FCFCFD",
     "color_btn": "#4A90E2",
     "color_buy": "#F2994A",
     "color_text": "#222222",
+    "font_size_base": 16,
+    "favicon": "",
+    "social_instagram": "https://www.instagram.com/fsplanet_official",
+    "social_twitter": "https://twitter.com/fsplanet",
+    "social_facebook": "https://www.facebook.com/fsplanet",
+    "social_youtube": "https://www.youtube.com/@fsplanet",
+    "social_pinterest": "https://www.pinterest.jp/fsplanet",
+    "social_line": "https://line.me/ti/p/fsplanet",
+    "enable_quick_add": true,
+    "show_sale_badge": true,
+    "show_new_badge": true,
+    "enable_scroll_reveal": true,
     "color_text_light": "#888888",
     "color_border": "#E0E8F0",
     "color_header_bg": "#FFFFFF",
     "color_footer_bg": "#1A2533",
     "color_footer_text": "#AABCCC",
-
     "font_heading": "cormorant_garamond_n3",
     "font_body": "noto_sans_jp_n4",
-    "font_size_base": 16,
     "font_letter_spacing": "0.08em",
     "heading_weight": 300,
-
     "logo_text": "F'sPlanet",
     "logo_width": 160,
     "logo_height": 40,
-    "favicon": "",
-
     "header_style": "transparent",
     "header_sticky": true,
     "header_height": 68,
@@ -39,7 +55,6 @@
     "nav_link_5_url": "/collections/home",
     "nav_link_6_label": "Topics",
     "nav_link_6_url": "/blogs/news",
-
     "show_announcement_bar": true,
     "announcement_text_1": "🚚 税込5,000円以上で送料無料",
     "announcement_text_2": "✨ 新規会員登録で10%OFFクーポンプレゼント",
@@ -47,31 +62,18 @@
     "announcement_speed": 40,
     "announcement_bg_color": "#62ADED",
     "announcement_text_color": "#FFFFFF",
-
     "enable_cart_drawer": true,
-    "enable_quick_add": true,
     "show_product_badges": true,
-    "show_new_badge": true,
-    "show_sale_badge": true,
     "show_bestseller_badge": true,
     "new_badge_days": 30,
     "show_wishlist": true,
     "show_product_ratings": true,
     "card_image_ratio": "portrait",
     "card_border_radius": 12,
-
     "section_gap": "80px",
     "container_max_width": "1280px",
     "border_radius": "12px",
     "button_radius": "30px",
-
-    "social_instagram": "https://www.instagram.com/fsplanet_official",
-    "social_twitter": "https://twitter.com/fsplanet",
-    "social_facebook": "https://www.facebook.com/fsplanet",
-    "social_pinterest": "https://www.pinterest.jp/fsplanet",
-    "social_youtube": "https://www.youtube.com/@fsplanet",
-    "social_line": "https://line.me/ti/p/fsplanet",
-
     "footer_show_newsletter": true,
     "footer_show_app": true,
     "footer_show_payments": true,
@@ -83,16 +85,195 @@
     "footer_col3_title": "Support",
     "footer_col3_links": "/pages/shipping\n/pages/returns\n/pages/privacy-policy\n/pages/terms",
     "footer_copyright_name": "F'sPlanet",
-
     "seo_meta_title": "F'sPlanet — 家族の時間をもっと豊かに。",
     "seo_meta_description": "上質でナチュラルなライフスタイルアイテムが揃う百貨店型オンラインショップ。キッズ・ベビー、ウィメンズ、メンズ、インテリア・雑貨、ギフトなど幅広いカテゴリを展開。",
     "seo_og_image": "",
-
-    "enable_scroll_reveal": true,
     "enable_page_transition": false,
     "enable_top_button": true,
     "enable_fab_cart": true,
-    "color_scheme": "light"
+    "color_scheme": "light",
+    "content_for_index": [],
+    "blocks": {
+      "9670189827046205946": {
+        "type": "shopify://apps/hextom-translate-and-currency/blocks/app-block/b927a799-be04-4b97-9efb-5c8f0290a68e",
+        "disabled": false,
+        "settings": {}
+      },
+      "6406956604159796213": {
+        "type": "shopify://apps/smart-seo/blocks/smartseo/7b0a6064-ca2e-4392-9a1d-8c43c942357b",
+        "disabled": false,
+        "settings": {}
+      },
+      "1232542678405107163": {
+        "type": "shopify://apps/instafeed/blocks/head-block/c447db20-095d-4a10-9725-b5977662c9d5",
+        "disabled": false,
+        "settings": {}
+      },
+      "16936711665464183970": {
+        "type": "shopify://apps/slider-revolution/blocks/app-embed/d2c2325b-ecb9-42b8-a0b0-ca2ffb6e3203",
+        "disabled": false,
+        "settings": {
+          "enabled_templates_switcher": false,
+          "enabled_templates": "",
+          "enable_fontawesome": true,
+          "enable_stroke": true
+        }
+      },
+      "6969950322492502179": {
+        "type": "shopify://apps/yahoo/blocks/embed/6450ca0f-2641-4742-b488-bd9d40aa5ab7",
+        "disabled": false,
+        "settings": {}
+      },
+      "3720565183479497137": {
+        "type": "shopify://apps/globo-product-options/blocks/app-embed-block/fdc9fad5-1a0f-4bd4-9c8a-1af6a6eef6b8",
+        "disabled": false,
+        "settings": {}
+      },
+      "6159598353363395418": {
+        "type": "shopify://apps/google-youtube/blocks/store_widget/14ec7bd0-ac77-49a9-9417-90752398bdff",
+        "disabled": false,
+        "settings": {
+          "widget_position": "LEFT_BOTTOM",
+          "side_margin": 36,
+          "bottom_margin": 36,
+          "mobile_side_margin": 16,
+          "mobile_bottom_margin": 46
+        }
+      },
+      "18421699284197576312": {
+        "type": "shopify://apps/easypoints/blocks/sdk/f0862409-7105-4920-b523-5bd76a964d4a",
+        "disabled": false,
+        "settings": {
+          "primary_color": "#5936e3",
+          "enable_my_account": false
+        }
+      },
+      "4599818392069375057": {
+        "type": "shopify://apps/easypoints/blocks/widget2/f0862409-7105-4920-b523-5bd76a964d4a",
+        "disabled": false,
+        "settings": {
+          "primary_color": "#5936e3",
+          "position": "right",
+          "bottom_offset": 16,
+          "horizontal_offset": 16,
+          "z_index": "999",
+          "use_easypoints_font": true,
+          "icon_only": false,
+          "highlighted_bonus_collection": "",
+          "barcode_displayed": false
+        }
+      },
+      "15683396631634586217": {
+        "type": "shopify://apps/inbox/blocks/chat/841fc607-4181-4ad1-842d-e24d7f8bad6b",
+        "disabled": false,
+        "settings": {
+          "greeting_message": "",
+          "background_color": "#FFFFFF",
+          "font_color": "#000000",
+          "button_color": "#000000",
+          "secondary_color": "#FFFFFF",
+          "ternary_color": "#6A6A6A",
+          "button_icon": "chat_bubble",
+          "button_text": "chat_with_us",
+          "button_horizontal_position": "bottom_right",
+          "button_vertical_position": "lowest",
+          "agent_inherit_fonts": true,
+          "agent_font": "system_ui_n4",
+          "agent_border_radius": 16
+        }
+      },
+      "13768625480086291342": {
+        "type": "shopify://apps/forms/blocks/forms/8744a304-fcb1-4347-b211-bb6b4759a76a",
+        "disabled": false,
+        "settings": {}
+      },
+      "1768834845299682660": {
+        "type": "shopify://apps/subscriptions/blocks/app-embed-block/a3bfe9ec-96f8-4508-a003-df608a36d2ad",
+        "disabled": false,
+        "settings": {
+          "color_text_title": "#6D7175",
+          "color_text_body": "#6D7175",
+          "dividers_color": "#8F8D8D",
+          "bacgkround_color": "#FFFFFF",
+          "border_thickness": 1,
+          "border_radius": 0,
+          "subscription_policy_url": ""
+        }
+      },
+      "17303863897821421073": {
+        "type": "shopify://apps/all-in-gift/blocks/embed/14c78036-27a0-4098-a9e3-c3f1525dedff",
+        "disabled": false,
+        "settings": {}
+      },
+      "14060646107696862457": {
+        "type": "shopify://apps/judge-me-reviews/blocks/judgeme_core/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+        "disabled": false,
+        "settings": {}
+      },
+      "13047258039897440615": {
+        "type": "shopify://apps/judge-me-reviews/blocks/cart_drawer_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+        "disabled": false,
+        "settings": {
+          "widget_type": "review-widget"
+        }
+      },
+      "6097499278999377719": {
+        "type": "shopify://apps/globo-mega-menu/blocks/app-embed/7a00835e-fe40-45a5-a615-2eb4ab697b58",
+        "disabled": false,
+        "settings": {
+          "themeId": "{{theme.id}}"
+        }
+      },
+      "1692329972272007824": {
+        "type": "shopify://apps/zepto-product-personalizer/blocks/product_personalizer_main/7411210d-7b32-4c09-9455-e129e3be4729",
+        "disabled": false,
+        "settings": {}
+      },
+      "12601257459161342390": {
+        "type": "shopify://apps/giftship/blocks/giftship/26bd5756-d344-471d-baf8-ba6267b82da9",
+        "disabled": false,
+        "settings": {
+          "gs_drawer_cart": false
+        }
+      },
+      "6143736321357441667": {
+        "type": "shopify://apps/tidio-live-chat-chatbots/blocks/app-embed/1002274d-fb18-4939-98f6-5f05a8deeadc",
+        "disabled": false,
+        "settings": {}
+      },
+      "6610233760104865948": {
+        "type": "shopify://apps/brevo-pushowl/blocks/pushowl-app-embed-3d2ff2b5/fa20c3ba-38bf-43e0-ba5c-431f6ae07d95",
+        "disabled": false,
+        "settings": {}
+      },
+      "9658382757468664484": {
+        "type": "shopify://apps/aftership-email-marketing-sms/blocks/aftership_popup/2db13273-f8db-4274-be89-c86a3352fb70",
+        "disabled": false,
+        "settings": {
+          "show_aftership_popup_description": ""
+        }
+      },
+      "10373342392219168611": {
+        "type": "shopify://apps/wiser-ai-upsell-cross-sell/blocks/wiser-quiz/3f966edc-9a4a-465c-a4df-436d2a39160d",
+        "disabled": false,
+        "settings": {}
+      },
+      "10434560723743799785": {
+        "type": "shopify://apps/wiser-ai-upsell-cross-sell/blocks/wiser-popup-block/3f966edc-9a4a-465c-a4df-436d2a39160d",
+        "disabled": false,
+        "settings": {}
+      },
+      "5639393805199886848": {
+        "type": "shopify://apps/wiser-ai-upsell-cross-sell/blocks/wiser-cart-drawer-block/3f966edc-9a4a-465c-a4df-436d2a39160d",
+        "disabled": false,
+        "settings": {}
+      },
+      "10115289292966514107": {
+        "type": "shopify://apps/wiser-ai-upsell-cross-sell/blocks/wiser-block/3f966edc-9a4a-465c-a4df-436d2a39160d",
+        "disabled": false,
+        "settings": {}
+      }
+    }
   },
   "presets": {}
 }
