@@ -1,6 +1,406 @@
+{% doc %}
+  @prompt
+    ギフトカードをコレクションに変更して
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-collection-card-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+  }
+
+  .ai-collection-card-wrapper-{{ ai_gen_id }} {
+    position: relative;
+    display: block;
+    text-decoration: none;
+    border-radius: {{ block.settings.border_radius }}px;
+    overflow: hidden;
+    background-color: {{ block.settings.card_bg_color }};
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .ai-collection-card-wrapper-{{ ai_gen_id }}:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+
+  .ai-collection-card-image-container-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    padding-bottom: {{ block.settings.image_aspect_ratio }}%;
+    overflow: hidden;
+    background-color: #f4f4f4;
+  }
+
+  .ai-collection-card-image-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .ai-collection-card-wrapper-{{ ai_gen_id }}:hover .ai-collection-card-image-{{ ai_gen_id }} {
+    transform: scale(1.05);
+  }
+
+  .ai-collection-card-placeholder-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f4f4f4;
+  }
+
+  .ai-collection-card-placeholder-{{ ai_gen_id }} svg {
+    width: 60%;
+    height: 60%;
+    opacity: 0.3;
+  }
+
+  .ai-collection-card-overlay-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, {{ block.settings.overlay_opacity }}) 100%);
+    pointer-events: none;
+  }
+
+  .ai-collection-card-content-{{ ai_gen_id }} {
+    padding: {{ block.settings.content_padding }}px;
+    text-align: {{ block.settings.text_alignment }};
+  }
+
+  .ai-collection-card-title-{{ ai_gen_id }} {
+    margin: 0 0 8px;
+    font-size: {{ block.settings.title_size }}px;
+    font-weight: {{ block.settings.title_weight }};
+    color: {{ block.settings.title_color }};
+    line-height: 1.3;
+  }
+
+  .ai-collection-card-description-{{ ai_gen_id }} {
+    margin: 0 0 12px;
+    font-size: {{ block.settings.description_size }}px;
+    color: {{ block.settings.description_color }};
+    line-height: 1.5;
+  }
+
+  .ai-collection-card-count-{{ ai_gen_id }} {
+    font-size: {{ block.settings.count_size }}px;
+    color: {{ block.settings.count_color }};
+  }
+
+  .ai-collection-card-empty-state-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 20px;
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-collection-card-title-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.title_size }}px * 0.85);
+    }
+
+    .ai-collection-card-description-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.description_size }}px * 0.9);
+    }
+  }
+{% endstyle %}
+
+<div class="ai-collection-card-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  {% if block.settings.collection != blank %}
+    <a href="{{ block.settings.collection.url }}" class="ai-collection-card-wrapper-{{ ai_gen_id }}">
+      <div class="ai-collection-card-image-container-{{ ai_gen_id }}">
+        {% if block.settings.collection.featured_image %}
+          <img
+            src="{{ block.settings.collection.featured_image | image_url: width: 800 }}"
+            alt="{{ block.settings.collection.featured_image.alt | default: block.settings.collection.title | escape }}"
+            loading="lazy"
+            width="800"
+            height="{{ 800 | times: block.settings.image_aspect_ratio | divided_by: 100 }}"
+            class="ai-collection-card-image-{{ ai_gen_id }}"
+          >
+        {% elsif block.settings.collection.products.first.featured_image %}
+          <img
+            src="{{ block.settings.collection.products.first.featured_image | image_url: width: 800 }}"
+            alt="{{ block.settings.collection.title | escape }}"
+            loading="lazy"
+            width="800"
+            height="{{ 800 | times: block.settings.image_aspect_ratio | divided_by: 100 }}"
+            class="ai-collection-card-image-{{ ai_gen_id }}"
+          >
+        {% else %}
+          <div class="ai-collection-card-placeholder-{{ ai_gen_id }}">
+            {{ 'collection-1' | placeholder_svg_tag }}
+          </div>
+        {% endif %}
+        {% if block.settings.show_overlay %}
+          <div class="ai-collection-card-overlay-{{ ai_gen_id }}"></div>
+        {% endif %}
+      </div>
+
+      <div class="ai-collection-card-content-{{ ai_gen_id }}">
+        <h3 class="ai-collection-card-title-{{ ai_gen_id }}">
+          {{ block.settings.collection.title }}
+        </h3>
+
+        {% if block.settings.show_description and block.settings.collection.description != blank %}
+          <div class="ai-collection-card-description-{{ ai_gen_id }}">
+            {{ block.settings.collection.description | strip_html | truncate: 100 }}
+          </div>
+        {% endif %}
+
+        {% if block.settings.show_product_count %}
+          <div class="ai-collection-card-count-{{ ai_gen_id }}">
+            {{ block.settings.collection.products_count }}
+            {% if block.settings.collection.products_count == 1 %}
+              アイテム
+            {% else %}
+              アイテム
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+    </a>
+  {% else %}
+    <div class="ai-collection-card-wrapper-{{ ai_gen_id }}">
+      <div class="ai-collection-card-image-container-{{ ai_gen_id }}">
+        <div class="ai-collection-card-placeholder-{{ ai_gen_id }}">
+          {{ 'collection-1' | placeholder_svg_tag }}
+        </div>
+        <div class="ai-collection-card-empty-state-{{ ai_gen_id }}">
+          次に、コレクションを選択してください
+        </div>
+      </div>
+      <div class="ai-collection-card-content-{{ ai_gen_id }}">
+        <h3 class="ai-collection-card-title-{{ ai_gen_id }}">
+          コレクション名
+        </h3>
+        {% if block.settings.show_description %}
+          <div class="ai-collection-card-description-{{ ai_gen_id }}">
+            コレクションの説明がここに表示されます
+          </div>
+        {% endif %}
+        {% if block.settings.show_product_count %}
+          <div class="ai-collection-card-count-{{ ai_gen_id }}">
+            0 アイテム
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+</div>
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "コレクションカード",
+  "settings": [
+    {
+      "type": "header",
+      "content": "コレクション"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "コレクション"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "デスクトップ幅",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "画像"
+    },
+    {
+      "type": "range",
+      "id": "image_aspect_ratio",
+      "label": "画像アスペクト比",
+      "min": 50,
+      "max": 150,
+      "step": 5,
+      "unit": "%",
+      "default": 100,
+      "info": "100% = 正方形、75% = 横長、133% = 縦長"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_overlay",
+      "label": "オーバーレイを表示",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "オーバーレイの不透明度",
+      "min": 0,
+      "max": 0.8,
+      "step": 0.1,
+      "default": 0.3
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "角の丸み",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "コンテンツ"
+    },
+    {
+      "type": "range",
+      "id": "content_padding",
+      "label": "コンテンツの余白",
+      "min": 10,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "テキスト配置",
+      "options": [
+        {
+          "value": "left",
+          "label": "左"
+        },
+        {
+          "value": "center",
+          "label": "中央"
+        },
+        {
+          "value": "right",
+          "label": "右"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "説明を表示",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_count",
+      "label": "商品数を表示",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "タイトル"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "タイトルサイズ",
+      "min": 14,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "title_weight",
+      "label": "タイトルの太さ",
+      "min": 300,
+      "max": 700,
+      "step": 100,
+      "default": 600
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "タイトルカラー",
+      "default": "#222222"
+    },
+    {
+      "type": "header",
+      "content": "説明"
+    },
+    {
+      "type": "range",
+      "id": "description_size",
+      "label": "説明サイズ",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "説明カラー",
+      "default": "#666666"
+    },
+    {
+      "type": "header",
+      "content": "商品数"
+    },
+    {
+      "type": "range",
+      "id": "count_size",
+      "label": "商品数サイズ",
+      "min": 11,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "default": 13
+    },
+    {
+      "type": "color",
+      "id": "count_color",
+      "label": "商品数カラー",
+      "default": "#888888"
+    },
+    {
+      "type": "header",
+      "content": "カード"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "背景色",
+      "default": "#FFFFFF"
+    }
+  ],
+  "presets": [
+    {
+      "name": "コレクションカード"
+    }
+  ]
+}
 {% endschema %}
