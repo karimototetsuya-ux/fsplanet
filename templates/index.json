@@ -283,6 +283,7 @@
         "gift-1": {
           "type": "card",
           "settings": {
+            "image": "shopify://shop_images/1751495093224-33yOBd3P0gt5WC5XyJlkKw2t6FPnHe9shjDvisHxXIwZjQGC5o.webp",
             "price_range": "¥3,000 – ¥5,000",
             "title": "Birthday\nGift",
             "btn_label": "Shop Now",
@@ -292,6 +293,7 @@
         "gift-2": {
           "type": "card",
           "settings": {
+            "image": "shopify://shop_images/1751495155203-3ceD9B3TKj5HG1MjStArqJy5JT6VrEhq72fhocfSLQSsiIGFR8.webp",
             "price_range": "¥5,000 – ¥10,000",
             "title": "Wedding\nGift",
             "btn_label": "Shop Now",
@@ -301,6 +303,7 @@
         "gift-3": {
           "type": "card",
           "settings": {
+            "image": "shopify://shop_images/1751495197325-HmJQiUa6GporlZGpjaEgodsFtG3YszCbMs8OXb7qrtanNZbznc.webp",
             "price_range": "¥10,000+",
             "title": "Luxury\nGift",
             "btn_label": "Shop Now",
@@ -314,9 +317,9 @@
         "gift-3"
       ],
       "settings": {
-        "label": "Gift Guide",
-        "heading": "贈りものガイド",
-        "subtext": "シーンや予算に合わせた、とっておきのギフトをご提案します。",
+        "label": "Collections",
+        "heading": "AnniversaryBlanket",
+        "subtext": "お名前入りブランケット",
         "bg_color": "#fbf8f4",
         "padding_top": 80,
         "padding_bottom": 80
